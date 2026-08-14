@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeHelper - 浏览器里的开发者工具箱，已支持 AI 辅助</title>
+    <meta name="description" content="FeHelper 是开源浏览器开发者工具箱，内置 34 个 JSON、编解码、接口调试、截图、取色、Mock、UUID、二维码和 AI 辅助工具，支持 Chrome、Edge、Firefox。">
+    <meta name="keywords" content="FeHelper,前端助手,开发者工具箱,JSON格式化,编解码,二维码,AI助手,Chrome扩展,Edge扩展,Firefox扩展">
+    <meta property="og:title" content="FeHelper - 浏览器里的开发者工具箱" />
+    <meta property="og:description" content="34 个常用开发工具集中到一个扩展里。JSON、编解码、接口调试、截图、取色、Mock、UUID、二维码和 AI 辅助，按需启用。" />
+    <meta property="og:image" content="https://fehelper.com/static/img/fe-128.png" />
+    <meta property="og:url" content="https://fehelper.com/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="FeHelper - 浏览器里的开发者工具箱" />
+    <meta name="twitter:description" content="开源浏览器开发者工具箱，34 个常用工具，已支持 AI 辅助。" />
+    <meta itemprop="name" content="FeHelper - 浏览器里的开发者工具箱">
+    <meta itemprop="description" content="JSON、编解码、接口调试、截图、取色、Mock、UUID、二维码和 AI 辅助工具，支持 Chrome、Edge、Firefox。">
+    <meta itemprop="image" content="https://fehelper.com/static/img/fe-128.png">
+
+    <link rel="icon" type="image/x-icon" href="static/img/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/img/fe-16.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="static/img/fe-48.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="static/img/fe-128.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="static/img/fe-128.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css?v=20260616">
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?17b02fba4e62901b4289eef4c2243123";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+<body>
+    <nav class="navbar" aria-label="主导航">
+        <div class="nav-container">
+            <a href="#top" class="nav-logo" aria-label="FeHelper 首页">
+                <img src="static/img/fe-48.png" alt="" class="logo-icon">
+                <span>FeHelper</span>
+            </a>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="https://www.fehelper.com/v1/index/index.html" target="_blank" rel="noreferrer noopener">在线使用</a></li>
+                <li><a href="#features">价值</a></li>
+                <li><a href="#ai">AI 支持</a></li>
+                <li><a href="#tools">工具</a></li>
+                <li><a href="docs.html">文档</a></li>
+                <li><a href="#download">安装</a></li>
+                <li><a href="https://github.com/zxlie/FeHelper" target="_blank" rel="noreferrer noopener" class="github-link"><i class="fab fa-github" aria-hidden="true"></i>GitHub</a></li>
+            </ul>
+            <button class="nav-toggle" type="button" aria-label="打开导航菜单" aria-controls="nav-menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main id="top">
+        <section class="hero">
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <h1>Web开发者的 <span>超级工具箱</span></h1>
+                    <p class="hero-subtitle">FeHelper 是一款 <strong>开源浏览器扩展</strong>，2012 至今持续维护。集成 34+ 种实用工具：JSON 格式化/BigInt 精度、编解码/Gzip/JWT、二维码/条形码、UUID/雪花 ID、时间戳转换、AI 智能助手、代码美化、接口调试等，覆盖开发全流程。</p>
+                    <div class="hero-data-badges" aria-label="FeHelper 数据概览">
+                        <a href="https://chrome.google.com/webstore/detail/pkgccpejnmalmdinmhkkfafefagiiiad" target="_blank" rel="noreferrer noopener">
+                            <img src="https://img.shields.io/chrome-web-store/v/pkgccpejnmalmdinmhkkfafefagiiiad?label=chrome%20web%20store&logo=googlechrome&color=3b82f6&style=for-the-badge" alt="Chrome Web Store 版本">
+                        </a>
+                        <img src="https://img.shields.io/badge/tools-34+-10b981?style=for-the-badge&logo=toolkit&logoColor=white" alt="34+ 内置工具">
+                        <img src="https://img.shields.io/chrome-web-store/rating/pkgccpejnmalmdinmhkkfafefagiiiad?label=rating&logo=googlechrome&color=3b82f6&style=for-the-badge" alt="Chrome Web Store 评分">
+                        <img src="https://img.shields.io/chrome-web-store/users/pkgccpejnmalmdinmhkkfafefagiiiad?label=users&logo=googlechrome&color=3b82f6&style=for-the-badge" alt="Chrome Web Store 用户量">
+                        <a href="https://github.com/zxlie/FeHelper" target="_blank" rel="noreferrer noopener" class="metric-badge github-metric" data-github-stat="stars" aria-label="GitHub Stars">
+                            <span class="metric-label"><i class="fab fa-github" aria-hidden="true"></i>Stars</span>
+                            <span class="metric-value" data-fallback="5.6K">5.6K</span>
+                        </a>
+                        <a href="https://github.com/zxlie/FeHelper" target="_blank" rel="noreferrer noopener" class="metric-badge github-metric" data-github-stat="forks" aria-label="GitHub Forks">
+                            <span class="metric-label"><i class="fab fa-github" aria-hidden="true"></i>Forks</span>
+                            <span class="metric-value" data-fallback="1.3K">1.3K</span>
+                        </a>
+                        <img src="https://img.shields.io/badge/since-2012-f59e0b?style=for-the-badge&logo=calendar&logoColor=white" alt="2012 至今持续维护">
+                    </div>
+                    <div class="hero-actions" aria-label="主要操作">
+                        <a href="#download" class="btn btn-primary"><i class="fas fa-download" aria-hidden="true"></i>立即安装</a>
+                        <a href="#offline-download" class="btn btn-success"><i class="fas fa-cloud-download-alt" aria-hidden="true"></i>无梯下载</a>
+                        <a href="#features" class="btn btn-secondary">了解更多</a>
+                    </div>
+                </div>
+                <div class="hero-browser" aria-label="FeHelper 官网首屏工具和小程序入口预览">
+                    <div class="browser-shell">
+                        <div class="browser-topbar">
+                            <div class="browser-controls" aria-hidden="true">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="browser-url">fehelper.com</div>
+                            <img src="static/img/fe-16.png" alt="" class="browser-extension-icon">
+                        </div>
+                        <div class="browser-body">
+                            <div class="hero-tool-demo-grid">
+                                <div class="hero-tool-demo-card">
+                                    <i class="fas fa-code" aria-hidden="true"></i>
+                                    <span>开发工具类</span>
+                                </div>
+                                <div class="hero-tool-demo-card">
+                                    <i class="fas fa-image" aria-hidden="true"></i>
+                                    <span>图像处理类</span>
+                                </div>
+                                <div class="hero-tool-demo-card">
+                                    <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                                    <span>编解码转换类</span>
+                                </div>
+                                <div class="hero-tool-demo-card">
+                                    <i class="fas fa-bolt" aria-hidden="true"></i>
+                                    <span>效率工具类</span>
+                                </div>
+                                <div class="hero-tool-demo-card">
+                                    <i class="fas fa-calculator" aria-hidden="true"></i>
+                                    <span>计算工具类</span>
+                                </div>
+                                <div class="hero-tool-demo-card">
+                                    <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
+                                    <span>其他工具</span>
+                                </div>
+                            </div>
+                            <div class="mini-program-card">
+                                <div class="mini-program-copy">
+                                    <div class="mini-program-header">
+                                        <span class="mini-program-icon"><i class="fab fa-weixin" aria-hidden="true"></i></span>
+                                        <div>
+                                            <h3>微信小程序版 <strong>NEW</strong></h3>
+                                            <p>扫码即用，无需安装</p>
+                                        </div>
+                                    </div>
+                                    <div class="mini-program-tags">
+                                        <span>无需安装</span>
+                                        <span>扫码即用</span>
+                                        <span>核心功能</span>
+                                    </div>
+                                </div>
+                                <div class="mini-program-qr">
+                                    <img src="static/img/fh-wx-xcx.jpg" alt="FeHelper 微信小程序码">
+                                    <p>微信扫码使用</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="proof-band" aria-label="产品事实">
+            <div class="container proof-grid">
+                <div>
+                    <strong>34</strong>
+                    <span>内置工具</span>
+                </div>
+                <div>
+                    <strong>3</strong>
+                    <span>Chrome / Edge / Firefox</span>
+                </div>
+                <div>
+                    <strong>MV3</strong>
+                    <span>现代扩展架构</span>
+                </div>
+                <div>
+                    <strong>AI</strong>
+                    <span>本机或自选模型服务</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>FeHelper 的价值不是工具多，而是少切换</h2>
+                    <p>它把开发者每天反复打开的零散网页、脚本和临时工具，整理成一个浏览器里的工作台。</p>
+                </div>
+                <div class="value-grid">
+                    <article class="value-card">
+                        <div class="value-icon"><i class="fas fa-code" aria-hidden="true"></i></div>
+                        <h3>处理接口与数据</h3>
+                        <p>JSON 自动美化、结构比对、BigInt 无损、嵌套转义解析、Excel 转 JSON、Mock 数据和图表制作。</p>
+                    </article>
+                    <article class="value-card">
+                        <div class="value-icon"><i class="fas fa-random" aria-hidden="true"></i></div>
+                        <h3>转换常见格式</h3>
+                        <p>URL、Base64、Unicode、Hex、JWT、Cookie、Gzip、字符串转义、时间戳、FILETIME、进制和颜色互转。</p>
+                    </article>
+                    <article class="value-card">
+                        <div class="value-icon"><i class="fas fa-vial" aria-hidden="true"></i></div>
+                        <h3>调试页面与请求</h3>
+                        <p>简易 Postman、WebSocket、页面性能分析、网页截屏、取色、栅格标尺和油猴脚本覆盖日常排查。</p>
+                    </article>
+                    <article class="value-card">
+                        <div class="value-icon"><i class="fas fa-sliders-h" aria-hidden="true"></i></div>
+                        <h3>按需安装和排序</h3>
+                        <p>工具市场、快捷键、右键菜单、收藏、最近使用、夜间模式和本地配置，让扩展保持轻而可控。</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai" class="ai-section section">
+            <div class="container ai-grid">
+                <div class="ai-copy">
+                    <div class="section-heading align-left">
+                        <h2>FeHelper 已经支持 AI，但不把确定性工具交给 AI 代替</h2>
+                        <p>先用本地工具完成格式化、识别和转换，再在需要判断、修复、解释时调用 AI。</p>
+                    </div>
+                    <div class="ai-provider-grid">
+                        <article class="ai-provider">
+                            <h3>Chrome 内置 AI</h3>
+                            <p>支持 Gemini Nano 的 Chrome 可在本机运行，首次使用可能需要下载模型，不需要 API Key。</p>
+                        </article>
+                        <article class="ai-provider">
+                            <h3>SiliconFlow</h3>
+                            <p>内置 SiliconFlow 服务商配置，默认使用 Qwen2.5-Coder 模型，需要用户配置自己的 API Key。</p>
+                        </article>
+                        <article class="ai-provider">
+                            <h3>OpenAI 兼容接口</h3>
+                            <p>支持自定义 API URL 和模型名称，适配任意 OpenAI Chat Completions 兼容服务。</p>
+                        </article>
+                    </div>
+                    <p class="ai-note">隐私边界：普通工具优先本地处理。AI 功能只在用户主动发起时，把对应输入发送给所选模型服务。</p>
+                </div>
+                <div class="ai-panel">
+                    <h3>AI 现在嵌进了具体工具流程</h3>
+                    <div class="ai-task-list">
+                        <div><span>JSON</span><p>修复错误，并从样例生成 TypeScript、JSON Schema 或 Zod。</p></div>
+                        <div><span>ENC</span><p>自动尝试 URL、Base64、Unicode、Hex、Gzip、JWT 等解码链路。</p></div>
+                        <div><span>QR</span><p>生成 Wi-Fi、名片、日程等标准二维码内容，识别解码结果并检查扫码可靠性。</p></div>
+                        <div><span>FMT</span><p>格式化代码后补充意图、风险点和可读性建议。</p></div>
+                        <div><span>API</span><p>检查请求配置、响应现场、Headers、Body、鉴权和 CORS 线索。</p></div>
+                    </div>
+                    <img src="static/screenshot/settings.jpg" alt="FeHelper 设置界面截图" class="ai-screenshot">
+                </div>
+            </div>
+        </section>
+
+        <section id="tools" class="tools section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>34 个工具，按开发工作流分组</h2>
+                    <p>不是把功能堆在一起，而是覆盖从接口数据、页面调试到内容生成的常见路径。</p>
+                </div>
+                <div class="category-tabs" role="tablist" aria-label="工具分类">
+                    <button class="tab-btn active" type="button" data-category="dev">开发调试</button>
+                    <button class="tab-btn" type="button" data-category="encode">转换解码</button>
+                    <button class="tab-btn" type="button" data-category="image">页面图像</button>
+                    <button class="tab-btn" type="button" data-category="productivity">效率与 AI</button>
+                    <button class="tab-btn" type="button" data-category="utility">生成计算</button>
+                </div>
+
+                <div class="tools-grid active" data-category="dev">
+                    <article class="tool-card"><h3>JSON 美化</h3><p>自动检测、手动格式化、BigInt、排序、编辑、下载、嵌套转义解析。</p></article>
+                    <article class="tool-card"><h3>内容比对</h3><p>支持 JSON、文本、代码、日志和 Markdown 的按行差异对比。</p></article>
+                    <article class="tool-card"><h3>简易 Postman</h3><p>GET、POST、HEAD、PUT、DELETE 请求调试，响应 JSON 自动格式化。</p></article>
+                    <article class="tool-card"><h3>WebSocket</h3><p>测试 ws/wss 连接、消息发送、返回内容和联调过程。</p></article>
+                    <article class="tool-card"><h3>代码美化与压缩</h3><p>JavaScript、CSS、HTML、XML、SQL 格式化，以及 HTML、JS、CSS 压缩。</p></article>
+                    <article class="tool-card"><h3>正则与性能</h3><p>常用正则速查、匹配测试、页面性能指标、资源加载和长任务分析。</p></article>
+                </div>
+
+                <div class="tools-grid" data-category="encode">
+                    <article class="tool-card"><h3>信息编码转换</h3><p>Unicode、UTF-8、UTF-16、URL、Base64、MD5、SHA1、Hex、JWT、Cookie、Gzip。</p></article>
+                    <article class="tool-card"><h3>AI 自动解码</h3><p>先本地探测解码链路，再让 AI 解释明文结构和敏感字段风险。</p></article>
+                    <article class="tool-card"><h3>时间与 FILETIME</h3><p>Unix 秒/毫秒、日期字符串、世界时区和 Windows FILETIME 互转。</p></article>
+                    <article class="tool-card"><h3>进制与颜色</h3><p>2 到 36 进制 BigInt 无损转换，HEX、RGB、RGBA、HSL、HSV 互转。</p></article>
+                </div>
+
+                <div class="tools-grid" data-category="image">
+                    <article class="tool-card"><h3>二维码与条形码</h3><p>二维码生成/解码，Code128、EAN-13、EAN-8、UPC、ITF-14 条形码导出。</p></article>
+                    <article class="tool-card"><h3>图片 Base64</h3><p>图片链接、文件、截图和 Base64 互转，适合快速嵌入和排查。</p></article>
+                    <article class="tool-card"><h3>SVG 转图片</h3><p>SVG 转 PNG、JPG、WebP，支持尺寸设置、拖放和 URL 导入。</p></article>
+                    <article class="tool-card"><h3>截图、取色、标尺</h3><p>可视区截屏、全页截屏、页面取色和 10px 栅格标尺。</p></article>
+                    <article class="tool-card"><h3>图表与海报</h3><p>把结构化数据快速做成图表，或使用模板生成运营海报。</p></article>
+                </div>
+
+                <div class="tools-grid" data-category="productivity">
+                    <article class="tool-card featured-tool"><h3>AI 智能助手</h3><p>写代码、改代码、方案设计、资料整理和分析，支持本机 AI、SiliconFlow 和自定义 OpenAI 兼容接口。</p></article>
+                    <article class="tool-card"><h3>JSON 结构助手</h3><p>解析失败时修复 JSON，解析成功后生成 TypeScript、JSON Schema 或 Zod。</p></article>
+                    <article class="tool-card"><h3>便签与 Markdown</h3><p>本地便签、目录管理、导入导出、Markdown 预览、HTML 转 Markdown 和 PDF 下载。</p></article>
+                    <article class="tool-card"><h3>网页油猴工具</h3><p>配置页面匹配规则，注入脚本和样式，支持 <code>.user.js</code> 导入导出和运行日志。</p></article>
+                    <article class="tool-card"><h3>便捷思维导图</h3><p>轻量脑图、本地存储、自动保存、批量导入导出和图片下载。</p></article>
+                </div>
+
+                <div class="tools-grid" data-category="utility">
+                    <article class="tool-card"><h3>UUID / ID 生成器</h3><p>UUID v4、Twitter Snowflake 风格雪花 ID、NanoID，支持批量生成和字段解析。</p></article>
+                    <article class="tool-card"><h3>随机密码</h3><p>按长度、数字、大小写字母和特殊符号生成随机密码。</p></article>
+                    <article class="tool-card"><h3>Crontab 与日期计算</h3><p>生成、解释 Crontab 表达式，批量转换时间、计算时区和日期差。</p></article>
+                    <article class="tool-card"><h3>贷款利率</h3><p>计算还款计划，按还款额反推贷款实际利率。</p></article>
+                    <article class="tool-card"><h3>Excel 转 JSON</h3><p>把 Excel、CSV、TSV 转为 JSON、XML、MySQL、PHP 等结构。</p></article>
+                    <article class="tool-card"><h3>FH 开发者工具</h3><p>本地开发自定义工具，并集成到 FeHelper 工具市场。</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="screens section" aria-labelledby="screens-title">
+            <div class="container">
+                <div class="section-heading">
+                    <h2 id="screens-title">真实界面，而不是概念图</h2>
+                    <p>官网预览使用扩展真实截图和介绍视频，便于判断安装后的实际体验。</p>
+                </div>
+                <div class="screenshot-grid tool-preview">
+                    <figure class="preview-item">
+                        <img src="static/screenshot/options.png" alt="FeHelper 配置页截图">
+                        <figcaption>工具市场与配置</figcaption>
+                    </figure>
+                    <figure class="preview-item">
+                        <img src="static/screenshot/json-format.png" alt="FeHelper JSON 美化工具截图">
+                        <figcaption>JSON 美化</figcaption>
+                    </figure>
+                    <figure class="preview-item">
+                        <img src="static/screenshot/en-decode.png" alt="FeHelper 编解码工具截图">
+                        <figcaption>编解码转换</figcaption>
+                    </figure>
+                </div>
+                <div class="promo-video-frame">
+                    <video src="static/video/fehelper-promo.mp4?v=20260507" poster="static/video/fehelper-promo-cover.png?v=20260507" controls playsinline preload="metadata"></video>
+                </div>
+            </div>
+        </section>
+
+        <section class="open-source section">
+            <div class="container open-grid">
+                <div>
+                    <h2>开源、可审计、长期维护</h2>
+                    <p>FeHelper 使用 MIT 协议开源，扩展代码、构建脚本和自动化测试都在 GitHub。普通工具以本地处理为默认，AI 能力需要用户主动配置并发起。</p>
+                </div>
+                <div class="source-card">
+                    <img src="https://api.star-history.com/svg?repos=zxlie/FeHelper&type=Date" alt="FeHelper GitHub Star 历史趋势图">
+                    <div class="source-actions">
+                        <a href="https://github.com/zxlie/FeHelper" target="_blank" rel="noreferrer noopener" class="btn btn-secondary">查看源码</a>
+                        <a href="https://github.com/zxlie/FeHelper/issues" target="_blank" rel="noreferrer noopener" class="btn btn-secondary">反馈问题</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="download" class="download section">
+            <div class="container download-grid">
+                <div class="download-copy">
+                    <h2>选择你的浏览器安装 FeHelper</h2>
+                    <p>支持商店安装、无梯镜像下载，也可以从 GitHub 源码构建。Firefox 版本会按平台能力移除少量不兼容工具。</p>
+                    <ul class="download-points">
+                        <li>默认快捷键 Alt+Shift+J，可在扩展设置里修改。</li>
+                        <li>支持右键菜单、工具排序、收藏、最近使用和夜间模式。</li>
+                        <li>普通工具无需账号，AI 服务按用户选择的模型提供方配置。</li>
+                    </ul>
+                </div>
+                <div class="download-buttons">
+                    <a href="https://chrome.google.com/webstore/detail/pkgccpejnmalmdinmhkkfafefagiiiad" class="download-btn chrome-btn" target="_blank" rel="noreferrer noopener">
+                        <i class="fab fa-chrome" aria-hidden="true"></i>
+                        <span><strong>Chrome Web Store</strong><small>适合 Chrome 与 Chromium 浏览器</small></span>
+                    </a>
+                    <a href="https://microsoftedge.microsoft.com/addons/detail/feolnkbgcbjmamimpfcnklggdcbgakhe" class="download-btn edge-btn" target="_blank" rel="noreferrer noopener">
+                        <i class="fab fa-edge" aria-hidden="true"></i>
+                        <span><strong>Microsoft Edge Add-ons</strong><small>从 Edge 官方商店安装</small></span>
+                    </a>
+                    <a href="https://addons.mozilla.org/zh-CN/firefox/addon/fehelper-%E5%89%8D%E7%AB%AF%E5%8A%A9%E6%89%8B/" class="download-btn firefox-btn" target="_blank" rel="noreferrer noopener">
+                        <i class="fab fa-firefox" aria-hidden="true"></i>
+                        <span><strong>Firefox Add-ons</strong><small>Firefox WebExtensions 版本</small></span>
+                    </a>
+                    <a href="https://chrome-stats.com/d/pkgccpejnmalmdinmhkkfafefagiiiad/download" class="download-btn mirror-btn" target="_blank" rel="noreferrer noopener">
+                        <i class="fas fa-cloud-download-alt" aria-hidden="true"></i>
+                        <span><strong>无梯镜像下载</strong><small>无法访问 Chrome 商店时使用</small></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="offline-download" class="offline-download section">
+            <div class="container offline-grid">
+                <div>
+                    <h2>离线安装提示</h2>
+                    <p>下载 CRX 或 ZIP 后，在 <code>chrome://extensions</code> 打开开发者模式，再拖入 CRX 或加载已解压目录。</p>
+                </div>
+                <ol class="offline-steps">
+                    <li>从 Chrome-Stats 下载 CRX 或 ZIP。</li>
+                    <li>打开浏览器扩展管理页并启用开发者模式。</li>
+                    <li>拖入 CRX，或选择解压后的扩展目录。</li>
+                    <li>安装完成后可关闭开发者模式，降低浏览器警告干扰。</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div>
+                <div class="footer-logo">
+                    <img src="static/img/fe-48.png" alt="" class="logo-icon">
+                    <span>FeHelper</span>
+                </div>
+                <p>浏览器里的开发者工具箱。开源、可审计、按需启用，已支持 AI 辅助。</p>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h3>产品</h3>
+                    <a href="#features">价值</a>
+                    <a href="#ai">AI 支持</a>
+                    <a href="#tools">工具列表</a>
+                    <a href="privacy-policy.html">隐私政策</a>
+                </div>
+                <div>
+                    <h3>开发者</h3>
+                    <a href="docs.html">文档中心</a>
+                    <a href="https://github.com/zxlie/FeHelper" target="_blank" rel="noreferrer noopener">GitHub</a>
+                    <a href="https://github.com/zxlie/FeHelper/issues" target="_blank" rel="noreferrer noopener">问题反馈</a>
+                    <a href="https://www.fehelper.com/v1/index/index.html" target="_blank" rel="noreferrer noopener">在线使用</a>
+                </div>
+                <div>
+                    <h3>安装</h3>
+                    <a href="https://chrome.google.com/webstore/detail/pkgccpejnmalmdinmhkkfafefagiiiad" target="_blank" rel="noreferrer noopener">Chrome Store</a>
+                    <a href="https://microsoftedge.microsoft.com/addons/detail/feolnkbgcbjmamimpfcnklggdcbgakhe" target="_blank" rel="noreferrer noopener">Edge Add-ons</a>
+                    <a href="https://addons.mozilla.org/zh-CN/firefox/addon/fehelper-%E5%89%8D%E7%AB%AF%E5%8A%A9%E6%89%8B/" target="_blank" rel="noreferrer noopener">Firefox Add-ons</a>
+                    <a href="https://chrome-stats.com/d/pkgccpejnmalmdinmhkkfafefagiiiad/download" target="_blank" rel="noreferrer noopener">无梯下载</a>
+                </div>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2012-2026 FeHelper. Open source under MIT license.</p>
+            <p class="footer-icp">
+                <a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer noopener">京ICP备14006329号-1</a>
+                <span>|</span>
+                <a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer noopener">京ICP备14006329号-2</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script>
+    (function() {
+      var ua = window.navigator.userAgent.toLowerCase();
+      if (!/micromessenger/.test(ua)) return;
+      var url = location.href.split('#')[0];
+      fetch('https://chrome.fehelper.com/api/wechat-signature?url=' + encodeURIComponent(url))
+        .then(function(res) { return res.json(); })
+        .then(function(cfg) {
+          wx.config({
+            debug: false,
+            appId: cfg.data.appId,
+            timestamp: cfg.data.timestamp,
+            nonceStr: cfg.data.nonceStr,
+            signature: cfg.data.signature,
+            jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
+          });
+          wx.ready(function () {
+            wx.updateAppMessageShareData({
+              title: 'FeHelper - 浏览器里的开发者工具箱',
+              desc: '34 个常用开发工具，JSON、编解码、接口调试、截图、取色、二维码和 AI 辅助，支持 Chrome、Edge、Firefox。',
+              link: url,
+              imgUrl: 'https://fehelper.com/static/img/fe-128.png'
+            });
+            wx.updateTimelineShareData({
+              title: 'FeHelper - 浏览器里的开发者工具箱，已支持 AI 辅助',
+              link: url,
+              imgUrl: 'https://fehelper.com/static/img/fe-128.png'
+            });
+          });
+        });
+    })();
+    </script>
+    <script src="static/js/script.js?v=20260616"></script>
+</body>
+</html>

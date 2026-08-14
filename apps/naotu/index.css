@@ -1,0 +1,201 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+h1.editor-title {
+    background: #393F4F;
+    color: white;
+    margin: 0;
+    height: 40px;
+    font-size: 14px;
+    line-height: 40px;
+    font-family: 'Hiragino Sans GB', 'Arial', 'Microsoft Yahei';
+    font-weight: normal;
+    padding: 0 20px;
+}
+div.minder-editor-container {
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+a.x-a-high, a.x-a-high:visited {
+    color:#ff0;
+}
+.x-a-high:hover {
+    color:#aa0;
+}
+.x-toolbox {
+    margin-left: 50px;
+    float: right;
+}
+.x-toolbox .x-line {
+    font-size: 12px;
+    margin:0 6px;
+    color: #bbb;
+}
+.x-toolbox a.x-tool {
+    font-size: 12px;
+    color: #eaa421;
+    text-decoration: none;
+}
+.x-toolbox a.x-tool:hover {
+    color:#ff0;
+}
+.my-naotu-list .x-toolbox {
+    padding-bottom: 5px;
+}
+.my-naotu-list .x-toolbox a.x-tool {
+    color: #00a2d4;
+}
+.my-naotu-list .x-toolbox a.x-tool:hover {
+    color:#00f;
+}
+.my-naotu-list {
+    margin: 20px;
+}
+.my-naotu-list .mm-tips{
+    font-size:16px;
+    line-height: 30px;
+    margin: 20px 0 50px;
+    padding: 15px 60px;
+    border: 1px solid #48b;
+    background: #00b;
+    color: #fff;
+    border-radius: 60px;
+}
+.x-y {
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 3px;
+    margin-bottom: 10px;
+}
+.my-naotu-list .mm-tips a{
+    color:red;
+}
+.my-naotu-list table {
+    font-size: 14px;
+}
+.x-tips {
+    font-size: 12px;
+    color: #999;
+    font-style: italic;
+    margin-left: 40px;
+}
+.x-tips span {
+    color: yellow;
+    margin-left: 5px;
+    text-decoration: underline;
+    border-bottom: 1px solid yellow;
+    padding-bottom: 2px;
+}
+.x-tips span:hover {
+    color:#f00;
+    cursor: pointer;
+    border-bottom-color: #f00;
+}
+th.th-op {
+    width:100px;
+}
+
+body.fh-modern {
+    height: auto;
+    overflow: auto;
+}
+
+body.fh-modern h1.editor-title {
+    display: none;
+}
+
+body.fh-modern kityminder-editor {
+    display: none;
+}
+
+body.fh-modern .naotu-shell {
+    min-height: calc(100dvh - 116px);
+}
+
+body.fh-modern .naotu-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+    padding: 14px;
+    border: 1px solid var(--fh-line);
+    border-radius: var(--fh-radius);
+    background: var(--fh-subtle);
+}
+
+body.fh-modern .naotu-hero h2 {
+    margin: 0;
+    color: var(--fh-text);
+    font-size: 18px;
+    font-weight: 800;
+}
+
+body.fh-modern .naotu-hero p {
+    margin: 6px 0 0;
+    color: var(--fh-muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+body.fh-modern .my-naotu-list {
+    margin: 0;
+}
+
+body.fh-modern .my-naotu-list .mm-tips {
+    margin: 0 0 14px;
+    padding: 14px 16px;
+    border: 1px solid #bfdbfe;
+    border-radius: var(--fh-radius);
+    background: var(--fh-primary-soft);
+    color: #1e40af;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+body.fh-modern .my-naotu-list .mm-tips a {
+    color: var(--fh-primary);
+    font-weight: 800;
+}
+
+body.fh-modern .x-y {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 36px;
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--fh-line);
+    color: var(--fh-text);
+    font-size: 14px;
+    font-weight: 900;
+}
+
+body.fh-modern .x-toolbox {
+    float: none;
+    margin-left: 0;
+}
+
+body.fh-modern .my-naotu-list .x-toolbox a.x-tool {
+    color: var(--fh-primary);
+    font-weight: 800;
+}
+
+body.fh-modern .my-naotu-list table {
+    margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+    body.fh-modern .naotu-hero {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

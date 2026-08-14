@@ -1,0 +1,41 @@
+@import url("../static/vendor/prism/prism.css");
+@import url("../static/css/bootstrap.min.css");
+
+#codeSource {
+    height: 150px;
+}
+#btnFormat {
+    outline: none;
+}
+
+.fh-ai-tool-btn {
+    border: 1px solid rgba(37, 99, 235, 0.24);
+    background: #eef5ff;
+    color: #1d4ed8;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+.fh-ai-tool-btn:hover,
+.fh-ai-tool-btn:focus {
+    border-color: rgba(37, 99, 235, 0.5);
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.example-links {
+    margin-left: 70px;
+    display: inline-block;
+}
+
+.example-link {
+    margin-right: 15px;
+    color: #337ab7;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.example-link:hover {
+    color: #23527c;
+    text-decoration: underline;
+}

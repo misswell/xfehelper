@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+    <head>
+        <title>文本/JSON Diff</title>
+        <meta charset="UTF-8">
+        <link rel="shortcut icon" href="../static/img/favicon.ico">
+        <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="../static/css/fehelper-tools.css">
+        <script type="text/javascript" src="../static/vendor/evalCore.min.js"></script>
+        <script type="text/javascript" src="../static/vendor/vue/vue.js"></script>
+    </head>
+    <body class="fh-modern">
+        <div class="wrapper wp-json" id="pageContainer">
+            <div class="panel panel-default" style="margin-bottom: 0px;">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a href="https://fehelper.com" target="_blank" class="x-a-high">
+                            <img src="../static/img/fe-16.png" alt="fehelper"/> FeHelper</a>：文本/JSON Diff
+                            
+                        <a class="x-other-tools" @click="openOptionsPage($event)"><i class="icon-plus-circle"></i> 工具市场</a>
+                        <a href="#" class="x-donate-link" id="donateLink" @click="openDonateModal($event)"><i class="nav-icon">SP</i>请作者喝咖啡</a>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="panel-body mod-json">
+                <div class="json-examples">
+                    <div class="compare-mode-switch" role="tablist" aria-label="对比模式">
+                        <button type="button" class="mode-button" :class="{ active: compareMode === 'json' }" @click="setCompareMode('json')">JSON 对比</button>
+                        <button type="button" class="mode-button" :class="{ active: compareMode === 'text' }" @click="setCompareMode('text')">任意文本</button>
+                    </div>
+                    <span>{{ compareMode === 'json' ? '示例 JSON：' : '示例文本：' }}</span>
+                    <a href="#" class="example-button" v-for="example in activeExamples" :key="example.key" :data-example="example.key" @click.prevent="fillExample(example.key)">{{ example.label }}</a>
+                    <div class="diff-actions" role="group" aria-label="对比操作">
+                        <button type="button" class="diff-action-button" @click="formatBothSides" :disabled="compareMode !== 'json'">美化</button>
+                        <button type="button" class="diff-action-button" @click="clearBothSides" :disabled="!hasContent">清空</button>
+                        <button type="button" class="diff-action-button diff-action-primary" @click="compareContent">对比</button>
+                    </div>
+                    <span class="x-error result-display" v-bind:class="{'x-hlt': errorHighlight}" v-if="!!errorMessage">
+                        <span class="x-hlt">Tips：</span>
+                        <span v-if="leftSideError" class="x-hlt1">左侧</span>
+                        <span v-if="rightSideError" class="x-hlt1">右侧</span>
+                        <span>{{ errorMessage }}</span>
+                    </span>
+                </div>
+                <aside class="json-diff-summary" v-if="compareMode === 'json' && diffSummary.length" role="region" aria-live="polite" aria-label="结构化差异摘要">
+                    <div class="json-diff-summary-title">
+                        <div class="json-diff-summary-heading">
+                            <strong>结构化差异</strong>
+                            <span>{{ diffSummary.length }} 处</span>
+                        </div>
+                        <button type="button" class="json-diff-summary-close" @click="clearDiffSummary" aria-label="关闭结构化差异摘要">×</button>
+                    </div>
+                    <div class="json-diff-summary-list">
+                        <div class="json-diff-summary-item" v-for="item in diffSummary" :key="item.id">
+                            <span class="json-diff-op" :class="'json-diff-op-' + item.op">{{ item.label }}</span>
+                            <code>{{ item.path }}</code>
+                            <span class="json-diff-from" v-if="item.from">从 {{ item.from }}</span>
+                            <span class="json-diff-value" v-if="item.valuePreview">{{ item.valuePreview }}</span>
+                        </div>
+                    </div>
+                </aside>
+                <div class="col-md-6 box-wrapper-left">
+                    <textarea class="form-control mod-textarea" id="jsonSourceLeft" ref="srcLeft" placeholder="左侧粘贴待比对内容"></textarea>
+                </div>
+                <div class="col-md-6 box-wrapper-right">
+                    <textarea class="form-control mod-textarea" id="jsonSourceRight" ref="srcRight" placeholder="右侧粘贴待比对内容"></textarea>
+                </div>
+            </div>
+
+        </div>
+        <script src="../static/vendor/jquery/jquery-3.3.1.min.js"></script>
+        <script src="../static/vendor/codemirror/codemirror.js"></script>
+        <script src="../static/vendor/codemirror/javascript.js"></script>
+        <script src="../static/vendor/codemirror/active-line.js"></script>
+        <script src="../static/vendor/codemirror/matchbrackets.js"></script>
+        <script src="../static/vendor/codemirror/placeholder.js"></script>
+        <script src="../static/vendor/codemirror/formatting.js"></script>
+        <script src="../static/vendor/json-diff/backbone-events.min.js"></script>
+        <script src="../static/vendor/json-diff/json-patch-duplex.min.js"></script>
+        <script src="../static/vendor/json-diff/json-source-map.js"></script>
+        <script src="../static/vendor/json-diff/json-diff.js"></script>
+        <script src="../json-format/json-auto-utils.js"></script>
+        <script src="./js-adapter.js"></script>
+        <script src="./diff-utils.js" type="module"></script>
+    <script src="../static/js/tool-layout.js"></script>
+        <script src="./index.js"></script>
+        <script src="./index-event-handler.js"></script>
+    </body>
+</html>

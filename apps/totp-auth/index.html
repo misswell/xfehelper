@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+    <head>
+        <title>2FA 动态口令</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="../static/img/favicon.ico">
+        <link rel="stylesheet" href="../static/css/fehelper-tools.css">
+        <link rel="stylesheet" href="index.css">
+        <script type="text/javascript" src="../static/vendor/vue/vue.js"></script>
+    </head>
+    <body class="fh-modern">
+        <div id="pageContainer" class="totp-page" v-cloak>
+            <header class="totp-header">
+                <a href="https://fehelper.com" target="_blank" class="totp-brand">
+                    <img src="../static/img/fe-16.png" alt="FeHelper">
+                    <span>FeHelper</span>
+                </a>
+                <h1>2FA 动态口令</h1>
+                <button type="button" class="totp-ghost-button" v-if="vaultReady" @click="toggleSecretReveal">{{ revealSecrets ? '隐藏密钥' : '显示密钥' }}</button>
+                <button type="button" class="totp-ghost-button" v-if="vaultReady" @click="lockVault">锁定</button>
+            </header>
+
+            <section class="totp-vault-panel" v-if="!vaultReady">
+                <div class="totp-vault-copy">
+                    <h2>{{ vaultTitle }}</h2>
+                    <p>{{ vaultHint }}</p>
+                </div>
+                <div class="totp-vault-actions">
+                    <input type="password" v-model="vaultPassphrase" autocomplete="new-password" placeholder="本地保险箱口令">
+                    <input type="password" v-if="!vaultExists" v-model="vaultPassphraseConfirm" autocomplete="new-password" placeholder="再次输入口令">
+                    <button type="button" class="totp-primary-button" v-if="vaultExists" @click="unlockVault">解锁</button>
+                    <button type="button" class="totp-primary-button" v-else @click="createVault">创建保险箱</button>
+                </div>
+            </section>
+
+            <main class="totp-layout">
+                <section class="totp-pane totp-form-pane">
+                    <div class="totp-pane-head">
+                        <h2>添加账号</h2>
+                        <span>{{ vaultReady ? '已加密' : '需先解锁' }}</span>
+                    </div>
+                    <label class="totp-field">
+                        <span>Issuer</span>
+                        <input type="text" v-model.trim="issuerInput" :disabled="!vaultReady" autocomplete="off" spellcheck="false" placeholder="GitHub">
+                    </label>
+                    <label class="totp-field">
+                        <span>Account</span>
+                        <input type="text" v-model.trim="accountInput" :disabled="!vaultReady" autocomplete="off" spellcheck="false" placeholder="name@example.com">
+                    </label>
+                    <label class="totp-field">
+                        <span>Secret</span>
+                        <input type="text" v-model.trim="secretInput" :disabled="!vaultReady" autocomplete="off" spellcheck="false" placeholder="Base32 secret">
+                    </label>
+                    <div class="totp-field-grid">
+                        <label class="totp-field">
+                            <span>Digits</span>
+                            <select v-model.number="digitsInput" :disabled="!vaultReady">
+                                <option :value="6">6</option>
+                                <option :value="8">8</option>
+                            </select>
+                        </label>
+                        <label class="totp-field">
+                            <span>Period</span>
+                            <input type="number" min="15" max="120" step="5" v-model.number="periodInput" :disabled="!vaultReady">
+                        </label>
+                        <label class="totp-field">
+                            <span>Algorithm</span>
+                            <select v-model="algorithmInput" :disabled="!vaultReady">
+                                <option value="SHA-1">SHA-1</option>
+                                <option value="SHA-256">SHA-256</option>
+                                <option value="SHA-512">SHA-512</option>
+                            </select>
+                        </label>
+                    </div>
+                    <button type="button" class="totp-primary-button" @click="addAccount" :disabled="!vaultReady">加密保存账号</button>
+
+                    <div class="totp-uri-box">
+                        <label class="totp-field">
+                            <span>otpauth URI</span>
+                            <textarea v-model.trim="uriInput" :disabled="!vaultReady" spellcheck="false" placeholder="otpauth://totp/Issuer:account?secret=..."></textarea>
+                        </label>
+                        <button type="button" class="totp-secondary-button" @click="importOtpAuthUri" :disabled="!vaultReady">导入 URI</button>
+                    </div>
+                    <p class="totp-security-note">账号密钥使用本地口令加密保存。忘记口令后无法恢复。</p>
+                </section>
+
+                <section class="totp-pane totp-list-pane">
+                    <div class="totp-pane-head">
+                        <h2>动态码</h2>
+                        <span>{{ accounts.length }} 个账号</span>
+                    </div>
+                    <div class="totp-empty" v-if="!accounts.length">
+                        <strong>{{ vaultReady ? '暂无账号' : '保险箱未解锁' }}</strong>
+                        <span>{{ vaultReady ? '添加 Base32 secret 后开始生成动态口令。' : '解锁后显示本地动态口令。' }}</span>
+                    </div>
+                    <article class="totp-account" v-for="account in accounts" :key="account.id">
+                        <div class="totp-account-meta">
+                            <strong>{{ account.issuer || '未命名服务' }}</strong>
+                            <span>{{ account.name || '未命名账号' }}</span>
+                            <span>{{ account.algorithm || 'SHA-1' }} / {{ account.digits }} 位 / {{ account.period }}s</span>
+                            <code v-if="revealSecrets">{{ account.secret }}</code>
+                        </div>
+                        <div class="totp-code-box">
+                            <button type="button" class="totp-code" @click="copyCode(account)">{{ getCode(account.id) }}</button>
+                            <div class="totp-progress" aria-hidden="true">
+                                <span :style="{ width: getProgress(account) + '%' }"></span>
+                            </div>
+                            <small>{{ getRemainingSeconds(account) }}s</small>
+                        </div>
+                        <button type="button" class="totp-remove-button" @click="removeAccount(account)">删除</button>
+                    </article>
+                </section>
+            </main>
+
+            <div class="totp-notice" v-if="noticeText">{{ noticeText }}</div>
+        </div>
+
+        <script src="../static/js/tool-layout.js"></script>
+        <script src="totp-core.js"></script>
+        <script src="index.js"></script>
+    </body>
+</html>

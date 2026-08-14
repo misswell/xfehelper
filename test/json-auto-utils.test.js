@@ -1,0 +1,134 @@
+import { createRequire } from 'node:module';
+import { describe, expect, it } from 'vitest';
+
+const require = createRequire(import.meta.url);
+const utils = require('../apps/json-format/json-auto-utils.js');
+
+describe('json-auto-utils', () => {
+    it('用与手动 JSON 工具一致的宽松解析处理自动格式化输入', () => {
+        const parsed = utils.parseJSONLike("{status: 'ok', id: 1234567890123456789}");
+
+        expect(parsed.value.status).toBe('ok');
+        expect(parsed.value.id).toBe(BigInt('1234567890123456789'));
+        expect(parsed.normalizedSource).toBe('{"status":"ok","id":1234567890123456789}');
+    });
+
+    it('识别 JSONP 并保留回调名元信息', () => {
+        const parsed = utils.parseJSONLike('callback({"status":200})');
+
+        expect(parsed.funcName).toBe('callback');
+        expect(parsed.value.status).toBe(200);
+        expect(parsed.normalizedSource).toBe('{"status":200}');
+    });
+
+    it('Issue #576: 自动解码破坏合法 JSON 时回退原始 JSON', () => {
+        const source = '{"url":"https://example.com/callback?payload=%7B%22status%22%3Atrue%7D"}';
+        const decoded = decodeURIComponent(source);
+
+        expect(() => utils.parseWithBigInt(decoded)).toThrow();
+        expect(utils.coerceDecodedJSONSource(source, decoded)).toBe(source);
+        expect(utils.parseJSONLike(utils.coerceDecodedJSONSource(source, decoded))).not.toBeNull();
+    });
+
+    it('Issue #592: 宽松 key 修正不会破坏字符串值里的逗号和冒号', () => {
+        const source = '{\n  "schema": ",m:"\n}';
+        const parsed = utils.parseJSONLike(source);
+
+        expect(utils.parseWithBigInt(source)).toEqual({ schema: ',m:' });
+        expect(parsed.value.schema).toBe(',m:');
+        expect(parsed.normalizedSource).toBe('{"schema":",m:"}');
+    });
+
+    it('自动解码得到完整 JSON 时使用解码后的合法 JSON', () => {
+        const source = '%7B%22name%22%3A%22FeHelper%22%7D';
+        const decoded = decodeURIComponent(source);
+
+        expect(utils.coerceDecodedJSONSource(source, decoded)).toBe('{"name":"FeHelper"}');
+    });
+
+    it('支持顶层转义 JSON 的嵌套解析', () => {
+        const source = '"{\\"id\\":1234567890123456789}"';
+        const parsed = utils.parseJSONLike(source, { nestedEscapeParse: true });
+
+        expect(parsed.value.id).toBe(BigInt('1234567890123456789'));
+        expect(parsed.normalizedSource).toBe('{"id":1234567890123456789}');
+    });
+
+    it('兼容带 XSSI/防劫持前缀的 JSON 页面内容', () => {
+        const source = `)]}'\n{"status":"ok","items":[1,2,3]}`;
+        const parsed = utils.parseJSONLike(source);
+
+        expect(parsed).not.toBeNull();
+        expect(parsed.value.status).toBe('ok');
+        expect(parsed.normalizedSource).toBe('{"status":"ok","items":[1,2,3]}');
+    });
+
+    it('兼容正文前后带说明文本的 JSON 片段', () => {
+        const source = 'source viewer\n{"status":"ok","payload":{"count":2}}\nrendered by browser';
+        const parsed = utils.parseJSONLike(source);
+
+        expect(parsed).not.toBeNull();
+        expect(parsed.value.payload.count).toBe(2);
+        expect(parsed.normalizedSource).toBe('{"status":"ok","payload":{"count":2}}');
+    });
+
+    it('Issue #593: HTML 自动格式化路径可关闭正文中的 JSON 片段提取', () => {
+        const source = '普通网页正文 before {"status":"ok"} after';
+
+        expect(utils.parseJSONLike(source)).not.toBeNull();
+        expect(utils.parseJSONLike(source, { allowExtractJSONFragment: false })).toBeNull();
+    });
+
+    it('Issue #601: HTML 自动格式化路径可关闭函数调用/JSONP 解析', () => {
+        const source = "wx.switchTab({\n  url: '/index'\n})";
+
+        expect(utils.parseJSONLike(source, { allowExtractJSONFragment: false })).not.toBeNull();
+        expect(utils.parseJSONLike(source, {
+            allowExtractJSONFragment: false,
+            allowJSONP: false,
+        })).toBeNull();
+    });
+
+    it('Issue #601: HTML 页面代码示例不会被正文 JSON 片段提取误判', () => {
+        const parseOptions = {
+            allowExtractJSONFragment: false,
+            allowJSONP: false,
+        };
+        const samples = [
+            "wx.switchTab({\n  url: '/index'\n})",
+            "import { motion } from 'motion/react';\n\nexport default function Demo() {\n  return <motion.div layout={{ duration: 0.2 }} />;\n}",
+            "<html><body><pre>wx.switchTab({ url: '/index' })</pre></body></html>",
+        ];
+
+        samples.forEach(source => {
+            expect(utils.parseJSONLike(source, parseOptions)).toBeNull();
+        });
+        expect(utils.parseJSONLike('{"status":"ok"}', parseOptions).value.status).toBe('ok');
+    });
+
+    it('Issue #608: raw YAML/YML resources are not JSON auto-format targets', () => {
+        expect(utils.isYAMLResource(
+            'https://raw.githubusercontent.com/bitxeno/go-docker-skeleton/refs/heads/master/.github/workflows/release.yml',
+            'text/plain; charset=utf-8',
+        )).toBe(true);
+        expect(utils.isYAMLResource('https://example.com/config.yaml', 'text/plain')).toBe(true);
+        expect(utils.isYAMLResource('https://example.com/config', 'application/x-yaml')).toBe(true);
+        expect(utils.isYAMLResource('https://example.com/data.json', 'application/json')).toBe(false);
+    });
+
+    it('Issue #613: 自动格式化保留数字字符串 key 的输入顺序', () => {
+        const parsed = utils.parseJSONLike('{"2":"b","1":"a","name":"FeHelper"}');
+        const keys = Object.keys(parsed.value).map(utils.normalizePreservedKey);
+
+        expect(keys).toEqual(['2', '1', 'name']);
+        expect(utils.safeStringify(parsed.value)).toBe('{"2":"b","1":"a","name":"FeHelper"}');
+    });
+
+    it('Issue #623/#624: JSON Pointer 中的数字字符串 key 前缀会被归一化', () => {
+        const parsed = utils.parseJSONLike('{"2":{"name":"b"},"1":"a"}');
+        const internalKey = Object.keys(parsed.value)[0];
+
+        expect(internalKey).toBe('__FH_PRESERVE_INTEGER_KEY__2');
+        expect(utils.normalizePreservedJsonPointer('/' + internalKey + '/name')).toBe('/2/name');
+    });
+});

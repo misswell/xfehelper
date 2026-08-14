@@ -1,0 +1,15 @@
+# 工程文件
+.idea
+.DS_Store
+.todolist
+node_modules/
+package-lock.json
+Users/
+output-chrome/
+output-firefox/
+output-edge/
+promo-video/
+.vscode/    
+.pw-userdata-fehelper/
+.pw-userdata-fehelper-warm/
+.pw-userdata-fehelper-headless/

@@ -1,0 +1,240 @@
+@import url("../static/css/bootstrap.min.css");
+
+.mod-timestamp{
+    width:950px;
+    margin:20px auto 0;
+    padding:5px 15px;
+    background:#fff;
+    border:1px solid #bbb
+}
+.mod-timestamp .x-input div{
+    margin:5px 0
+}
+#txtNowDate,#txtNow,#txtDesStamp,#txtSrcStamp,#txtDesDate,#txtLocale{
+    width:300px;
+}
+#txtNowDate,#txtNow,#txtDesStamp,#txtDesDate{
+    color:#666;
+    font-weight:500
+}
+#txtNowS,#txtNowMs {
+    width:140px;
+    color:#666;
+    font-weight: 500;
+}
+#txtSrcYear,#txtSrcMonth,#txtSrcDay,#txtSrcHour,#txtSrcMinute,#txtSrcSecond{
+    width:40px;
+}
+
+.mod-time-input{
+    width: 80px;
+}
+.x-sel-sec {
+    display: inline-block;
+    width: 80px;
+}
+.x-wd {
+    margin-top: 0px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-size: 16px;
+    color: #428bca;
+}
+.x-cnt {
+    padding:0 15px 30px;
+}
+thead th {
+    text-align: center;
+    background: #f9f9f9;
+}
+.x-gmt-setting {
+    display: inline-block;
+    float: right;
+    position: relative;
+    top: -8px;
+    right: -13px;
+}
+.x-gmt-setting select {
+    width:auto;
+    display: inline;
+}
+#fehelper_alertmsg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000000;
+    background: #000;
+    display: inline-block;
+    color: #fff;
+    text-align: center;
+    padding: 10px 10px;
+    margin: 0 auto;
+    font-size: 14px;
+    border-bottom: 1px solid #aaa;
+}
+
+/* 顶部升级提示样式 */
+#fh-timestamp-upgrade-tip {
+    width: 100%;
+    position: static;
+    background: linear-gradient(90deg,#ff2d55 0%,#ff9800 100%);
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 18px 10px 18px 10px;
+    box-shadow: 0 4px 16px rgba(255,45,85,0.18),0 1.5px 0 #fff;
+    letter-spacing: 1px;
+}
+.fh-tip-link {
+    color: #fff;
+    text-decoration: underline;
+    font-size: 22px;
+    font-weight: 900;
+    display: inline-block;
+    margin-left: 8px;
+    animation: fh-tip-blink 1s infinite alternate;
+}
+@keyframes fh-tip-blink {
+    0% { color: #fff; text-shadow: 0 0 8px #fff, 0 0 16px #ff9800; }
+    100% { color: #ffeb3b; text-shadow: 0 0 16px #ff2d55, 0 0 32px #ff9800; }
+}
+body {
+    padding-top: 70px !important;
+}
+
+body.fh-modern {
+    padding-top: 0 !important;
+}
+
+body.fh-modern #fh-timestamp-upgrade-tip {
+    margin: 0 0 12px;
+    padding: 12px 14px;
+    border: 1px solid #fed7aa;
+    border-radius: var(--fh-radius);
+    background: var(--fh-warning-soft);
+    box-shadow: none;
+    color: #9a3412;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+body.fh-modern .fh-tip-link {
+    color: var(--fh-primary);
+    font-size: 14px;
+    font-weight: 900;
+    animation: none;
+}
+
+body.fh-modern .x-gmt-setting {
+    position: static;
+    top: auto;
+    right: auto;
+    float: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    color: var(--fh-muted);
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+body.fh-modern .x-gmt-setting select {
+    width: min(260px, 32vw);
+    display: inline-flex;
+}
+
+body.fh-modern .mod-stamp {
+    padding: 16px 14px 18px;
+}
+
+body.fh-modern .mod-stamp .x-cnt {
+    padding: 10px 14px 24px;
+}
+
+body.fh-modern .mod-stamp .x-cnt > .row,
+body.fh-modern .mod-stamp > .row.x-cnt {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+}
+
+body.fh-modern .mod-stamp .x-cnt > .row + .row {
+    margin-top: 10px;
+}
+
+body.fh-modern .mod-stamp .row > span {
+    min-width: 120px;
+    color: var(--fh-text);
+    font-weight: 700;
+}
+
+body.fh-modern .mod-stamp .form-control {
+    margin: 0 !important;
+}
+
+body.fh-modern .mod-time-input {
+    width: auto;
+    min-width: 82px;
+    padding-right: 14px;
+    padding-left: 14px;
+}
+
+body.fh-modern #txtNowDate,
+body.fh-modern #txtSrcStamp,
+body.fh-modern #txtLocale,
+body.fh-modern #txtDesDate,
+body.fh-modern #txtDesStamp {
+    width: 300px;
+    max-width: 100%;
+}
+
+body.fh-modern #txtNowS,
+body.fh-modern #txtNowMs {
+    width: 150px;
+}
+
+body.fh-modern .fh-filetime-source {
+    flex: 1 1 360px;
+    min-width: 260px;
+}
+
+body.fh-modern .fh-filetime-result {
+    flex: 1 1 320px;
+    min-width: 260px;
+}
+
+@media (max-width: 760px) {
+    body.fh-modern .x-gmt-setting {
+        width: 100%;
+        justify-content: space-between;
+        margin-left: 0;
+    }
+
+    body.fh-modern .x-gmt-setting select {
+        width: min(100%, 260px);
+    }
+
+    body.fh-modern .mod-stamp .row > span,
+    body.fh-modern .mod-stamp .form-control,
+    body.fh-modern #txtNowDate,
+    body.fh-modern #txtSrcStamp,
+    body.fh-modern #txtLocale,
+    body.fh-modern #txtDesDate,
+    body.fh-modern #txtDesStamp,
+    body.fh-modern #txtNowS,
+    body.fh-modern #txtNowMs {
+        width: 100%;
+    }
+}
+
+.panel-no-margin-bottom {
+    margin-bottom: 0 !important;
+}

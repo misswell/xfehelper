@@ -1,0 +1,583 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <title>FeHelper-控制台</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="theme-boot.js"></script>
+    <link rel="stylesheet" href="index.css"/>
+    <script type="text/javascript" src="../static/vendor/evalCore.min.js"></script>
+    <script type="text/javascript" src="../static/vendor/vue/vue.js"></script>
+</head>
+<body>
+
+<div :class="['fh-console', uiMode === 'lite' ? 'fh-console-lite' : 'fh-console-omni']" id="marketContainer" v-cloak>
+    <aside class="fh-sidebar">
+        <div class="fh-sidebar-head">
+            <a href="https://fehelper.com" target="_blank" class="fh-brand">
+                <img class="fh-brand-mark" src="../static/img/fe-48.png" alt="" aria-hidden="true">
+                <span class="fh-brand-copy">
+                    <strong>FeHelper</strong>
+                    <span>{{ uiMode === 'lite' ? 'Lite 控制台' : '开发者工具控制台' }}</span>
+                </span>
+            </a>
+            <div class="fh-mode-switch" role="group" aria-label="FeHelper 模式切换">
+                <button type="button" :class="{ active: uiMode === 'lite' }" @click="setUiMode('lite')">Lite</button>
+                <button type="button" :class="{ active: uiMode === 'omni' }" @click="setUiMode('omni')">Omni</button>
+            </div>
+        </div>
+
+        <div class="fh-version-card">
+            <div class="fh-version-top">
+                <span>当前版本</span>
+                <strong>v{{manifest.version}}</strong>
+            </div>
+            <div class="fh-version-state" v-if="versionChecked">
+                <template v-if="latestVersion && !needUpdate">
+                    <span class="fh-state-dot"></span>
+                    <span>已是最新版</span>
+                </template>
+                <template v-else>
+                    <span>最新版本</span>
+                    <strong v-if="latestVersion">v{{latestVersion}}</strong>
+                    <button v-if="needUpdate" type="button" @click="openStorePage">立即更新</button>
+                    <button v-else type="button" @click="openStorePage">打开商店</button>
+                </template>
+            </div>
+            <div class="fh-version-state" v-else>
+                <span class="fh-state-dot -muted"></span>
+                <span>正在检查版本</span>
+            </div>
+        </div>
+
+        <nav class="fh-side-actions" aria-label="FeHelper主要操作">
+            <button type="button" class="fh-side-action is-settings" @click="showSettings">
+                <span class="fh-action-icon" aria-hidden="true">ST</span>
+                <span class="fh-action-copy">
+                    <strong>插件设置</strong>
+                    <small>快捷键、右键菜单、工具排序</small>
+                </span>
+                <span class="fh-action-meta">打开</span>
+            </button>
+            <button type="button" class="fh-side-action is-donate" @click="openDonateModal">
+                <span class="fh-action-icon" aria-hidden="true">SP</span>
+                <span class="fh-action-copy">
+                    <strong>请作者喝咖啡</strong>
+                    <small>支持 FeHelper 持续更新</small>
+                </span>
+                <span class="fh-action-meta">支持</span>
+            </button>
+        </nav>
+
+        <section class="fh-side-section" v-if="uiMode === 'omni'">
+            <h2>工具分类</h2>
+            <button type="button" :class="{active: currentCategory === ''}" @click="handleCategoryChange('')">
+                <span>全部分类</span>
+                <strong>{{Object.keys(originalTools).length}}</strong>
+            </button>
+            <button type="button" v-for="category in categories" :key="category.key" :class="{active: currentCategory === category.key}" @click="handleCategoryChange(category.key)">
+                <span>{{category.name}}</span>
+                <strong>{{getCategoryCount(category.key)}}</strong>
+            </button>
+        </section>
+
+        <section class="fh-side-section">
+            <h2>我的工具</h2>
+            <button type="button" :class="{active: currentView === 'installed'}" @click="showMyInstalled">
+                <span>已安装</span>
+                <strong>{{installedCount}}</strong>
+            </button>
+            <button type="button" :class="{active: currentView === 'favorites'}" @click="showMyFavorites">
+                <span>我的收藏</span>
+                <strong>{{getFavoritesCount()}}</strong>
+            </button>
+            <button type="button" :class="{active: currentView === 'recent'}" @click="showRecentUsed">
+                <span>最近使用</span>
+                <strong>{{recentCount}}</strong>
+            </button>
+        </section>
+    </aside>
+
+    <main class="fh-main">
+        <div :class="['fh-workspace-grid', uiMode === 'lite' ? 'is-lite' : 'is-omni']">
+            <section class="fh-tools-panel">
+            <div class="fh-toolbar">
+                <div class="fh-search-box">
+                    <span class="fh-search-icon" aria-hidden="true"></span>
+                    <input type="text" v-model="searchKey" placeholder="搜索工具名称、用途或命令" @input="handleSearch">
+                </div>
+                <select v-model="currentCategory" @change="handleCategoryChange(currentCategory)" class="fh-select" aria-label="选择工具分类">
+                    <option value="">全部分类</option>
+                    <option v-for="category in categories" :key="category.key" :value="category.key">{{category.name}}</option>
+                </select>
+                <select v-model="sortType" @change="handleSort" class="fh-select" aria-label="选择排序方式">
+                    <option value="default">默认排序</option>
+                    <option value="name">名称排序</option>
+                </select>
+                <div class="fh-view-toggle" role="group" aria-label="切换展示方式">
+                    <button type="button" :class="{ active: viewMode === 'grid' }" @click="saveViewMode('grid')">网格</button>
+                    <button type="button" :class="{ active: viewMode === 'list' }" @click="saveViewMode('list')">列表</button>
+                </div>
+                <button type="button" class="fh-clear-filter" v-if="hasActiveFilter" @click="resetTools">清除筛选</button>
+            </div>
+
+            <div class="fh-table-head">
+                <div>
+                    <p class="fh-eyebrow">{{activeViewLabel}}</p>
+                    <h2>{{filteredTools.length}} 个工具</h2>
+                </div>
+                <span>{{activeFilterSummary}}</span>
+            </div>
+
+            <div v-if="loading" class="fh-loading-list" aria-live="polite">
+                <div class="fh-skeleton"></div>
+                <div class="fh-skeleton"></div>
+                <div class="fh-skeleton"></div>
+            </div>
+
+            <div v-else-if="filteredTools.length === 0" class="fh-empty-state">
+                <img class="fh-empty-mark" src="../static/img/fe-48.png" alt="" aria-hidden="true">
+                <strong>没有匹配的工具</strong>
+                <p>调整搜索词或分类，或者回到全部工具查看完整列表。</p>
+                <button type="button" @click="resetTools">查看全部工具</button>
+            </div>
+
+            <div v-else :class="['tools-container', viewMode]">
+                <article v-for="tool in filteredTools" :key="tool.key" class="tool-card" :data-category="getToolCategory(tool.key)">
+                    <div class="tool-info">
+                        <span class="tool-icon" aria-hidden="true">{{getToolBadge(tool.key, tool)}}</span>
+                        <div class="tool-copy">
+                            <h3>{{tool.name}}</h3>
+                            <p class="tool-desc">{{tool.tips}}</p>
+                            <div class="tool-meta">
+                                <span>{{getCategoryLabel(tool.key)}}</span>
+                                <span v-if="tool.installed">已安装</span>
+                                <span v-if="tool.systemInstalled">系统内置</span>
+                                <span v-if="tool.favorite">已收藏</span>
+                                <span v-if="isAiEnhancedTool(tool.key)" class="tool-meta-ai">AI扩展</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-actions">
+                        <button :class="['btn', tool.installed ? 'btn-danger' : 'btn-success', 'btn-xs']"
+                                @click="tool.installed ? uninstallTool(tool.key) : installTool(tool.key)"
+                                :disabled="tool.systemInstalled && tool.installed"
+                                :data-tool="tool.key">
+                            {{tool.installed ? '卸载' : '安装'}}<span class="x-progress"></span>
+                        </button>
+                        <button class="btn btn-xs" :class="tool.inContextMenu ? 'btn-warning' : 'btn-info'"
+                                v-if="tool.installed"
+                                @click="toggleContextMenu(tool.key)">
+                            {{tool.inContextMenu ? '移出右键' : '加入右键'}}
+                        </button>
+                        <button class="btn btn-default btn-xs"
+                                :class="{active: tool.favorite}"
+                                @click="toggleFavorite(tool.key)">
+                            {{tool.favorite ? '已收藏' : '收藏'}}
+                        </button>
+                        <button class="btn btn-info btn-xs"
+                                v-if="isAiEnhancedTool(tool.key)"
+                                @click="openAiFeature(getAiFeaturePack(tool.key))">
+                            AI入口
+                        </button>
+                    </div>
+                </article>
+            </div>
+            </section>
+
+            <aside class="fh-context-rail" v-if="uiMode === 'omni'">
+                <section :class="['fh-ai-console', aiStatusClass]">
+                    <div class="fh-ai-console-main">
+                        <div class="fh-ai-console-copy">
+                            <p class="fh-eyebrow">FeHelper AI</p>
+                            <h2>{{aiPanelTitle}}</h2>
+                            <p>{{aiModelMessage}}</p>
+                        </div>
+                        <div class="fh-ai-console-actions">
+                            <button v-if="showAiPrimaryAction" type="button" class="btn btn-success" @click="handleAiPrimaryAction" :disabled="aiModelBusy">
+                                {{aiPrimaryActionLabel}}
+                            </button>
+                            <button type="button" class="btn btn-default" @click="openAiAgent()">打开 AI 助手</button>
+                            <button type="button" class="btn btn-info" @click="checkBuiltInAiStatus({ notify: true })" :disabled="aiModelBusy">
+                                {{aiRefreshActionLabel}}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="fh-ai-status-card">
+                        <span :class="['fh-ai-status-dot', aiStatusClass]"></span>
+                        <div>
+                            <strong>{{aiStatusCardTitle}}</strong>
+                            <small>Chrome Built-in AI / Gemini Nano</small>
+                        </div>
+                        <div class="fh-ai-progress" v-if="aiModelStatus === 'downloading' || aiModelProgressPercent > 0 && aiModelProgressPercent < 100">
+                            <span :style="{ width: aiModelProgressPercent + '%' }"></span>
+                            <em>{{aiModelProgressPercent}}%</em>
+                        </div>
+                    </div>
+                    <div class="fh-ai-feature-grid">
+                        <button v-for="pack in aiFeaturePacks" :key="pack.toolKey" type="button" class="fh-ai-feature-card" @click="openAiFeature(pack)">
+                            <span class="fh-ai-feature-badge">{{pack.badge}}</span>
+                            <span>
+                                <strong>{{pack.title}}</strong>
+                                <small>{{pack.desc}}</small>
+                            </span>
+                            <em>{{aiModelStatus === 'available' ? '打开工具' : '先启用模型'}}</em>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="fh-recommendations" v-if="visibleRecommendationCards.length">
+                    <div class="fh-section-head">
+                        <div>
+                            <p class="fh-eyebrow">Quick picks</p>
+                            <h2>精选入口</h2>
+                        </div>
+                        <span>点击即可安装或打开</span>
+                    </div>
+                    <div class="fh-recommendation-grid">
+                        <button v-for="card in visibleRecommendationCards" :key="card.title" type="button" class="fh-recommendation-card" @click="handleRecommendClick(card)">
+                            <span class="fh-rec-badge" aria-hidden="true">{{getRecommendationBadge(card)}}</span>
+                            <span class="fh-rec-copy">
+                                <strong>{{card.title}}</strong>
+                                <small>{{card.desc}}</small>
+                            </span>
+                            <span :class="['fh-tag', card.tagClass]">{{card.tag}}</span>
+                        </button>
+                    </div>
+                </section>
+            </aside>
+        </div>
+
+        <footer class="fh-page-footer">
+            <span>FeHelper v{{manifest.version}}</span>
+            <div class="fh-page-footer-links">
+                <a v-if="promoRecommendationCard" :href="promoRecommendationCard.url" target="_blank" rel="noopener noreferrer">合作入口</a>
+                <a href="https://github.com/zxlie/FeHelper/issues" target="_blank">问题反馈</a>
+            </div>
+        </footer>
+    </main>
+
+    <div class="settings-modal" v-if="showSettingsModal" v-cloak ref="settingsModal" @keydown="handleModalKeydown($event, 'settings')">
+        <div class="settings-dialog" role="dialog" aria-modal="true" aria-labelledby="settingsDialogTitle" tabindex="-1">
+            <div class="settings-header">
+                <div>
+                    <p class="fh-eyebrow">Preferences</p>
+                    <h3 id="settingsDialogTitle">FeHelper 插件配置</h3>
+                </div>
+                <button type="button" class="close-btn" @click="closeSettings" aria-label="关闭">×</button>
+            </div>
+            <div class="settings-body settings-layout">
+                <aside class="settings-nav" aria-label="设置分类">
+                    <a href="#settings-entry">入口</a>
+                    <a href="#settings-popup-order">排序</a>
+                    <a href="#settings-behavior">行为</a>
+                    <a href="#settings-privacy">权限</a>
+                    <a href="#settings-appearance">外观</a>
+                </aside>
+
+                <div class="settings-content">
+                    <section class="settings-section" id="settings-entry">
+                        <div class="settings-section-head">
+                            <div>
+                                <h4>常用入口</h4>
+                                <p>配置打开 FeHelper 的入口方式，适合高频键盘操作。</p>
+                            </div>
+                        </div>
+                        <div class="setting-panel">
+                            <div class="setting-info-row">
+                                <div>
+                                    <strong>快捷键</strong>
+                                    <span>当前为 {{ defaultKey }}。按下后会打开 FeHelper 工具入口，可用方向键选择工具并用回车打开。</span>
+                                </div>
+                                <a href="#" @click="setShortcuts" id="setShortcuts" class="a-btn">配置快捷键</a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="settings-popup-order">
+                        <div class="settings-section-head">
+                            <div>
+                                <h4>Popup 工具顺序</h4>
+                                <p>拖拽调整 popup 中的显示顺序，只影响你的本机配置。</p>
+                            </div>
+                        </div>
+                        <div class="tool-sort-container">
+                            <div class="sort-tips">把最常用工具放到前面，保存后会同步到 popup。</div>
+                            <div class="sortable-list" id="sortableList">
+                                <div v-for="(tool, index) in sortableTools"
+                                     :key="tool.key"
+                                     class="sortable-item"
+                                     :data-tool-key="tool.key"
+                                     draggable="true"
+                                     @dragstart="handleDragStart($event, index)"
+                                     @dragover="handleDragOver($event)"
+                                     @drop="handleDrop($event, index)"
+                                     @dragend="handleDragEnd">
+                                    <div class="drag-handle">⋮⋮</div>
+                                    <div class="tool-icon">{{getToolBadge(tool.key, tool)}}</div>
+                                    <div class="tool-name">{{tool.name}}</div>
+                                    <div class="tool-desc">{{tool.tips}}</div>
+                                </div>
+                            </div>
+                            <div class="sort-actions">
+                                <button class="btn btn-info btn-sm" @click="resetToolOrder">重置默认顺序</button>
+                                <button class="btn btn-success btn-sm" @click="saveToolOrder">保存排序</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="settings-behavior">
+                        <div class="settings-section-head">
+                            <div>
+                                <h4>使用行为</h4>
+                                <p>管理工具打开方式、右键菜单和 JSON 页面自动处理。</p>
+                            </div>
+                        </div>
+                        <div class="setting-panel">
+                            <fieldset class="setting-radio-group">
+                                <legend>FeHelper 模式</legend>
+                                <label class="setting-radio-card" :class="{active: uiMode === 'lite'}" for="FH_UI_MODE_LITE">
+                                    <input type="radio" name="fh_ui_mode" id="FH_UI_MODE_LITE" value="lite" :checked="uiMode === 'lite'" @change="setUiMode('lite')"/>
+                                    <span>
+                                        <strong>Lite</strong>
+                                        <small>面向高频使用，Popup 更克制，JSON 页面默认只突出核心动作。</small>
+                                    </span>
+                                </label>
+                                <label class="setting-radio-card" :class="{active: uiMode === 'omni'}" for="FH_UI_MODE_OMNI">
+                                    <input type="radio" name="fh_ui_mode" id="FH_UI_MODE_OMNI" value="omni" :checked="uiMode === 'omni'" @change="setUiMode('omni')"/>
+                                    <span>
+                                        <strong>Omni</strong>
+                                        <small>保留当前满血能力，Popup、AI 入口和 JSON 扩展操作全部展开。</small>
+                                    </span>
+                                </label>
+                            </fieldset>
+
+                            <label class="setting-toggle-row" for="opt_item_contextMenus">
+                                <input class="setting-switch-input" type="checkbox" value="OPT_ITEM_CONTEXTMENUS" id="opt_item_contextMenus" v-model="selectedOpts"/>
+                                <span class="setting-switch" aria-hidden="true"></span>
+                                <span class="setting-copy">
+                                    <strong>将 FeHelper 工具添加到右键菜单</strong>
+                                    <small>适合经常在网页里直接调用工具的使用方式。</small>
+                                </span>
+                            </label>
+
+                            <div class="setting-child-group" :class="{'is-disabled':!selectedOpts.includes('OPT_ITEM_CONTEXTMENUS')}">
+                                <label class="setting-toggle-row is-child" for="MENU_DOWNLOAD_CRX">
+                                    <input class="setting-switch-input" type="checkbox" id="MENU_DOWNLOAD_CRX" v-model="menuDownloadCrx" :disabled="!selectedOpts.includes('OPT_ITEM_CONTEXTMENUS')"/>
+                                    <span class="setting-switch" aria-hidden="true"></span>
+                                    <span class="setting-copy">
+                                        <strong>插件分享/下载入口</strong>
+                                        <small>在右键菜单中显示插件分享和下载相关入口。</small>
+                                    </span>
+                                </label>
+                                <label class="setting-toggle-row is-child" for="MENU_FEHELPER_SETTING">
+                                    <input class="setting-switch-input" type="checkbox" id="MENU_FEHELPER_SETTING" v-model="menuFeHelperSeting" :disabled="!selectedOpts.includes('OPT_ITEM_CONTEXTMENUS')"/>
+                                    <span class="setting-switch" aria-hidden="true"></span>
+                                    <span class="setting-copy">
+                                        <strong>FeHelper 设置入口</strong>
+                                        <small>在右键菜单中显示设置页面入口。</small>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <label class="setting-toggle-row" for="FORBID_OPEN_IN_NEW_TAB">
+                                <input class="setting-switch-input" type="checkbox" value="FORBID_OPEN_IN_NEW_TAB" id="FORBID_OPEN_IN_NEW_TAB" v-model="selectedOpts"/>
+                                <span class="setting-switch" aria-hidden="true"></span>
+                                <span class="setting-copy">
+                                    <strong>避免重复打开同一工具</strong>
+                                    <small>打开已有工具页时优先复用当前标签，减少窗口堆叠。</small>
+                                </span>
+                            </label>
+
+                            <label class="setting-toggle-row" for="AUTO_APPLY_EXTENSION_UPDATE">
+                                <input class="setting-switch-input" type="checkbox" value="AUTO_APPLY_EXTENSION_UPDATE" id="AUTO_APPLY_EXTENSION_UPDATE" v-model="selectedOpts"/>
+                                <span class="setting-switch" aria-hidden="true"></span>
+                                <span class="setting-copy">
+                                    <strong>自动应用扩展更新</strong>
+                                    <small>关闭时只提醒有新版本，避免更新重载关闭正在使用的工具页。</small>
+                                </span>
+                            </label>
+
+                            <label class="setting-toggle-row" for="JSON_PAGE_FORMAT">
+                                <input class="setting-switch-input" type="checkbox" value="JSON_PAGE_FORMAT" id="JSON_PAGE_FORMAT" v-model="selectedOpts"/>
+                                <span class="setting-switch" aria-hidden="true"></span>
+                                <span class="setting-copy">
+                                    <strong>自动美化 JSON 页面</strong>
+                                    <small>访问纯 JSON 页面时自动格式化，方便直接阅读和折叠。</small>
+                                </span>
+                            </label>
+
+                            <div class="setting-info-row setting-number-row">
+                                <div class="setting-copy">
+                                    <strong>JSON 自动格式化 Key 数上限</strong>
+                                    <small>超过该数量时停止网页自动格式化，避免大 JSON 页面卡顿。</small>
+                                </div>
+                                <label class="setting-number-control" for="MAX_JSON_KEYS_NUMBER">
+                                    <input
+                                        id="MAX_JSON_KEYS_NUMBER"
+                                        type="number"
+                                        min="1"
+                                        step="1000"
+                                        v-model.number="jsonFormatKeyLimit"
+                                        @change="normalizeJsonFormatKeyLimitInput"
+                                    />
+                                    <span>keys</span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="settings-privacy">
+                        <div class="settings-section-head">
+                            <div>
+                                <h4>权限与数据</h4>
+                                <p>这些配置会影响页面访问范围和统计上报，建议按需开启。</p>
+                            </div>
+                        </div>
+                        <div class="setting-panel">
+                            <div class="setting-info-row setting-permission-summary">
+                                <div class="setting-copy">
+                                    <strong>当前版本实际权限</strong>
+                                    <small>Manifest 主要使用 <code>tabs</code>、<code>activeTab</code>、<code>storage</code>、<code>notifications</code>、<code>webNavigation</code> 和页面访问权限，用于读取当前页面内容、保存本地设置、监听页面切换并运行页面工具。</small>
+                                </div>
+                                <div class="setting-permission-tags" aria-label="当前版本权限列表">
+                                    <span>tabs</span>
+                                    <span>activeTab</span>
+                                    <span>storage</span>
+                                    <span>notifications</span>
+                                    <span>webNavigation</span>
+                                </div>
+                            </div>
+
+                            <div class="setting-info-row setting-permission-summary">
+                                <div class="setting-copy">
+                                    <strong>不会申请的敏感权限</strong>
+                                    <small>当前源码未声明 <code>history</code> 或 <code>clipboardRead</code>。FeHelper 不会主动读取浏览器历史记录，也不会静默读取你的剪贴板内容。</small>
+                                </div>
+                                <div class="setting-permission-tags is-safe" aria-label="未申请的敏感权限">
+                                    <span>no history</span>
+                                    <span>no clipboardRead</span>
+                                </div>
+                            </div>
+
+                            <label class="setting-toggle-row" for="CONTENT_SCRIPT_ALLOW_ALL_FRAMES">
+                                <input class="setting-switch-input" type="checkbox" value="CONTENT_SCRIPT_ALLOW_ALL_FRAMES" id="CONTENT_SCRIPT_ALLOW_ALL_FRAMES" v-model="selectedOpts"/>
+                                <span class="setting-switch" aria-hidden="true"></span>
+                                <span class="setting-copy">
+                                    <strong>允许访问页面内所有 iframe</strong>
+                                    <small>只在需要处理嵌入页面内容时开启。普通使用保持关闭即可。</small>
+                                </span>
+                            </label>
+
+                            <label class="setting-toggle-row" for="FORBID_STATISTICS">
+                                <input class="setting-switch-input" type="checkbox" value="FORBID_STATISTICS" id="FORBID_STATISTICS" v-model="selectedOpts"/>
+                                <span class="setting-switch" aria-hidden="true"></span>
+                                <span class="setting-copy">
+                                    <strong>关闭使用统计</strong>
+                                    <small>开启后不会向服务器上报插件访问统计。</small>
+                                </span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="settings-appearance" v-if="!isFirefox">
+                        <div class="settings-section-head">
+                            <div>
+                                <h4>外观</h4>
+                                <p>选择夜间模式策略。所有工具页、popup 和 JSON 自动格式化页面会保持一致。</p>
+                            </div>
+                        </div>
+                        <div class="setting-panel">
+                            <fieldset class="setting-radio-group">
+                                <legend>夜间模式</legend>
+                                <label class="setting-radio-card" :class="{active: darkModePreference === 'off'}" for="DARK_MODE_OFF">
+                                    <input type="radio" name="dark_mode_preference" id="DARK_MODE_OFF" value="off" :checked="darkModePreference === 'off'" @change="setDarkModePreference('off')"/>
+                                    <span>
+                                        <strong>关闭</strong>
+                                        <small>所有页面保持浅色，不跟随系统暗色。</small>
+                                    </span>
+                                </label>
+                                <label class="setting-radio-card" :class="{active: darkModePreference === 'system'}" for="DARK_MODE_SYSTEM">
+                                    <input type="radio" name="dark_mode_preference" id="DARK_MODE_SYSTEM" value="system" :checked="darkModePreference === 'system'" @change="setDarkModePreference('system')"/>
+                                    <span>
+                                        <strong>跟随系统</strong>
+                                        <small>Chrome 或系统处于暗色时，FeHelper 自动切换为夜间模式。</small>
+                                    </span>
+                                </label>
+                                <label class="setting-radio-card" :class="{active: darkModePreference === 'always'}" for="DARK_MODE_ALWAYS">
+                                    <input type="radio" name="dark_mode_preference" id="DARK_MODE_ALWAYS" value="always" :checked="darkModePreference === 'always'" @change="setDarkModePreference('always')"/>
+                                    <span>
+                                        <strong>始终开启</strong>
+                                        <small>不受系统设置影响，FeHelper 页面始终使用夜间模式。</small>
+                                    </span>
+                                </label>
+                            </fieldset>
+                            <div class="setting-action-row">
+                                <a href="#" class="a-btn" @click="turnLight($event)">体验夜间模式</a>
+                                <span class="x-count-down" v-cloak v-if="countDown>0">本次体验将在 {{countDown}} 秒后自动结束</span>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="settings-footer">
+                <button class="btn btn-success" @click="saveSettings">保存</button>
+                <button class="btn btn-default" @click="closeSettings">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-modal donate-modal" v-if="showDonateModal" v-cloak ref="donateModal" @keydown="handleModalKeydown($event, 'donate')">
+        <div class="settings-dialog" role="dialog" aria-modal="true" aria-labelledby="donateDialogTitle" tabindex="-1">
+            <div class="settings-header">
+                <div>
+                    <p class="fh-eyebrow">Support</p>
+                    <h3 id="donateDialogTitle">支持 FeHelper 持续维护</h3>
+                </div>
+                <button type="button" class="close-btn" @click="closeDonateModal" aria-label="关闭">×</button>
+            </div>
+            <div class="settings-body">
+                <div class="donate-content">
+                    <p class="donate-desc">{{donate.text}}我会尽量抽时间保持更新。</p>
+                    <div class="donate-qrcode">
+                        <img :src="donate.image" alt="微信打赏二维码" class="donate-image">
+                        <p class="donate-text">微信打赏，鼓励升级</p>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-footer">
+                <button class="btn btn-success" @click="closeDonateModal">我已打赏</button>
+                <button class="btn btn-default" @click="closeDonateModal">以后再说</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-modal confirm-modal" v-if="confirmDialog.show" v-cloak ref="confirmModal" @keydown="handleModalKeydown($event, 'confirm')">
+        <div class="settings-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmDialogTitle" tabindex="-1">
+            <div class="settings-header">
+                <div>
+                    <p class="fh-eyebrow">Confirm</p>
+                    <h3 id="confirmDialogTitle">{{ confirmDialog.title }}</h3>
+                </div>
+                <button type="button" class="close-btn" @click="cancelConfirm" aria-label="关闭">×</button>
+            </div>
+            <div class="settings-body">
+                <div class="confirm-content">
+                    <div class="confirm-icon">?</div>
+                    <p class="confirm-message">{{ confirmDialog.message }}</p>
+                </div>
+            </div>
+            <div class="settings-footer">
+                <button class="btn btn-success" @click="confirmAction">确定</button>
+                <button class="btn btn-default" @click="cancelConfirm">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../static/js/dark-mode.js"></script>
+<script type="module" src="index.js"></script>
+
+</body>
+</html>
