@@ -3,6 +3,12 @@
  * @type {{download}}
  */
 import toolMap from './tools.js';
+import {
+    BUILTIN_TOOLS_INITIALIZED_KEY,
+    getAutoInstallChanges,
+    TOOL_STORAGE_PREFIX,
+    MENU_STORAGE_PREFIX
+} from './auto-install.js';
 
 let Awesome = (() => {
 
@@ -10,10 +16,11 @@ let Awesome = (() => {
 
     const SERVER_SITE = manifest.homepage_url;
     const URL_TOOL_TPL = `${SERVER_SITE}/#TOOL-NAME#/index.html`;
-    const TOOL_NAME_TPL = 'DYNAMIC_TOOL:#TOOL-NAME#';
+    const TOOL_NAME_TPL = `${TOOL_STORAGE_PREFIX}#TOOL-NAME#`;
     const TOOL_CONTENT_SCRIPT_TPL = 'DYNAMIC_TOOL:CS:#TOOL-NAME#';
     const TOOL_CONTENT_SCRIPT_CSS_TPL = 'DYNAMIC_TOOL:CS:CSS:#TOOL-NAME#';
-    const TOOL_MENU_TPL = 'DYNAMIC_MENU:#TOOL-NAME#';
+    const TOOL_MENU_TPL = `${MENU_STORAGE_PREFIX}#TOOL-NAME#`;
+    const BUILT_IN_TOOL_NAMES = Object.keys(toolMap);
 
     /**
      * 管理本地存储
@@ -54,6 +61,32 @@ let Awesome = (() => {
         return {get, set, remove};
     })();
 
+    let allBuiltInToolsReadyPromise;
+
+    /**
+     * 将扩展包内的全部工具标记为已安装，并默认加入右键菜单。
+     *
+     * 这个 Promise 会在当前 Service Worker 生命周期内复用，避免 popup、
+     * 菜单和内容脚本注入同时启动时重复读写 storage。
+     */
+    let ensureAllToolsInstalled = () => {
+        if (!allBuiltInToolsReadyPromise) {
+            allBuiltInToolsReadyPromise = StorageMgr.get(null)
+                .then(storage => {
+                    const changes = getAutoInstallChanges(BUILT_IN_TOOL_NAMES, storage || {});
+                    if (!Object.keys(changes).length) {
+                        return changes;
+                    }
+                    return StorageMgr.set(changes).then(() => changes);
+                })
+                .catch(error => {
+                    console.warn('[JsHelper] 自动启用内置工具失败:', error);
+                    return {};
+                });
+        }
+        return allBuiltInToolsReadyPromise;
+    };
+
     /**
      * 检测工具是否已被成功安装
      * @param toolName 工具名称
@@ -65,7 +98,10 @@ let Awesome = (() => {
         let menuKey = TOOL_MENU_TPL.replace('#TOOL-NAME#', toolName);
         let toolKey = TOOL_NAME_TPL.replace('#TOOL-NAME#', toolName);
 
-        return Promise.all([StorageMgr.get(toolKey), StorageMgr.get(menuKey)]).then(values => {
+        return ensureAllToolsInstalled().then(() => Promise.all([
+            StorageMgr.get(toolKey),
+            StorageMgr.get(menuKey)
+        ])).then(values => {
             let toolInstalled = !!values[0];
             // 系统预置的功能，是强制 installed 状态的
             if(toolMap[toolName] && toolMap[toolName].systemInstalled) {
@@ -112,7 +148,11 @@ let Awesome = (() => {
 
         log(toolName + ' 卸载成功！');
 
-        return StorageMgr.remove(items);
+        return StorageMgr.remove(items).then(() => {
+            // 删除键会让“缺失即自动安装”逻辑在下一次启动时再次恢复工具。
+            // 用 0 记录用户的明确卸载意图，后续启动只会保留关闭状态。
+            return StorageMgr.set(TOOL_NAME_TPL.replace('#TOOL-NAME#', toolName), 0);
+        });
     };
 
     /**
@@ -128,6 +168,8 @@ let Awesome = (() => {
     });
 
     let getAllTools = async () => {
+
+        await ensureAllToolsInstalled();
 
         // 获取本地开发的插件，也拼接进来
         try {
@@ -151,7 +193,7 @@ let Awesome = (() => {
                 let key = i % 2 === 0 ? 'installed' : 'menu';
                 toolMap[tool][key] = v;
                 // 本地工具，还需要看是否处于开启状态
-                if (toolMap[tool].hasOwnProperty('_devTool')) {
+                if (Object.prototype.hasOwnProperty.call(toolMap[tool], '_devTool')) {
                     toolMap[tool][key] = toolMap[tool][key] && toolMap[tool]._enable;
                 }
             });
@@ -166,6 +208,8 @@ let Awesome = (() => {
      */
     let getInstalledTools = async () => {
         try {
+            await ensureAllToolsInstalled();
+
             // 一次性获取所有存储数据，避免多次访问
             const allStorageData = await new Promise((resolve, reject) => {
                 chrome.storage.local.get(null, result => {
@@ -203,7 +247,7 @@ let Awesome = (() => {
                 let menuInstalled = String(allStorageData[menuKey]) === '1';
                 
                 // 本地工具，还需要看是否处于开启状态
-                if (toolMap[toolName].hasOwnProperty('_devTool')) {
+                if (Object.prototype.hasOwnProperty.call(toolMap[toolName], '_devTool')) {
                     toolInstalled = toolInstalled && toolMap[toolName]._enable;
                     menuInstalled = menuInstalled && toolMap[toolName]._enable;
                 }
@@ -359,7 +403,11 @@ let Awesome = (() => {
         getToolTpl,
         gcLocalFiles,
         getAllTools,
-        collectAndSendClientInfo
+        collectAndSendClientInfo,
+        ensureAllToolsInstalled,
+        BUILTIN_TOOLS_INITIALIZED_KEY,
+        TOOL_STORAGE_PREFIX,
+        MENU_STORAGE_PREFIX
     }
 })();
 

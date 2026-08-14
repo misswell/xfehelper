@@ -11,9 +11,20 @@ function createStorageSeed(toolNames = MENU_TOOL_NAMES) {
         'DYNAMIC_MENU:fehelper-setting': '0'
     };
 
+    const enabledTools = new Set(toolNames);
+
     toolNames.forEach((toolName, index) => {
         seed[`DYNAMIC_TOOL:${toolName}`] = String(index + 1);
         seed[`DYNAMIC_MENU:${toolName}`] = '1';
+    });
+
+    // 缺失键现在代表“首次启动，等待自动启用”。小菜单测试需要显式
+    // 关闭未选中的工具，才能模拟用户已经筛选过工具的持久化状态。
+    MENU_TOOL_NAMES.forEach(toolName => {
+        if (!enabledTools.has(toolName)) {
+            seed[`DYNAMIC_TOOL:${toolName}`] = 0;
+            seed[`DYNAMIC_MENU:${toolName}`] = '0';
+        }
     });
 
     return seed;
