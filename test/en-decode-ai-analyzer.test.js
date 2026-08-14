@@ -15,7 +15,7 @@ function toBase64Url(value) {
 
 describe('en-decode AI analyzer', () => {
     it('finds URL decode plus Base64 decode plus JSON preview', async () => {
-        const payload = JSON.stringify({ok: true, name: 'JsHelper'});
+        const payload = JSON.stringify({ok: true, name: 'XFeHelper', version: '1'});
         const input = encodeURIComponent(Buffer.from(payload, 'utf8').toString('base64'));
         const analysis = await analyzeDecodeInput(input);
 
@@ -25,7 +25,7 @@ describe('en-decode AI analyzer', () => {
             'Base64解码',
             'JSON格式化预览'
         ]);
-        expect(analysis.bestCandidate.output).toContain('"name": "JsHelper"');
+        expect(analysis.bestCandidate.output).toContain('"name": "XFeHelper"');
         expect(analysis.markdown).toContain('应用最佳结果');
     });
 

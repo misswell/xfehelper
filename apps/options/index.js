@@ -63,7 +63,7 @@ const AI_STATUS_TEXT = {
     unavailable: '当前设备暂不满足本机 AI 运行条件',
     downloadable: 'Gemini Nano 模型可下载，点击即可启用',
     downloading: '正在下载 Gemini Nano 本机模型',
-    available: 'Gemini Nano 已可用，建议优先使用 JsHelper AI',
+    available: 'Gemini Nano 已可用，建议优先使用 XFeHelper AI',
     error: 'AI 模型状态检测失败'
 };
 
@@ -96,14 +96,14 @@ new Vue({
         countDown: 0, // 夜间模式倒计时
         selectedOpts: [], // 选中的选项（已支持FORBID_STATISTICS）
         menuDownloadCrx: false, // 菜单-插件下载
-        menuJsHelperSeting: false, // 菜单-JsHelper设置
+        menuXFeHelperSeting: false, // 菜单-XFeHelper设置
         jsonFormatKeyLimit: DEFAULT_JSON_KEY_LIMIT,
         isFirefox: false, // 是否Firefox浏览器
 
         // 打赏相关
         showDonateModal: false,
         donate: {
-            text: '感谢你对JsHelper的认可和支持！',
+            text: '感谢你对XFeHelper的认可和支持！',
             image: './donate.jpeg'
         },
 
@@ -301,7 +301,7 @@ new Vue({
             if (this.sortType === 'name') {
                 parts.push('按名称排序');
             }
-            return parts.length ? parts.join(' / ') : '按 JsHelper 默认顺序展示';
+            return parts.length ? parts.join(' / ') : '按 XFeHelper 默认顺序展示';
         },
 
         hasActiveFilter() {
@@ -361,8 +361,8 @@ new Vue({
 
         aiPanelTitle() {
             return this.aiModelStatus === 'available'
-                ? 'JsHelper AI 已就绪，核心工具已接入'
-                : '开启 JsHelper AI，先准备 Chrome 本机 Gemini 模型';
+                ? 'XFeHelper AI 已就绪，核心工具已接入'
+                : '开启 XFeHelper AI，先准备 Chrome 本机 Gemini 模型';
         },
 
         visibleRecommendationCards() {
@@ -457,7 +457,7 @@ new Vue({
                 });
                 if (notify) {
                     this.showInPageNotification({
-                        title: 'JsHelper AI',
+                        title: 'XFeHelper AI',
                         message: `检测完成：${this.aiStatusCardTitle}`
                     });
                 }
@@ -469,7 +469,7 @@ new Vue({
                 });
                 if (notify) {
                     this.showInPageNotification({
-                        title: 'JsHelper AI',
+                        title: 'XFeHelper AI',
                         message: `检测失败：${message}`
                     });
                 }
@@ -502,14 +502,14 @@ new Vue({
                     message: AI_STATUS_TEXT.available
                 });
                 this.showInPageNotification({
-                    title: 'JsHelper AI',
+                    title: 'XFeHelper AI',
                     message: 'Gemini Nano 已准备好，可以使用本机 AI 能力。'
                 });
             } catch (error) {
                 const message = this.formatBuiltInAiError(error);
                 this.applyBuiltInAiStatus({ status: 'error', message });
                 this.showInPageNotification({
-                    title: 'JsHelper AI',
+                    title: 'XFeHelper AI',
                     message
                 });
             } finally {
@@ -744,7 +744,7 @@ new Vue({
             if (status === 'update_available') {
                 // 显示更新通知
                 this.showNotification({
-                    title: 'JsHelper 更新',
+                    title: 'XFeHelper 更新',
                     message: '已发现新版本，正在更新...'
                 });
                 
@@ -755,8 +755,8 @@ new Vue({
             } else if (status === 'no_update') {
                 // 如果没有可用更新，但用户点击了更新按钮
                 this.showNotification({
-                    title: 'JsHelper 更新',
-                    message: '您的JsHelper已经是最新版本。'
+                    title: 'XFeHelper 更新',
+                    message: '您的XFeHelper已经是最新版本。'
                 });
             } else {
                 // 其他情况，如更新检查失败等
@@ -766,8 +766,8 @@ new Vue({
                 });
                 
                 this.showNotification({
-                    title: 'JsHelper 更新',
-                    message: '自动更新失败，请访问JsHelper官网手动获取最新版本。'
+                    title: 'XFeHelper 更新',
+                    message: '自动更新失败，请访问XFeHelper官网手动获取最新版本。'
                 });
             }
         },
@@ -780,7 +780,7 @@ new Vue({
             });
             
             this.showNotification({
-                title: 'JsHelper 更新错误',
+                title: 'XFeHelper 更新错误',
                 message: '更新过程中出现错误，请手动检查更新。'
             });
         },
@@ -797,7 +797,7 @@ new Vue({
                 const notificationOptions = {
                     type: 'basic',
                     iconUrl: chrome.runtime.getURL('static/img/fe-48.png'),
-                    title: options.title || 'JsHelper',
+                    title: options.title || 'XFeHelper',
                     message: options.message || '',
                     priority: 2,
                     requireInteraction: false, // 改为false，因为我们会手动关闭
@@ -815,7 +815,7 @@ new Vue({
                         const simpleOptions = {
                             type: 'basic',
                             iconUrl: chrome.runtime.getURL('static/img/fe-48.png'),
-                            title: options.title || 'JsHelper',
+                            title: options.title || 'XFeHelper',
                             message: options.message || ''
                         };
                         
@@ -856,7 +856,7 @@ new Vue({
                 // 创建一个通知元素
                 const notificationEl = document.createElement('div');
                 notificationEl.className = 'in-page-notification';
-                const title = (options && options.title) ? String(options.title) : 'JsHelper';
+                const title = (options && options.title) ? String(options.title) : 'XFeHelper';
                 const message = (options && options.message) ? String(options.message) : '';
                 notificationEl.innerHTML = `
                     <div class="notification-content">
@@ -1370,7 +1370,7 @@ new Vue({
                     
                     // 加载右键菜单设置
                     this.menuDownloadCrx = await Awesome.menuMgr('download-crx', 'get') === '1';
-                    this.menuJsHelperSeting = await Awesome.menuMgr('fehelper-setting', 'get') !== '0';
+                    this.menuXFeHelperSeting = await Awesome.menuMgr('fehelper-setting', 'get') !== '0';
                     
                     // 获取快捷键
                     chrome.commands.getAll((commands) => {
@@ -1444,7 +1444,7 @@ new Vue({
                     [FH_OPTIONS_UI_MODE]: this.uiMode
                 });
             } catch (error) {
-                console.warn('保存 JsHelper 模式失败:', error);
+                console.warn('保存 XFeHelper 模式失败:', error);
             }
         },
 
@@ -1718,7 +1718,7 @@ new Vue({
 
                         // 处理右键菜单
                         const crxAction = this.menuDownloadCrx ? 'install' : 'offload';
-                        const settingAction = this.menuJsHelperSeting ? 'install' : 'offload';
+                        const settingAction = this.menuXFeHelperSeting ? 'install' : 'offload';
                         
                         await Promise.all([
                             Awesome.menuMgr('download-crx', crxAction),
@@ -1740,19 +1740,19 @@ new Vue({
                         
                         // 显示提示
                         this.showNotification({
-                            title: 'JsHelper 设置',
+                            title: 'XFeHelper 设置',
                             message: '设置和工具排序已保存！'
                         });
                     } catch (innerError) {
                         this.showNotification({
-                            title: 'JsHelper 设置错误',
+                            title: 'XFeHelper 设置错误',
                             message: '保存菜单设置失败: ' + innerError.message
                         });
                     }
                 });
             } catch (error) {
                 this.showNotification({
-                    title: 'JsHelper 设置错误',
+                    title: 'XFeHelper 设置错误',
                     message: '保存设置失败: ' + error.message
                 });
             }
@@ -1837,7 +1837,7 @@ new Vue({
                             this.donate.text = `看起来【${matchedTool.name}】工具帮助到了你，感谢你的认可！`;
                         } else {
                             // 没有匹配到特定工具，使用通用文案
-                            this.donate.text = `感谢你对JsHelper的认可和支持！`;
+                            this.donate.text = `感谢你对XFeHelper的认可和支持！`;
                         }
                         
                         // 显示打赏弹窗

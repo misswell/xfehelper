@@ -79,7 +79,7 @@
         doc.body.innerHTML = [
             '<div class="fh-devtool-runtime-error" style="max-width:960px;margin:24px auto;padding:20px 24px;border-radius:16px;background:#fff7ed;border:1px solid #fdba74;color:#9a3412;font:14px/1.6 Menlo, Monaco, Consolas, monospace;">',
             '<h2 style="margin:0 0 12px;font:600 20px/1.3 sans-serif;color:#7c2d12;">自定义工具运行失败</h2>',
-            '<p style="margin:0 0 12px;font:14px/1.6 sans-serif;">JsHelper 已尝试用原生执行器加载该工具，但脚本仍然报错。请优先检查依赖包是否要求 ESM import/export、浏览器专属 API 或运行时全局变量。</p>',
+            '<p style="margin:0 0 12px;font:14px/1.6 sans-serif;">XFeHelper 已尝试用原生执行器加载该工具，但脚本仍然报错。请优先检查依赖包是否要求 ESM import/export、浏览器专属 API 或运行时全局变量。</p>',
             '<pre style="margin:0;padding:14px;background:#ffedd5;border-radius:12px;white-space:pre-wrap;word-break:break-word;">',
             escapeHtml(detail),
             '</pre>',
@@ -121,7 +121,7 @@
 
         let iframe = doc.createElement('iframe');
         iframe.className = 'fh-dynamic-sandbox';
-        iframe.title = 'JsHelper dynamic tool';
+        iframe.title = 'XFeHelper dynamic tool';
         iframe.src = 'sandbox.html';
         iframe.style.cssText = 'display:block;width:100%;height:100vh;border:0;background:#fff;';
         doc.body.appendChild(iframe);

@@ -1,5 +1,5 @@
 /**
- * JsHelper，截图后的保存界面
+ * XFeHelper，截图后的保存界面
  */
 new Vue({
     el: '#pageContainer',

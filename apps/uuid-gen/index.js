@@ -1,5 +1,5 @@
 /**
- * JsHelper UUID/ID Generator
+ * XFeHelper UUID/ID Generator
  */
 (function () {
     var snowflakeSeq = 0;

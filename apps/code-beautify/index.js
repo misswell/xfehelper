@@ -1,5 +1,5 @@
 /**
- * JsHelper 代码美化工具
+ * XFeHelper 代码美化工具
  */
 import {
     copyInlineAiResult,

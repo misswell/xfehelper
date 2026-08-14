@@ -1,7 +1,7 @@
 {
-  "name": "JsHelper",
+  "name": "XFeHelper",
   "version": "1.0.0",
-  "description": "JsHelper-前端助手",
+  "description": "XFeHelper-前端助手",
   "main": "index.js",
   "overrides": {
     "fast-xml-parser": "^5.7.0",
@@ -45,7 +45,7 @@
     "url": "git+https://github.com/zxlie/FeHelper.git"
   },
   "keywords": [
-    "jshelper"
+    "xfehelper"
   ],
   "author": "zhaoxianlie",
   "license": "MIT",

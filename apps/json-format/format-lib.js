@@ -79,7 +79,7 @@ window.toast = function (content) {
 
 
 /**
- * JsHelper Json Format Lib，入口文件
+ * XFeHelper Json Format Lib，入口文件
  * @example
  *  Formatter.format(jsonString)
  */
@@ -479,7 +479,7 @@ window.Formatter = (function () {
         function tryDownload() {
             try {
                 let aLink = document.createElement('a');
-                aLink.download = 'JsHelper-' + dt + '.json';
+                aLink.download = 'XFeHelper-' + dt + '.json';
                 aLink.href = URL.createObjectURL(blob);
                 aLink.style.display = 'none';
                 
@@ -518,7 +518,7 @@ window.Formatter = (function () {
                         url: URL.createObjectURL(blob),
                         saveAs: true,
                         conflictAction: 'overwrite',
-                        filename: 'JsHelper-' + dt + '.json'
+                        filename: 'XFeHelper-' + dt + '.json'
                     }, (downloadId) => {
                         if (chrome.runtime.lastError) {
                             console.error('Chrome下载失败:', chrome.runtime.lastError);
@@ -909,7 +909,7 @@ window.Formatter = (function () {
 
             if (typeof chrome === 'undefined' || !chrome.permissions) {
                 // 下载JSON的简单形式
-                $(this).attr('download', 'JsHelper-' + dt + '.json').attr('href', URL.createObjectURL(blob));
+                $(this).attr('download', 'XFeHelper-' + dt + '.json').attr('href', URL.createObjectURL(blob));
             } else {
                 // 请求权限
                 chrome.permissions.request({
@@ -920,7 +920,7 @@ window.Formatter = (function () {
                             url: URL.createObjectURL(blob),
                             saveAs: true,
                             conflictAction: 'overwrite',
-                            filename: 'JsHelper-' + dt + '.json'
+                            filename: 'XFeHelper-' + dt + '.json'
                         });
                     } else {
                         toast('必须接受授权，才能正常下载！');

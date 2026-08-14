@@ -1,5 +1,5 @@
 /**
- * JsHelper - 专业时间戳工具
+ * XFeHelper - 专业时间戳工具
  * 使用原生JavaScript实现，无需Vue依赖，兼容Chrome扩展CSP策略
  */
 

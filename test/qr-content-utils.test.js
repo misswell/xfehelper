@@ -54,7 +54,7 @@ describe('QR content utilities', () => {
     });
 
     it('builds vCard 3.0 content for contact QR tags', () => {
-        const result = buildQrContentFromDescription('生成联系人二维码：姓名=张三，公司=JsHelper，手机=13800138000，邮箱=a@example.com，网址=https://fehelper.com。');
+        const result = buildQrContentFromDescription('生成联系人二维码：姓名=张三，公司=XFeHelper，手机=13800138000，邮箱=a@example.com，网址=https://fehelper.com。');
 
         expect(result.type).toBe('contact');
         expect(result.content).toContain('BEGIN:VCARD');
@@ -81,10 +81,10 @@ describe('QR content utilities', () => {
     });
 
     it('builds mailto URI with subject and body for email QR tags', () => {
-        const result = buildQrContentFromDescription('生成邮件二维码：收件人=a+tag@example.com，主题=测试邮件，正文=你好 JsHelper。');
+        const result = buildQrContentFromDescription('生成邮件二维码：收件人=a+tag@example.com，主题=测试邮件，正文=你好 XFeHelper。');
 
         expect(result.type).toBe('email');
-        expect(result.content).toBe('mailto:a+tag@example.com?subject=%E6%B5%8B%E8%AF%95%E9%82%AE%E4%BB%B6&body=%E4%BD%A0%E5%A5%BD%20JsHelper');
+        expect(result.content).toBe('mailto:a+tag@example.com?subject=%E6%B5%8B%E8%AF%95%E9%82%AE%E4%BB%B6&body=%E4%BD%A0%E5%A5%BD%20XFeHelper');
     });
 
     it('builds geo URI for coordinates and map search URL for address', () => {

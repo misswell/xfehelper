@@ -40,10 +40,10 @@ describe('json-auto-utils', () => {
     });
 
     it('自动解码得到完整 JSON 时使用解码后的合法 JSON', () => {
-        const source = '%7B%22name%22%3A%22JsHelper%22%7D';
+        const source = '%7B%22name%22%3A%22XFeHelper%22%7D';
         const decoded = decodeURIComponent(source);
 
-        expect(utils.coerceDecodedJSONSource(source, decoded)).toBe('{"name":"JsHelper"}');
+        expect(utils.coerceDecodedJSONSource(source, decoded)).toBe('{"name":"XFeHelper"}');
     });
 
     it('支持顶层转义 JSON 的嵌套解析', () => {
@@ -117,11 +117,11 @@ describe('json-auto-utils', () => {
     });
 
     it('Issue #613: 自动格式化保留数字字符串 key 的输入顺序', () => {
-        const parsed = utils.parseJSONLike('{"2":"b","1":"a","name":"JsHelper"}');
+        const parsed = utils.parseJSONLike('{"2":"b","1":"a","name":"XFeHelper"}');
         const keys = Object.keys(parsed.value).map(utils.normalizePreservedKey);
 
         expect(keys).toEqual(['2', '1', 'name']);
-        expect(utils.safeStringify(parsed.value)).toBe('{"2":"b","1":"a","name":"JsHelper"}');
+        expect(utils.safeStringify(parsed.value)).toBe('{"2":"b","1":"a","name":"XFeHelper"}');
     });
 
     it('Issue #623/#624: JSON Pointer 中的数字字符串 key 前缀会被归一化', () => {

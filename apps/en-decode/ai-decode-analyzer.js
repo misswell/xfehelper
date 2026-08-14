@@ -523,7 +523,7 @@ function getCodeFenceType(outputType) {
 function clipCode(text) {
     const source = String(text || '');
     if (source.length <= CODE_PREVIEW_LIMIT) return source;
-    return `${source.slice(0, CODE_PREVIEW_LIMIT)}\n\n[JsHelper 已截断，完整结果可点击“应用最佳结果”查看]`;
+    return `${source.slice(0, CODE_PREVIEW_LIMIT)}\n\n[XFeHelper 已截断，完整结果可点击“应用最佳结果”查看]`;
 }
 
 function sanitizeFence(text) {

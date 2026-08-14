@@ -1,5 +1,5 @@
 /**
- * JsHelper 公共文件
+ * XFeHelper 公共文件
  * @author zhaoxianlie
  */
 

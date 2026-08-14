@@ -1,5 +1,5 @@
 /**
- * JsHelper 信息编解码
+ * XFeHelper 信息编解码
  */
 import EncodeUtils from './endecode-lib.js';
 import {
@@ -205,7 +205,7 @@ new Vue({
                 taskKey: task,
                 title: 'AI 自动解码',
                 subtitle: '先跑本地链路探测，再让 AI 解释结果。',
-                result: '粘贴乱码、Base64、URL 参数、JWT、Cookie 或 Gzip Base64 后点击“AI 解码”。JsHelper 会自动尝试多条链路，并支持一键应用最佳结果。'
+                result: '粘贴乱码、Base64、URL 参数、JWT、Cookie 或 Gzip Base64 后点击“AI 解码”。XFeHelper 会自动尝试多条链路，并支持一键应用最佳结果。'
             });
         },
 
@@ -256,14 +256,14 @@ new Vue({
                     ? `${analysis.bestCandidate.title}，置信度 ${analysis.bestCandidate.confidence}`
                     : '没有找到高可信链路。',
                 instruction: [
-                    '请基于 JsHelper 的本地探测结果做简短判断，不要重新编造一套链路。',
+                    '请基于 XFeHelper 的本地探测结果做简短判断，不要重新编造一套链路。',
                     '如果本地候选已经清晰，直接确认推荐链路、解释最终内容结构和风险。',
                     '必须明确 MD5、SHA1 只能校验不能解密。',
                     '输出要保留最终明文代码块，便于复制。'
                 ].join('\n'),
                 inputLabel: '当前原文',
                 input: this.sourceContent,
-                resultLabel: 'JsHelper 本地探测结果',
+                resultLabel: 'XFeHelper 本地探测结果',
                 result: analysis.markdown,
                 initialResult: analysis.markdown,
                 preserveInitialResultOnError: true,

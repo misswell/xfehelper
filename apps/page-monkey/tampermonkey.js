@@ -94,7 +94,7 @@ window.TampermonkeyParser = (function () {
 
         lines.push(pad('run-at') + (monkey.mRunAt || 'document-end'));
 
-        // JsHelper 私有扩展字段
+        // XFeHelper 私有扩展字段
         lines.push(pad('fh-id') + monkey.id);
         lines.push(pad('fh-style') + (monkey.mStyle ? 'inline' : ''));
         lines.push(pad('fh-world') + (monkey.mWorld || 'MAIN'));
@@ -108,7 +108,7 @@ window.TampermonkeyParser = (function () {
         lines.push('');
 
         if (monkey.mStyle && monkey.mStyle.trim()) {
-            lines.push('// === JsHelper Inline CSS ===');
+            lines.push('// === XFeHelper Inline CSS ===');
             lines.push('// /* ' + monkey.mStyle.replace(/\*\//g, '*\\/') + ' */');
             lines.push('');
         }
@@ -139,7 +139,7 @@ window.TampermonkeyParser = (function () {
             else if (k === 'updated') monkey.mUpdatedAt = v;
         });
         let cssMatch = text.match(/\/\/\s*\/\*\s*([\s\S]*?)\s*\*\//);
-        if (cssMatch && /=== (?:FeHelper|JsHelper) Inline CSS ===/.test(text)) monkey.mStyle = cssMatch[1];
+        if (cssMatch && /=== (?:FeHelper|XFeHelper) Inline CSS ===/.test(text)) monkey.mStyle = cssMatch[1];
         return monkey;
     }
 

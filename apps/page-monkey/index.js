@@ -498,7 +498,7 @@ new Vue({
         },
         bulkExport() {
             let arr = this.cachedMonkeys.filter(c => this.selectedIds.includes(c.id));
-            this.downloadBackup(arr, `JsHelper-Monkeys-${this.selectedIds.length}.json`);
+            this.downloadBackup(arr, `XFeHelper-Monkeys-${this.selectedIds.length}.json`);
         },
 
         /* ============ 拖拽排序 ============ */
@@ -547,7 +547,7 @@ new Vue({
         },
 
         exportAll() {
-            this.downloadBackup(this.cachedMonkeys, `JsHelper-Monkeys-Backup-${new Date().format('yyyyMMdd-HHmmss')}.json`);
+            this.downloadBackup(this.cachedMonkeys, `XFeHelper-Monkeys-Backup-${new Date().format('yyyyMMdd-HHmmss')}.json`);
         },
 
         downloadBackup(arr, filename) {
@@ -635,7 +635,7 @@ new Vue({
                     if (m) { window.TampermonkeyParser.parseFhExtras(text, m); this.mergeMonkeys([migrate(m)]); return; }
                 } catch (e) {}
             }
-            // 4) JsHelper 旧导出 .js（FeHelperMonkey 格式）
+            // 4) XFeHelper 旧导出 .js（FeHelperMonkey 格式）
             if (/==FeHelperMonkey==/.test(text)) {
                 try {
                     let m = this.parseLegacyFhJs(text);
@@ -785,7 +785,7 @@ new Vue({
             r && r(false);
         },
 
-        /* ============ JsHelper 集成 ============ */
+        /* ============ XFeHelper 集成 ============ */
         openDonateModal(e) {
             e && e.preventDefault();
             try {

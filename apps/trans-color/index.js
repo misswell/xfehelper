@@ -1,5 +1,5 @@
 /**
- * JsHelper 颜色转换工具
+ * XFeHelper 颜色转换工具
  */
 new Vue({
     el: '#pageContainer',

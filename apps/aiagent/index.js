@@ -88,7 +88,7 @@ new Vue({
             sendTime:'2022/12/20 12:12:12',
             message: '你好，可以告诉我你是谁吗？我该怎么和你沟通？',
             respTime: '2022/12/20 12:12:13',
-            respContent: '你好，我是JsHelper智能助理，由OpenAI提供技术支持；你可以在下面的输入框向我提问，我会尽可能回答你~~~'
+            respContent: '你好，我是XFeHelper智能助理，由OpenAI提供技术支持；你可以在下面的输入框向我提问，我会尽可能回答你~~~'
         },
         respResult:{
             id: '',
@@ -688,7 +688,7 @@ function insertCodeToolbar(block) {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'JsHelper-demo.html';
+            a.download = 'XFeHelper-demo.html';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

@@ -1,5 +1,5 @@
 /**
- * JsHelper数据统计模块
+ * XFeHelper数据统计模块
  * @author fehelper
  */
 

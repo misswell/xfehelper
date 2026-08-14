@@ -194,8 +194,8 @@ const TEXT_EXAMPLES = {
     },
     htmlSnippet: {
         label: 'HTML片段',
-        left: '<section class=\"hero\">\n  <h1>JsHelper</h1>\n  <p>JSON 比对工具</p>\n</section>',
-        right: '<section class=\"hero hero-compact\">\n  <h1>JsHelper</h1>\n  <p>内容比对工具</p>\n  <button>立即试用</button>\n</section>'
+        left: '<section class=\"hero\">\n  <h1>XFeHelper</h1>\n  <p>JSON 比对工具</p>\n</section>',
+        right: '<section class=\"hero hero-compact\">\n  <h1>XFeHelper</h1>\n  <p>内容比对工具</p>\n  <button>立即试用</button>\n</section>'
     },
     logOutput: {
         label: '日志输出',

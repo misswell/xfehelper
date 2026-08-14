@@ -1,5 +1,5 @@
 /**
- * JsHelper：从chrome webstore下载extension文件的工具
+ * XFeHelper：从chrome webstore下载extension文件的工具
  * @author zhaoxianlie
  */
 
@@ -93,7 +93,7 @@ export default (function () {
             if (chrome.downloads && typeof chrome.downloads.download === 'function') {
                 _doDownload(url, crxName, crxId);
             } else {
-                notifyText('未启用下载权限，已用浏览器原生方式打开下载链接，可在 JsHelper 设置中授予“下载”权限以获得更好体验。');
+                notifyText('未启用下载权限，已用浏览器原生方式打开下载链接，可在 XFeHelper 设置中授予“下载”权限以获得更好体验。');
                 try {
                     chrome.tabs.create({url: url, active: true});
                 } catch (_) {}
@@ -132,7 +132,7 @@ export default (function () {
                 notifyText('下载失败，可能是当前网络无法访问Google站点！');
             });
         } else {
-            // 否则，下载JsHelper并分享出去
+            // 否则，下载XFeHelper并分享出去
             let crxId = MSG_TYPE.STABLE_EXTENSION_ID;
             let crxName = chrome.runtime.getManifest().name + '-latestVersion.crx';
 

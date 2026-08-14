@@ -80,7 +80,7 @@ let Awesome = (() => {
                     return StorageMgr.set(changes).then(() => changes);
                 })
                 .catch(error => {
-                    console.warn('[JsHelper] 自动启用内置工具失败:', error);
+                    console.warn('[XFeHelper] 自动启用内置工具失败:', error);
                     return {};
                 });
         }

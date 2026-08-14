@@ -1,5 +1,5 @@
 /**
- * JsHelper QR Code Tools
+ * XFeHelper QR Code Tools
  */
 import {
     copyInlineAiResult,

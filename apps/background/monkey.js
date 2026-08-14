@@ -71,7 +71,7 @@ const buildGmApi = (monkey) => {
     });
     return `
         const __GM_PREFIX = '__FH_GM_' + ${JSON.stringify(monkey.id)} + '_';
-        const GM_info = { script: ${meta}, version: '2.0', scriptHandler: 'JsHelper Monkey' };
+        const GM_info = { script: ${meta}, version: '2.0', scriptHandler: 'XFeHelper Monkey' };
         const GM_setValue = function(k, v){ try { localStorage.setItem(__GM_PREFIX + k, JSON.stringify(v)); } catch(e){} };
         const GM_getValue = function(k, d){ try { var v = localStorage.getItem(__GM_PREFIX + k); return v != null ? JSON.parse(v) : d; } catch(e){ return d; } };
         const GM_deleteValue = function(k){ try { localStorage.removeItem(__GM_PREFIX + k); } catch(e){} };
@@ -82,7 +82,7 @@ const buildGmApi = (monkey) => {
         const GM_setClipboard = function(text){ try { navigator.clipboard && navigator.clipboard.writeText(text); } catch(e){} };
         const GM_notification = function(opts){
             try {
-                var title = typeof opts === 'string' ? '' : (opts && opts.title) || 'JsHelper';
+                var title = typeof opts === 'string' ? '' : (opts && opts.title) || 'XFeHelper';
                 var text  = typeof opts === 'string' ? opts : (opts && opts.text) || '';
                 if (window.Notification && Notification.permission === 'granted') {
                     new Notification(title, { body: text });

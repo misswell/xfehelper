@@ -16,7 +16,7 @@ new Vue({
         exportNaotu: function (protocal) {
             // 导出JSON
             let blob = null;
-            let fileName = `JsHelper-Naotu-${new Date * 1}.json`;
+            let fileName = `XFeHelper-Naotu-${new Date * 1}.json`;
             blob = new Blob([JSON.stringify(this.mySavedNaotuList)], {type: 'application/octet-stream'});
             let elm = document.createElement('a');
             elm.setAttribute('download', fileName);

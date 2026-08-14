@@ -1,5 +1,5 @@
 /**
- * JsHelper 密码随机生成工具
+ * XFeHelper 密码随机生成工具
  */
 const DEFAULT_SPECIAL_CHARS = '~!@#$%^&*()[{]}-_=+\|;:\'\",<.>/?`';
 const PASSWORD_SPECIAL_CHARS_KEY = 'password:special-chars';

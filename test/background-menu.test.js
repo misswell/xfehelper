@@ -168,7 +168,7 @@ describe('background context menu wiring', () => {
         expect(toolTitles).toHaveLength(expectedTitles.length);
         expect(toolTitles).not.toContain('J  JSON格式化');
         expect(toolTitles).not.toContain('FMT  代码美化工具');
-        expect(toolTitles).not.toContain('SET  JsHelper设置');
+        expect(toolTitles).not.toContain('SET  XFeHelper设置');
     });
 
     it('groups large menu sets by task family instead of flooding the root menu', async () => {

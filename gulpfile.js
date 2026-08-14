@@ -1,5 +1,5 @@
 /**
- * JsHelper Chrome Extension Builder By Gulp
+ * XFeHelper Chrome Extension Builder By Gulp
  * @author zhaoxianlie
  */
 
@@ -176,9 +176,9 @@ function zipPackage(outputRoot = 'output-chrome', cb) {
     let manifest = JSON.parse(fs.readFileSync(pathOfMF, 'utf-8'));
     manifest.name = manifest.name.replace('-Dev', '');
     fs.writeFileSync(pathOfMF, JSON.stringify(manifest));
-    let pkgName = 'jshelper.zip';
+    let pkgName = 'xfehelper.zip';
     if (outputRoot === 'output-firefox') {
-        pkgName = 'jshelper.xpi';
+        pkgName = 'xfehelper.xpi';
     }
     shell.exec(`cd ${outputRoot}/apps && rm -rf ../${pkgName} && zip -r ../${pkgName} ./* > /dev/null && cd ../../`);
     let size = fs.statSync(`${outputRoot}/${pkgName}`).size;

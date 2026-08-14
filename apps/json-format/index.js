@@ -1,5 +1,5 @@
 /**
- * JsHelper Json Format Tools
+ * XFeHelper Json Format Tools
  */
 
 import { buildRenderableTableViewData, canBuildTableViewData } from './table-utils.js';
@@ -458,7 +458,7 @@ new Vue({
                 statusText: this.jsonAiStatusText,
                 result: [
                     state.message || JSON_AI_STATUS_TEXT[state.availability] || JSON_AI_STATUS_TEXT.error,
-                    'JsHelper 不会在本地模型不可用时把 JSON 自动发送到云端。'
+                    'XFeHelper 不会在本地模型不可用时把 JSON 自动发送到云端。'
                 ].join('\n')
             });
             return false;

@@ -321,7 +321,7 @@ function formatEventQrContent(fields, now = new Date()) {
     const lines = [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
-        'PRODID:-//JsHelper//QR Code//CN',
+        'PRODID:-//XFeHelper//QR Code//CN',
         'BEGIN:VEVENT',
         `UID:${encodeURIComponent(fields.title)}-${start.value}@fehelper.local`,
         `DTSTAMP:${formatDateStamp(now)}`,
