@@ -1,5 +1,5 @@
 /**
- * FeHelper SVG转图片工具
+ * JsHelper SVG转图片工具
  * 实现SVG到图片格式的转换
  */
 

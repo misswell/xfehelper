@@ -1,5 +1,5 @@
 /**
- * FeHelper Wpo Tools
+ * JsHelper Wpo Tools
  */
 new Vue({
     el: '#pageContainer',

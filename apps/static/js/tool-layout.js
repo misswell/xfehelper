@@ -223,9 +223,9 @@
     function getFallbackTitle() {
         let title = (document.title || '').trim();
         return title
-            .replace(/^FeHelper\s*[-|｜:：]\s*/i, '')
-            .replace(/\s*[-|｜:：]\s*FeHelper$/i, '')
-            .replace(/^FeHelper/i, '')
+            .replace(/^JsHelper\s*[-|｜:：]\s*/i, '')
+            .replace(/\s*[-|｜:：]\s*JsHelper$/i, '')
+            .replace(/^JsHelper/i, '')
             .trim();
     }
 
@@ -270,7 +270,7 @@
 
         cleanBrandLink(brandLink);
         brandLink.classList.add('fh-tool-brand-link');
-        brandLink.setAttribute('aria-label', 'FeHelper');
+        brandLink.setAttribute('aria-label', 'JsHelper');
 
         let brandLine = document.createElement('span');
         brandLine.className = 'fh-tool-brand-line';

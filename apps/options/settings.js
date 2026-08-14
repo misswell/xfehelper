@@ -1,5 +1,5 @@
 /**
- * FeHelper Settings Tools
+ * JsHelper Settings Tools
  * @author zhaoxianlie
  */
 

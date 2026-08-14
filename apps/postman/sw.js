@@ -1,5 +1,5 @@
 /**
- * FeHelper Postman Mock Server
+ * JsHelper Postman Mock Server
  * 基于Service Worker实现的本地POST请求模拟服务器
  */
 
@@ -13,7 +13,7 @@ const MOCK_APIS = {
       timestamp: new Date().toISOString(),
       data: {
         id: 1001,
-        name: 'FeHelper Mock API',
+        name: 'JsHelper Mock API',
         version: '1.0.0',
         description: '这是一个基于Service Worker的模拟API服务器'
       }
@@ -90,7 +90,7 @@ async function handleMockRequest(request, mockApi) {
         body: requestData
       },
       server: {
-        name: 'FeHelper Mock Server',
+        name: 'JsHelper Mock Server',
         version: '1.0.0',
         poweredBy: 'Service Worker'
       }
@@ -105,7 +105,7 @@ async function handleMockRequest(request, mockApi) {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'X-Powered-By': 'FeHelper Mock Server',
+        'X-Powered-By': 'JsHelper Mock Server',
         'X-Response-Time': mockApi.delay + 'ms'
       }
     });
@@ -139,14 +139,14 @@ function parseFormData(formDataString) {
 
 // Service Worker安装事件
 self.addEventListener('install', (event) => {
-  console.log('FeHelper Mock Server: Service Worker 已安装');
+  console.log('JsHelper Mock Server: Service Worker 已安装');
   self.skipWaiting();
 });
 
 // Service Worker激活事件
 self.addEventListener('activate', (event) => {
-  console.log('FeHelper Mock Server: Service Worker 已激活');
+  console.log('JsHelper Mock Server: Service Worker 已激活');
   event.waitUntil(self.clients.claim());
 });
 
-console.log('FeHelper Mock Server: Service Worker 已加载');
+console.log('JsHelper Mock Server: Service Worker 已加载');

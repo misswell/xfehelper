@@ -1,5 +1,5 @@
 /**
- * FeHelper 进制转换工具
+ * JsHelper 进制转换工具
  */
 new Vue({
     el: '#pageContainer',

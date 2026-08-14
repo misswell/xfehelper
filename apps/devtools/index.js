@@ -184,7 +184,7 @@ new Vue({
             if (this.updateUrlMode) {
                 updateUrl = this.$refs.updateUrl.value;
                 if (updateUrl.indexOf('baidufe.com') > -1 || updateUrl.indexOf('fehelper.com') > -1) {
-                    return this.toast('如果你是要安装FeHelper官网的工具，请到插件配置页直接安装！');
+                    return this.toast('如果你是要安装JsHelper官网的工具，请到插件配置页直接安装！');
                 }
             }
 

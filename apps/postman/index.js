@@ -1,5 +1,5 @@
 /**
- * FeHelper 简易版Postman
+ * JsHelper 简易版Postman
  */
 import {
     copyInlineAiResult,
@@ -118,7 +118,7 @@ new Vue({
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('./sw.js')
                         .then((registration) => {
-                            console.log('已启用 FeHelper Mock Server 已注册:', registration.scope);
+                            console.log('已启用 JsHelper Mock Server 已注册:', registration.scope);
                             // 通知Vue组件Mock服务器已就绪
                             window.dispatchEvent(new CustomEvent('mockServerReady'));
                         })
@@ -182,7 +182,7 @@ new Vue({
                 return `${contentTypeHeader.value}（手动设置）`;
             }
             if (this.methodContent.toLowerCase() === 'post' && this.urlencodedDefault) {
-                return 'application/x-www-form-urlencoded（FeHelper POST 默认携带）';
+                return 'application/x-www-form-urlencoded（JsHelper POST 默认携带）';
             }
             return '未设置';
         },
@@ -269,7 +269,7 @@ new Vue({
                 title: 'AI辅助调试',
                 subtitle: '检查请求配置并给出可执行调试方案。',
                 instruction: [
-                    '请作为 FeHelper 简易 Postman 的接口调试助手，基于当前请求现场给出可执行排查方案。',
+                    '请作为 JsHelper 简易 Postman 的接口调试助手，基于当前请求现场给出可执行排查方案。',
                     '必须检查：URL/查询参数、HTTP 方法、Headers、Content-Type、Body 格式、鉴权信息、CORS 可能性、Mock Server 适用性。',
                     '如果没有响应，不要编造服务端返回；输出可以直接复制的 curl 或 fetch 示例，必要时给出建议 Header/Body。'
                 ].join('\n'),
@@ -302,7 +302,7 @@ new Vue({
                 title: '诊断响应',
                 subtitle: '根据请求和响应定位接口问题。',
                 instruction: [
-                    '请基于 FeHelper 简易 Postman 的请求和响应现场做接口调试诊断。',
+                    '请基于 JsHelper 简易 Postman 的请求和响应现场做接口调试诊断。',
                     '必须结合状态码、响应头、响应体、JSON 解析错误、请求 Headers、Content-Type 和 Body 格式判断问题。',
                     '优先指出最可能的根因；如果证据不足，明确还缺哪项信息；不要泛泛解释 HTTP。'
                 ].join('\n'),
@@ -700,7 +700,7 @@ new Vue({
                 this.methodContent = 'POST';
                 this.paramContent = JSON.stringify({
                     title: '测试数据',
-                    content: '这是一个通过FeHelper Mock服务器创建的测试数据',
+                    content: '这是一个通过JsHelper Mock服务器创建的测试数据',
                     category: 'test',
                     tags: ['mock', 'test', 'fehelper']
                 }, null, 2);

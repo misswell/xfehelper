@@ -1,13 +1,13 @@
 /**
- * FeHelper Page Color Picker Tools
+ * JsHelper Page Color Picker Tools
  */
 
 window.colorpickerContentScript = function () {
 
 
-    let FeHelper = window.FeHelper || {};
+    let JsHelper = window.JsHelper || {};
 
-    FeHelper.elemTool = {
+    JsHelper.elemTool = {
         elm: function (nodeType, attributes, addchilds, appnedTo) {
             var ne = document.createElement(nodeType), i, l;
             if (attributes) {
@@ -89,7 +89,7 @@ window.colorpickerContentScript = function () {
     /**
      * 页面取色器
      */
-    FeHelper.ColorPicker = (function () {
+    JsHelper.ColorPicker = (function () {
 
         if (!(document.documentElement instanceof HTMLElement)) {
             return;
@@ -186,16 +186,16 @@ window.colorpickerContentScript = function () {
             hex = hxe ? hxe : hex;
             if (!_ge('fehelper-colorpicker-cpimprev') || (rgb && !_ge('cprgbvl'))) {
                 emptyNode(n);
-                FeHelper.elemTool.elm('div', {}, [
-                    FeHelper.elemTool.elm('img', {
+                JsHelper.elemTool.elm('div', {}, [
+                    JsHelper.elemTool.elm('img', {
                         id: 'fehelper-colorpicker-cpimprev',
                         height: wid,
                         width: wid,
                         src: pix,
                         style: 'margin:0px;padding:0px;margin:0px;'
                     }),
-                    FeHelper.elemTool.elm('br'),
-                    FeHelper.elemTool.elm('input', {
+                    JsHelper.elemTool.elm('br'),
+                    JsHelper.elemTool.elm('input', {
                         type: 'text',
                         size: 7,
                         style: 'width:60px;height:20px;line-height:20px;font-size:10pt;border:' + borderValue,
@@ -225,10 +225,10 @@ window.colorpickerContentScript = function () {
             ev.target.select();
         }
 
-        function setDisplay() {//FeHelper.elemTool.elm
+        function setDisplay() {//JsHelper.elemTool.elm
             emptyNode(n);
-            FeHelper.elemTool.elm('div', {}, [
-                FeHelper.elemTool.elm('input', {
+            JsHelper.elemTool.elm('div', {}, [
+                JsHelper.elemTool.elm('input', {
                     type: 'text',
                     size: 7,
                     style: 'width:80px;height:20px;line-height:20px;font-size:10pt;border:' + borderValue,
@@ -236,7 +236,7 @@ window.colorpickerContentScript = function () {
                     value: '#' + hex,
                     event: ['mouseover', selectTargElm]
                 }),
-                FeHelper.elemTool.elm('img', {
+                JsHelper.elemTool.elm('img', {
                     style: 'width:20px;height:20px;position:absolute;top:-10px;right:-10px;cursor:pointer;',
                     src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAACwklEQVQ4Ea1US0tbQRg9kwmp8YXBi7hKyMZAcaFuFN26daFEUg1BEF24FQr9D/0BIqhbDe0/0I0LceNCQSIVIcZdLkrER2LUm6+caeZiEmkp7cDlMnfOOfM9zneB/7zUn/REJAEgXsfllVI/fscJvncoIhrAZwArrutGb25uoJRCb28vROQKwBqAr0opr5nfEqGIpGq12s7h4SH29vZQKpUMR2uN9vZ29PX1YWJiAsPDw7zkk1Iq+1a0QVBEkuVy+dvW1hYuLi58HKMLBoPo6uoyb+6j0ShmZmYQDodnlVLfLdgXFJGQ53nVjY0NnJ+fo1arMT2Do0BbWxs6OjoQCASMqOd5iMViSKVS0Fp/UEo9ExywygBWj4+PUSwWTWpDQ0MYHx/3jylE4cHBQSwuLiIUCqFQKODk5ISYVQt8K7jCujE1RtPf349kMomRkRGLRSKRwNTUlMng+dkEBHLYPAsyXRaRj9fX19H7+3sTBQ+Pjo5Miul0Gg8PD+aS6elp831/f9/ycXd3B3KpoZTKWdvEb29vfRBT4yKR0S4vL5uLTk9Psbu7619qCeQ6jkOv5t6mbM/Nm6J8WFfWj4sXsFG2WQ2E+sYK5nt6elrOHcfB/Py8sdDl5SUWFhZokxbROjdPASPI3B3Hueru7vZFCZqbm2N9sL29jc3NTVMv1pQdtpHSm+RSwxesq6yNjY35grQMm5TNZvHy8oKnpyesr6/Tc6bz3L++vmJ0dJQcjqJZLcamAP1F+7B2lUoFj4+PRpBRdXZ2mm9kDwwMYGlp6X1j0+la61lag2PF26vVqpkYToVdtBD38XgcmUyGYhy9X6YE4EdoCfw5eJ63wwk4ODiA67ool8tGhJhIJILJyUmwPFrrlp+D1Wl4c65F5IuIFFzXlbOzM8nlclIsFoXf6mehBlJ90xJhM+hvf7DN/H/e/wRZ4k9klRmUggAAAABJRU5ErkJggg==',
                     alt: 'Close',
@@ -317,13 +317,13 @@ window.colorpickerContentScript = function () {
 
         function initialInit() {
             removeExistingNodes();
-            c = FeHelper.elemTool.elm('img', {
+            c = JsHelper.elemTool.elm('img', {
                 id: elmid1,
                 src: blankgif,
                 style: 'position:fixed;max-width:none!important;max-height:none!important;top:0px;left:0px;margin:0px;padding:0px;overflow:hidden;z-index:2147483646;',
                 events: [['click', picked, true], ['load', snapshotLoaded]]
             }, [], document.body);
-            n = FeHelper.elemTool.elm('div', {
+            n = JsHelper.elemTool.elm('div', {
                 id: elmid2,
                 style: 'position:fixed;min-width:30px;max-width:300px;box-shadow:2px 2px 2px #666;border:' + borderValue + ';border-radius:5px;z-index:2147483646;cursor:default;padding:10px;text-align:center;'
             }, [], document.body);
@@ -537,6 +537,6 @@ window.colorpickerContentScript = function () {
 
     // 给background page直接调用的
     window.colorpickerNoPage = function (request) {
-        FeHelper.ColorPicker(request)
+        JsHelper.ColorPicker(request)
     };
 };

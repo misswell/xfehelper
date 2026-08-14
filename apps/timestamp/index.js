@@ -1,5 +1,5 @@
 /**
- * FeHelper Timestamp Tools
+ * JsHelper Timestamp Tools
  */
 new Vue({
     el: '#pageContainer',

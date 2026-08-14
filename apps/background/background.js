@@ -119,7 +119,7 @@ let BgPageInstance = (function () {
 
     let _notifyToolOpenFailure = function (tool, error) {
         let message = `打开「${tool || '工具'}」失败：${(error && error.message) || error || '请重新点击插件图标后再试'}`;
-        console.error('[FeHelper] DynamicToolRunner failed:', message, error);
+        console.error('[JsHelper] DynamicToolRunner failed:', message, error);
         notifyText({
             title: '工具打开失败',
             message,
@@ -492,7 +492,7 @@ let BgPageInstance = (function () {
             let actionTxt;
             switch (action) {
                 case 'install':
-                    actionTxt = '工具已「安装」成功，并已添加到弹出下拉列表，点击FeHelper图标可正常使用！';
+                    actionTxt = '工具已「安装」成功，并已添加到弹出下拉列表，点击JsHelper图标可正常使用！';
                     break;
                 case 'offload':
                     actionTxt = '工具已「卸载」成功，并已从弹出下拉列表中移除！';
@@ -877,7 +877,7 @@ let BgPageInstance = (function () {
                     Statistics.recordUpdate(previousVersion);
                     if (previousVersion === '2019.12.2415') {
                         notifyText({
-                            message: '历尽千辛万苦，FeHelper已升级到最新版本，可以到插件设置页去安装旧版功能了！',
+                            message: '历尽千辛万苦，JsHelper已升级到最新版本，可以到插件设置页去安装旧版功能了！',
                             autoClose: 5000
                         });
                     }
@@ -901,7 +901,7 @@ let BgPageInstance = (function () {
 
     let _notifyExtensionUpdateDeferred = function () {
         notifyText({
-            title: 'FeHelper 更新',
+            title: 'JsHelper 更新',
             message: '已发现新版本。为避免关闭正在使用的工具页，请到插件设置页手动点击“立即更新”。',
             autoClose: 8000
         });
@@ -909,7 +909,7 @@ let BgPageInstance = (function () {
 
     let _applyExtensionUpdate = function () {
         notifyText({
-            title: 'FeHelper 更新',
+            title: 'JsHelper 更新',
             message: '已发现新版本，正在应用更新...',
             autoClose: 3000
         });
@@ -1249,7 +1249,7 @@ let BgPageInstance = (function () {
                 callback && callback({ success: true, content: scriptContent });
             })
             .catch(error => {
-                console.warn('[FeHelper] hotfix.json 获取失败:', url, error && error.message);
+                console.warn('[JsHelper] hotfix.json 获取失败:', url, error && error.message);
                 callback && callback({ success: false, error: (error && error.message) || String(error) });
             });
     }
@@ -1264,15 +1264,15 @@ let BgPageInstance = (function () {
             const now = Date.now();
             
             if (now - lastCheck > PATCH_CHECK_INTERVAL) {
-                console.log(`[FeHelper] 距离上次检查已超过5min，开始检查热更新...`);
+                console.log(`[JsHelper] 距离上次检查已超过5min，开始检查热更新...`);
                 
                 fetchFehelperPatchs((result) => {
                     if (result && result.success) {
-                        console.log(`[FeHelper] 自动热更新成功，版本: v${result.version}`);
+                        console.log(`[JsHelper] 自动热更新成功，版本: v${result.version}`);
                     } else if (result && result.notFound) {
-                        console.log(`[FeHelper] 当前版本暂无热更新补丁`);
+                        console.log(`[JsHelper] 当前版本暂无热更新补丁`);
                     } else {
-                        console.log(`[FeHelper] 自动热更新检查失败:`, result?.error);
+                        console.log(`[JsHelper] 自动热更新检查失败:`, result?.error);
                     }
                     
                     // 更新最后检查时间
@@ -1280,12 +1280,12 @@ let BgPageInstance = (function () {
                 });
             } else {
                 const nextCheck = new Date(lastCheck + PATCH_CHECK_INTERVAL);
-                console.log(`[FeHelper] 距离上次检查不足5min，下次检查时间: ${nextCheck.toLocaleString()}`);
+                console.log(`[JsHelper] 距离上次检查不足5min，下次检查时间: ${nextCheck.toLocaleString()}`);
             }
         });
     }
 
-    // 获取FeHelper热修复补丁
+    // 获取JsHelper热修复补丁
     function fetchFehelperPatchs(callback) {
         let version = String(chrome.runtime.getManifest().version).split('.').map(n => parseInt(n)).join('.');
         let patchUrl = `https://fehelper.com/v1/fh-patchs/v${version}.json`;
@@ -1307,18 +1307,18 @@ let BgPageInstance = (function () {
                             const storageData = {};
                             storageData[`FH_PATCH_HOTFIX_${version}`] = patchs;
                             chrome.storage.local.set(storageData, () => {
-                                console.log(`[FeHelper] 成功获取版本 v${version} 的热修复补丁`);
+                                console.log(`[JsHelper] 成功获取版本 v${version} 的热修复补丁`);
                                 callback && callback({ success: true, version });
                             });
                         });
                 } else {
                     // 文件不存在
-                    console.log(`[FeHelper] 服务器上不存在版本 v${version} 的补丁文件`);
+                    console.log(`[JsHelper] 服务器上不存在版本 v${version} 的补丁文件`);
                     callback && callback({ success: false, error: '补丁文件不存在', notFound: true });
                 }
             })
             .catch(e => {
-                console.warn('[FeHelper] 热修复补丁获取失败:', patchUrl, e && e.message);
+                console.warn('[JsHelper] 热修复补丁获取失败:', patchUrl, e && e.message);
                 callback && callback({ success: false, error: (e && e.message) || '没有需要修复的补丁' });
             });
     }

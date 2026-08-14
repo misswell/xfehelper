@@ -397,7 +397,7 @@ describe('json-format settings regression guards', () => {
         const optionsHtml = readSource('apps/options/index.html');
         const optionsSource = readSource('apps/options/index.js');
 
-        expect(popupHtml).toContain('FeHelper 模式切换');
+        expect(popupHtml).toContain('JsHelper 模式切换');
         expect(popupHtml).toContain("@click=\"setUiMode('lite')\"");
         expect(popupHtml).toContain("@click=\"setUiMode('omni')\"");
         expect(popupHtml).toContain("v-if=\"uiMode !== 'lite'\" class=\"fh-search\"");
@@ -411,7 +411,7 @@ describe('json-format settings regression guards', () => {
         expect(jsonSource).toContain("let JSON_FORMAT_UI_MODE = 'JSON_FORMAT_UI_MODE';");
         expect(jsonSource).toContain("chrome.storage.local.get([JSON_FORMAT_UI_MODE, FH_UI_MODE]");
         expect(jsonSource).toContain("[JSON_FORMAT_UI_MODE]: this.uiMode");
-        expect(optionsHtml).toContain('FeHelper 模式');
+        expect(optionsHtml).toContain('JsHelper 模式');
         expect(optionsHtml).toContain("id=\"FH_UI_MODE_LITE\"");
         expect(optionsHtml).toContain("id=\"FH_UI_MODE_OMNI\"");
         expect(optionsSource).toContain("const FH_OPTIONS_UI_MODE = 'FH_OPTIONS_UI_MODE';");

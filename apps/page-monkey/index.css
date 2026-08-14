@@ -73,7 +73,7 @@ a:hover { text-decoration: underline; }
 
 [v-cloak] { display: none; }
 
-/* ============ 顶部导航（与 FeHelper 全家桶风格一致：bootstrap panel-heading） ============ */
+/* ============ 顶部导航（与 JsHelper 全家桶风格一致：bootstrap panel-heading） ============ */
 .fh-app.wrapper {
     max-width: none;
     margin: 0;

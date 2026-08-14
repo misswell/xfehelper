@@ -1,6 +1,6 @@
 /**
- * FeHelper Full Page Capture
- * @author FeHelper
+ * JsHelper Full Page Capture
+ * @author JsHelper
  * @version 1.0.1
  */
 window.screenshotContentScript = function () {
@@ -373,11 +373,11 @@ window.screenshotContentScript = function () {
     }
 
     /**
-     * 隐藏所有FeHelper UI元素
+     * 隐藏所有JsHelper UI元素
      * 隐藏所有带有 fehelper-ui-element 类或 data-fh-ui 属性的元素
      * @returns {Object} 隐藏元素的原始显示状态
      */
-    function hideFeHelperUI() {
+    function hideJsHelperUI() {
         const uiElements = document.querySelectorAll('.fehelper-ui-element, [data-fh-ui="true"]');
         const originalDisplays = {};
 
@@ -397,11 +397,11 @@ window.screenshotContentScript = function () {
     }
     
     /**
-     * 显示所有FeHelper UI元素
+     * 显示所有JsHelper UI元素
      * 恢复所有带有 fehelper-ui-element 类或 data-fh-ui 属性的元素的显示状态
      * @param {Object} originalDisplays 原始显示状态对象
      */
-    function showFeHelperUI(originalDisplays) { // Accept argument
+    function showJsHelperUI(originalDisplays) { // Accept argument
         originalDisplays = originalDisplays || window._fh_original_displays || {}; // Use passed or global
         const uiElements = document.querySelectorAll('.fehelper-ui-element, [data-fh-ui="true"]');
 
@@ -432,7 +432,7 @@ window.screenshotContentScript = function () {
         elements.forEach(el => {
             const style = window.getComputedStyle(el);
             if (style && (style.position === 'fixed' || style.position === 'sticky')) {
-                // 排除FeHelper自己的UI元素
+                // 排除JsHelper自己的UI元素
                 if (el.classList.contains('fehelper-ui-element') || 
                     el.hasAttribute('data-fh-ui') || 
                     el.id === 'fehelper-screenshot-progress' ||
@@ -486,7 +486,7 @@ window.screenshotContentScript = function () {
         window.scrollTo(originalScrollLeft, originalScrollTop);
 
         // 恢复UI显示 - 传递存储的原始状态
-        showFeHelperUI(window._fh_original_displays || {});
+        showJsHelperUI(window._fh_original_displays || {});
         showFixedElements();
 
         // 隐藏进度UI
@@ -656,7 +656,7 @@ window.screenshotContentScript = function () {
         window._fh_screenshot_cancel_callback = cleanup;
         
         // 隐藏干扰UI
-        hideFeHelperUI();
+        hideJsHelperUI();
         hideFixedElements();
         
         // 等待DOM更新
@@ -779,7 +779,7 @@ window.screenshotContentScript = function () {
         };
 
         // 隐藏其他干扰UI（但不隐藏固定元素）
-        hideFeHelperUI(); // 保存原始UI状态
+        hideJsHelperUI(); // 保存原始UI状态
 
         // 创建存储截图数据的数组和已捕获位置的集合
         const screenshots = [];
@@ -1063,7 +1063,7 @@ window.screenshotContentScript = function () {
      * 创建截图选择UI
      */
     window.screenshotNoPage = function() {
-        // console.log('FeHelper: 截图工具触发');
+        // console.log('JsHelper: 截图工具触发');
         // 如果正在截图，不创建新UI
         if (isCapturing) {
             alert('正在截图中，请等待当前操作完成');
@@ -1086,7 +1086,7 @@ window.screenshotContentScript = function () {
             // 设置内部HTML
             container.innerHTML = `
                 <div id="fehelper_screenshot" style="position:fixed;left:0;top:0;right:0;z-index:1000000;padding:15px;background:rgba(0,0,0,0.8);color:#fff;text-align:center;">
-                    <h3 style="margin:0 0 10px 0;font-size:16px;">FeHelper 网页截图工具</h3>
+                    <h3 style="margin:0 0 10px 0;font-size:16px;">JsHelper 网页截图工具</h3>
                     <button id="btnVisible" style="margin:0 10px;padding:8px 15px;border-radius:4px;border:none;background:#4CAF50;color:#fff;cursor:pointer;font-size:14px;">可视区域截图</button>
                     <button id="btnWhole" style="margin:0 10px;padding:8px 15px;border-radius:4px;border:none;background:#2196F3;color:#fff;cursor:pointer;font-size:14px;">全网页截图</button>
                     <button id="btnClose" style="margin:0 10px;padding:8px 15px;border-radius:4px;border:none;background:#f44336;color:#fff;cursor:pointer;font-size:14px;">关闭</button>
@@ -1095,7 +1095,7 @@ window.screenshotContentScript = function () {
             
             // 确保DOM已准备好
             if (!document.body) {
-                // console.error('FeHelper截图：document.body不存在，无法添加截图UI');
+                // console.error('JsHelper截图：document.body不存在，无法添加截图UI');
                 // 尝试等待DOM加载完成
                 const checkBodyInterval = setInterval(() => {
                     if (document.body) {
@@ -1120,10 +1120,10 @@ window.screenshotContentScript = function () {
             // 绑定事件
             bindEvents(container);
             
-            // console.log('FeHelper截图UI已添加到页面');
+            // console.log('JsHelper截图UI已添加到页面');
             
         } catch (error) {
-            // console.error('FeHelper截图UI创建失败：', error);
+            // console.error('JsHelper截图UI创建失败：', error);
             alert('截图工具启动失败：' + error.message);
         }
     };
@@ -1175,7 +1175,7 @@ window.screenshotContentScript = function () {
     // 添加消息监听，支持通过消息触发截图功能
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.type === 'fh-screenshot-start') {
-            // console.log('FeHelper: 收到截图请求');
+            // console.log('JsHelper: 收到截图请求');
             window.screenshotNoPage();
             sendResponse({success: true});
             return true;
@@ -1183,7 +1183,7 @@ window.screenshotContentScript = function () {
     });
     
     // 初始化
-    // console.log('FeHelper: 截图功能已加载');
+    // console.log('JsHelper: 截图功能已加载');
 
     /**
      * 根据网页URL生成默认文件名
@@ -1202,7 +1202,7 @@ window.screenshotContentScript = function () {
         } else {
             name = '';
         }
-        return 'fehelper' + name + '-' + Date.now() + '.png';
+        return 'JsHelper' + name + '-' + Date.now() + '.png';
     }
 
     // 在截图失败的回调中，确保错误信息被正确记录，并释放资源

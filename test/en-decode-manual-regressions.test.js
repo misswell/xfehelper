@@ -16,10 +16,10 @@ describe('en-decode manual regressions', () => {
     });
 
     it('Issue #625: decoded complete JSON is pretty printed', () => {
-        const encoded = Buffer.from(JSON.stringify({ok: true, name: 'FeHelper'}), 'utf8').toString('base64url');
+        const encoded = Buffer.from(JSON.stringify({ok: true, name: 'JsHelper'}), 'utf8').toString('base64url');
         const decoded = EncodeUtils.utf8Decode(EncodeUtils.base64Decode(encoded));
 
-        expect(EncodeUtils.formatDecodedText(decoded)).toBe('{\n    "ok": true,\n    "name": "FeHelper"\n}');
+        expect(EncodeUtils.formatDecodedText(decoded)).toBe('{\n    "ok": true,\n    "name": "JsHelper"\n}');
     });
 
     it('Issue #622: URL decode keeps malformed percent sequences instead of throwing', () => {

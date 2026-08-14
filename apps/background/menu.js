@@ -1,5 +1,5 @@
 /**
- * FeHelper 右键菜单管理
+ * JsHelper 右键菜单管理
  * @type {{manage}}
  * @author zhaoxianlie
  */
@@ -58,7 +58,7 @@ export default (function () {
         },
         'fehelper-setting': {
             icon: 'SET',
-            text: 'FeHelper设置',
+            text: 'JsHelper设置',
             onClick: function (info, tab) {
                 chrome.runtime.openOptionsPage();
             }
@@ -253,7 +253,7 @@ export default (function () {
         _removeContextMenu(() => {
             chrome.contextMenus.create({
                 id: FeJson.contextMenuId,
-                title: "FeHelper",
+                title: "JsHelper",
                 contexts: ROOT_MENU_CONTEXTS,
                 documentUrlPatterns: ROOT_DOCUMENT_PATTERNS
             }, () => {

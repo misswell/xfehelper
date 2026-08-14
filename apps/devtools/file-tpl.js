@@ -29,7 +29,7 @@ window.FileTpl = {
  * 注意这里的方法名称，不要改！不要改！不要改！
  */
 window.#toolNameLower#ContentScript = function () {
-    console.log('你好，我是来自FeHelper的工具：#toolName#！');
+    console.log('你好，我是来自JsHelper的工具：#toolName#！');
 };`,
 
     // noPage为true时需要追加的内容脚本
@@ -38,8 +38,8 @@ window.#toolNameLower#ContentScript = function () {
  * 注意这里的方法名称，不要改！不要改！不要改！
  */
 window.#toolNameLower#NoPage = function (tabInfo) {
-    alert('你好，我是来自FeHelper的工具：#toolName#！你可以打开控制台看Demo的输出！');
-    console.log('你好，我是来自FeHelper的工具：#toolName#', tabInfo);
+    alert('你好，我是来自JsHelper的工具：#toolName#！你可以打开控制台看Demo的输出！');
+    console.log('你好，我是来自JsHelper的工具：#toolName#', tabInfo);
 };`,
 
     // index.js & index.css

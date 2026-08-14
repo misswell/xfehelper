@@ -1,5 +1,5 @@
 /**
- * FeHelper Code Compress
+ * JsHelper Code Compress
  */
 let editor = {};
 

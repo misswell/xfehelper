@@ -14,7 +14,7 @@
         document.body.innerHTML = [
             '<div class="fh-devtool-runtime-error" style="max-width:960px;margin:24px auto;padding:20px 24px;border-radius:12px;background:#fff7ed;border:1px solid #fdba74;color:#9a3412;font:14px/1.6 Menlo, Monaco, Consolas, monospace;">',
             '<h2 style="margin:0 0 12px;font:600 20px/1.3 sans-serif;color:#7c2d12;">自定义工具运行失败</h2>',
-            '<p style="margin:0 0 12px;font:14px/1.6 sans-serif;">FeHelper 已在隔离沙箱中运行此工具，但脚本仍然报错。请检查脚本依赖、全局变量或浏览器 API 使用方式。</p>',
+            '<p style="margin:0 0 12px;font:14px/1.6 sans-serif;">JsHelper 已在隔离沙箱中运行此工具，但脚本仍然报错。请检查脚本依赖、全局变量或浏览器 API 使用方式。</p>',
             '<pre style="margin:0;padding:14px;background:#ffedd5;border-radius:10px;white-space:pre-wrap;word-break:break-word;">',
             escapeHtml(detail),
             '</pre>',

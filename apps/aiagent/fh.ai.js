@@ -1,5 +1,5 @@
 /**
- * FeHelper AI 助手 - 流式问答
+ * JsHelper AI 助手 - 流式问答
  * 支持 Chrome 内置 AI、SiliconFlow 及任意 OpenAI 兼容服务
  */
 
@@ -27,7 +27,7 @@ const PROVIDERS = {
 
 const SYSTEM_PROMPT = {
     role: 'system',
-    content: '你是由FeHelper提供的，一个专为开发者服务的AI助手。' +
+    content: '你是由JsHelper提供的，一个专为开发者服务的AI助手。' +
         '你的目标是精准理解开发者的技术需求，并以最简洁、直接、专业的方式输出高质量代码，并且保证代码的完整性。' +
         '请避免无关的解释和冗余描述，只输出开发者真正需要的代码和必要的技术要点说明。' +
         '遇到不明确的需求时，优先追问关键细节，绝不输出与开发无关的内容。' +

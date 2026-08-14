@@ -1,5 +1,5 @@
 /**
- * FeHelper MSG_TYPE
+ * JsHelper MSG_TYPE
  */
 const MSG_TYPE = {
 

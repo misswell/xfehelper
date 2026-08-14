@@ -1,5 +1,5 @@
 /**
- * Json Page Automatic Format Via FeHelper
+ * Json Page Automatic Format Via JsHelper
  * @author zhaoxianlie
  */
 
@@ -714,7 +714,7 @@ window.JsonAutoFormat = (() => {
             '<div id="jfToolbar" class="x-toolbar fh-json-viewbar" style="display:none">' +
             '    <div class="fh-viewbar-brand">' +
             '        <a href="https://fehelper.com" target="_blank" class="x-a-title fh-viewbar-logo">' +
-            '            <img src="' + chrome.runtime.getURL('static/img/fe-16.png') + '" alt="FeHelper"/><span>FeHelper</span></a>' +
+            '            <img src="' + chrome.runtime.getURL('static/img/fe-16.png') + '" alt="JsHelper"/><span>JsHelper</span></a>' +
             '        <span class="fh-viewbar-title-divider" aria-hidden="true">｜</span>' +
             '        <span class="x-b-title fh-viewbar-title">JSON 格式化</span>' +
             '    </div>' +
@@ -1425,7 +1425,7 @@ window.JsonAutoFormat = (() => {
             if (formatOptions['MAX_JSON_KEYS_NUMBER']) {
                 let keysCount = _getAllKeysCount(jsonObj);
                 if (keysCount > formatOptions['MAX_JSON_KEYS_NUMBER']) {
-                    let msg = '当前JSON共 <b style="color:red">' + keysCount + '</b> 个Key，大于预设值' + formatOptions['MAX_JSON_KEYS_NUMBER'] + '，已取消自动格式化；可在FeHelper设置页的「JSON 自动格式化 Key 数上限」中调整此配置！';
+                    let msg = '当前JSON共 <b style="color:red">' + keysCount + '</b> 个Key，大于预设值' + formatOptions['MAX_JSON_KEYS_NUMBER'] + '，已取消自动格式化；可在JsHelper设置页的「JSON 自动格式化 Key 数上限」中调整此配置！';
                     return toast(msg);
                 }
             }

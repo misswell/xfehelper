@@ -3,7 +3,7 @@ import { getAiFeaturePack } from './fh.ai-features.js';
 
 const MAX_CONTEXT_LENGTH = 12000;
 const INLINE_AI_RULES = [
-    'FeHelper 工具内联 AI 规则：',
+    'JsHelper 工具内联 AI 规则：',
     '1. 只回答当前工具里的具体任务，不把用户引导到聊天页。',
     '2. 优先给可复制、可应用、可验证的结果。',
     '3. 不解释基础概念，除非用户当前错误需要定位原因。',
@@ -239,7 +239,7 @@ function setInlineAiGuide(state, options = {}) {
     Object.assign(state, {
         visible: true,
         taskKey: options.taskKey || 'guide',
-        title: options.title || 'FeHelper AI',
+        title: options.title || 'JsHelper AI',
         subtitle: options.subtitle || '',
         statusText: options.statusText || '',
         result: options.result || '',
@@ -253,7 +253,7 @@ function clipTextForPrompt(text, limit = MAX_CONTEXT_LENGTH) {
     if (value.length <= limit) return value;
     const head = value.slice(0, Math.floor(limit * 0.72));
     const tail = value.slice(value.length - Math.floor(limit * 0.22));
-    return `${head}\n\n[FeHelper 已截断中间 ${value.length - head.length - tail.length} 个字符]\n\n${tail}`;
+    return `${head}\n\n[JsHelper 已截断中间 ${value.length - head.length - tail.length} 个字符]\n\n${tail}`;
 }
 
 function formatSection(label, value) {
@@ -278,7 +278,7 @@ function buildToolAiMessages(toolKey, request = {}) {
     ].filter(Boolean).join('\n\n');
 
     const userContent = [
-        `# ${request.title || (pack && pack.title) || 'FeHelper AI 任务'}`,
+        `# ${request.title || (pack && pack.title) || 'JsHelper AI 任务'}`,
         request.instruction || request.action || (pack && pack.prompt) || '',
         formatMeta(request.meta),
         formatSection(request.inputLabel || '当前输入', request.input),
@@ -323,7 +323,7 @@ async function runInlineToolAi(state, request = {}) {
         visible: true,
         loading: true,
         taskKey: request.taskKey || '',
-        title: request.title || 'FeHelper AI',
+        title: request.title || 'JsHelper AI',
         subtitle: request.subtitle || '',
         result: request.initialResult || '',
         canApply: !!request.canApply,

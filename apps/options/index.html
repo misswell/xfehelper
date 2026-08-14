@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
-    <title>FeHelper-控制台</title>
+    <title>JsHelper-控制台</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript" src="theme-boot.js"></script>
@@ -17,11 +17,11 @@
             <a href="https://fehelper.com" target="_blank" class="fh-brand">
                 <img class="fh-brand-mark" src="../static/img/fe-48.png" alt="" aria-hidden="true">
                 <span class="fh-brand-copy">
-                    <strong>FeHelper</strong>
+                    <strong>JsHelper</strong>
                     <span>{{ uiMode === 'lite' ? 'Lite 控制台' : '开发者工具控制台' }}</span>
                 </span>
             </a>
-            <div class="fh-mode-switch" role="group" aria-label="FeHelper 模式切换">
+            <div class="fh-mode-switch" role="group" aria-label="JsHelper 模式切换">
                 <button type="button" :class="{ active: uiMode === 'lite' }" @click="setUiMode('lite')">Lite</button>
                 <button type="button" :class="{ active: uiMode === 'omni' }" @click="setUiMode('omni')">Omni</button>
             </div>
@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <nav class="fh-side-actions" aria-label="FeHelper主要操作">
+        <nav class="fh-side-actions" aria-label="JsHelper主要操作">
             <button type="button" class="fh-side-action is-settings" @click="showSettings">
                 <span class="fh-action-icon" aria-hidden="true">ST</span>
                 <span class="fh-action-copy">
@@ -63,7 +63,7 @@
                 <span class="fh-action-icon" aria-hidden="true">SP</span>
                 <span class="fh-action-copy">
                     <strong>请作者喝咖啡</strong>
-                    <small>支持 FeHelper 持续更新</small>
+                    <small>支持 JsHelper 持续更新</small>
                 </span>
                 <span class="fh-action-meta">支持</span>
             </button>
@@ -189,7 +189,7 @@
                 <section :class="['fh-ai-console', aiStatusClass]">
                     <div class="fh-ai-console-main">
                         <div class="fh-ai-console-copy">
-                            <p class="fh-eyebrow">FeHelper AI</p>
+                            <p class="fh-eyebrow">JsHelper AI</p>
                             <h2>{{aiPanelTitle}}</h2>
                             <p>{{aiModelMessage}}</p>
                         </div>
@@ -249,7 +249,7 @@
         </div>
 
         <footer class="fh-page-footer">
-            <span>FeHelper v{{manifest.version}}</span>
+            <span>JsHelper v{{manifest.version}}</span>
             <div class="fh-page-footer-links">
                 <a v-if="promoRecommendationCard" :href="promoRecommendationCard.url" target="_blank" rel="noopener noreferrer">合作入口</a>
                 <a href="https://github.com/zxlie/FeHelper/issues" target="_blank">问题反馈</a>
@@ -262,7 +262,7 @@
             <div class="settings-header">
                 <div>
                     <p class="fh-eyebrow">Preferences</p>
-                    <h3 id="settingsDialogTitle">FeHelper 插件配置</h3>
+                    <h3 id="settingsDialogTitle">JsHelper 插件配置</h3>
                 </div>
                 <button type="button" class="close-btn" @click="closeSettings" aria-label="关闭">×</button>
             </div>
@@ -280,14 +280,14 @@
                         <div class="settings-section-head">
                             <div>
                                 <h4>常用入口</h4>
-                                <p>配置打开 FeHelper 的入口方式，适合高频键盘操作。</p>
+                                <p>配置打开 JsHelper 的入口方式，适合高频键盘操作。</p>
                             </div>
                         </div>
                         <div class="setting-panel">
                             <div class="setting-info-row">
                                 <div>
                                     <strong>快捷键</strong>
-                                    <span>当前为 {{ defaultKey }}。按下后会打开 FeHelper 工具入口，可用方向键选择工具并用回车打开。</span>
+                                    <span>当前为 {{ defaultKey }}。按下后会打开 JsHelper 工具入口，可用方向键选择工具并用回车打开。</span>
                                 </div>
                                 <a href="#" @click="setShortcuts" id="setShortcuts" class="a-btn">配置快捷键</a>
                             </div>
@@ -335,7 +335,7 @@
                         </div>
                         <div class="setting-panel">
                             <fieldset class="setting-radio-group">
-                                <legend>FeHelper 模式</legend>
+                                <legend>JsHelper 模式</legend>
                                 <label class="setting-radio-card" :class="{active: uiMode === 'lite'}" for="FH_UI_MODE_LITE">
                                     <input type="radio" name="fh_ui_mode" id="FH_UI_MODE_LITE" value="lite" :checked="uiMode === 'lite'" @change="setUiMode('lite')"/>
                                     <span>
@@ -356,7 +356,7 @@
                                 <input class="setting-switch-input" type="checkbox" value="OPT_ITEM_CONTEXTMENUS" id="opt_item_contextMenus" v-model="selectedOpts"/>
                                 <span class="setting-switch" aria-hidden="true"></span>
                                 <span class="setting-copy">
-                                    <strong>将 FeHelper 工具添加到右键菜单</strong>
+                                    <strong>将 JsHelper 工具添加到右键菜单</strong>
                                     <small>适合经常在网页里直接调用工具的使用方式。</small>
                                 </span>
                             </label>
@@ -371,10 +371,10 @@
                                     </span>
                                 </label>
                                 <label class="setting-toggle-row is-child" for="MENU_FEHELPER_SETTING">
-                                    <input class="setting-switch-input" type="checkbox" id="MENU_FEHELPER_SETTING" v-model="menuFeHelperSeting" :disabled="!selectedOpts.includes('OPT_ITEM_CONTEXTMENUS')"/>
+                                    <input class="setting-switch-input" type="checkbox" id="MENU_FEHELPER_SETTING" v-model="menuJsHelperSeting" :disabled="!selectedOpts.includes('OPT_ITEM_CONTEXTMENUS')"/>
                                     <span class="setting-switch" aria-hidden="true"></span>
                                     <span class="setting-copy">
-                                        <strong>FeHelper 设置入口</strong>
+                                        <strong>JsHelper 设置入口</strong>
                                         <small>在右键菜单中显示设置页面入口。</small>
                                     </span>
                                 </label>
@@ -453,7 +453,7 @@
                             <div class="setting-info-row setting-permission-summary">
                                 <div class="setting-copy">
                                     <strong>不会申请的敏感权限</strong>
-                                    <small>当前源码未声明 <code>history</code> 或 <code>clipboardRead</code>。FeHelper 不会主动读取浏览器历史记录，也不会静默读取你的剪贴板内容。</small>
+                                    <small>当前源码未声明 <code>history</code> 或 <code>clipboardRead</code>。JsHelper 不会主动读取浏览器历史记录，也不会静默读取你的剪贴板内容。</small>
                                 </div>
                                 <div class="setting-permission-tags is-safe" aria-label="未申请的敏感权限">
                                     <span>no history</span>
@@ -502,14 +502,14 @@
                                     <input type="radio" name="dark_mode_preference" id="DARK_MODE_SYSTEM" value="system" :checked="darkModePreference === 'system'" @change="setDarkModePreference('system')"/>
                                     <span>
                                         <strong>跟随系统</strong>
-                                        <small>Chrome 或系统处于暗色时，FeHelper 自动切换为夜间模式。</small>
+                                        <small>Chrome 或系统处于暗色时，JsHelper 自动切换为夜间模式。</small>
                                     </span>
                                 </label>
                                 <label class="setting-radio-card" :class="{active: darkModePreference === 'always'}" for="DARK_MODE_ALWAYS">
                                     <input type="radio" name="dark_mode_preference" id="DARK_MODE_ALWAYS" value="always" :checked="darkModePreference === 'always'" @change="setDarkModePreference('always')"/>
                                     <span>
                                         <strong>始终开启</strong>
-                                        <small>不受系统设置影响，FeHelper 页面始终使用夜间模式。</small>
+                                        <small>不受系统设置影响，JsHelper 页面始终使用夜间模式。</small>
                                     </span>
                                 </label>
                             </fieldset>
@@ -533,7 +533,7 @@
             <div class="settings-header">
                 <div>
                     <p class="fh-eyebrow">Support</p>
-                    <h3 id="donateDialogTitle">支持 FeHelper 持续维护</h3>
+                    <h3 id="donateDialogTitle">支持 JsHelper 持续维护</h3>
                 </div>
                 <button type="button" class="close-btn" @click="closeDonateModal" aria-label="关闭">×</button>
             </div>

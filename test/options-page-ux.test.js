@@ -44,7 +44,7 @@ describe('options page UX policy', () => {
         const optionsCss = readSource('apps/options/index.css');
         const optionsSource = readSource('apps/options/index.js');
 
-        expect(optionsHtml).toContain('<title>FeHelper-控制台</title>');
+        expect(optionsHtml).toContain('<title>JsHelper-控制台</title>');
         expect(optionsHtml).toContain("{{ uiMode === 'lite' ? 'Lite 控制台' : '开发者工具控制台' }}");
         expect(optionsHtml).toContain("['fh-workspace-grid', uiMode === 'lite' ? 'is-lite' : 'is-omni']");
         expect(optionsHtml).toContain('class="fh-context-rail" v-if="uiMode === \'omni\'"');
@@ -98,7 +98,7 @@ describe('options page UX policy', () => {
         expect(optionsHtml).toContain('{{aiStatusCardTitle}}');
         expect(optionsHtml).not.toContain('{{aiStatusLabel}}');
         expect(statusCardTitle).toContain("return 'Gemini Nano 已可用';");
-        expect(statusCardTitle).not.toContain('建议优先使用 FeHelper AI');
+        expect(statusCardTitle).not.toContain('建议优先使用 JsHelper AI');
     });
 
     it('keeps the removed popup AI router out of popup and settings', () => {
@@ -199,6 +199,6 @@ describe('options page UX policy', () => {
         expect(optionsSource).toContain("thing: 'save-jsonformat-options'");
         expect(optionsSource).toContain('await this.saveJsonFormatSettings();');
         expect(optionsCss).toContain('.setting-number-control');
-        expect(contentScript).toContain('FeHelper设置页的「JSON 自动格式化 Key 数上限」');
+        expect(contentScript).toContain('JsHelper设置页的「JSON 自动格式化 Key 数上限」');
     });
 });

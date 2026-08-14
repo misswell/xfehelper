@@ -184,7 +184,7 @@ let toolMap = {
     },
     'devtools': {
         name: 'FH开发者工具',
-        tips: '以开发平台的思想，FeHelper支持用户进行本地开发，将自己的插件功能集成进FH工具市场',
+        tips: '以开发平台的思想，JsHelper支持用户进行本地开发，将自己的插件功能集成进FH工具市场',
         menuConfig: [{
             icon: 'DEV',
             text: 'FH开发者工具'

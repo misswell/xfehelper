@@ -1,5 +1,5 @@
 /**
- * FeHelper UUID/ID Generator
+ * JsHelper UUID/ID Generator
  */
 (function () {
     var snowflakeSeq = 0;

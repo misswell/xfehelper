@@ -156,11 +156,11 @@ describe('parseWithBigInt', () => {
     });
 
     it('Issue #613: 数字字符串 key 按输入顺序展示', () => {
-        const json = '{"2":"b","1":"a","name":"FeHelper"}';
+        const json = '{"2":"b","1":"a","name":"JsHelper"}';
         const result = parseWithBigInt(json);
 
         expect(Object.keys(result).map(normalizePreservedKey)).toEqual(['2', '1', 'name']);
-        expect(safeStringify(result)).toBe('{"2":"b","1":"a","name":"FeHelper"}');
+        expect(safeStringify(result)).toBe('{"2":"b","1":"a","name":"JsHelper"}');
     });
 
     it('Issue #623/#624: JSON Pointer 中的数字字符串 key 前缀会被归一化', () => {

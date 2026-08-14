@@ -31,7 +31,7 @@ describe('AI inline helper', () => {
 
         expect(messages).toHaveLength(2);
         expect(messages[0].role).toBe('system');
-        expect(messages[0].content).toContain('FeHelper 的 JSON 自动化助手');
+        expect(messages[0].content).toContain('JsHelper 的 JSON 自动化助手');
         expect(messages[0].content).toContain('TypeScript 类型');
         expect(messages[0].content).toContain('Zod Schema');
         expect(messages[0].content).toContain('工具内联 AI 规则');
@@ -60,7 +60,7 @@ describe('AI inline helper', () => {
         const clipped = clipTextForPrompt(text, 1000);
 
         expect(clipped.length).toBeLessThan(text.length);
-        expect(clipped).toContain('FeHelper 已截断中间');
+        expect(clipped).toContain('JsHelper 已截断中间');
         expect(clipped.startsWith('aaaa')).toBe(true);
         expect(clipped.endsWith('zzzz')).toBe(true);
     });

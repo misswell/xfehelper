@@ -1,5 +1,5 @@
 /**
- * FeHelper Image Base64 Tools
+ * JsHelper Image Base64 Tools
  */
 new Vue({
     el: '#pageContainer',

@@ -15,7 +15,7 @@ window.helloworldContentScript = function () {
         });
     }
 
-    console.log('你好，我是来自FeHelper的工具Demo：hello world！');
+    console.log('你好，我是来自JsHelper的工具Demo：hello world！');
 };
 
 /**
@@ -24,6 +24,6 @@ window.helloworldContentScript = function () {
  * @author 阿烈叔
  */
 window.helloworldNoPage = function (tabInfo) {
-    alert('你好，我是来自FeHelper的工具Demo：hello world！你可以打开控制台看Demo的输出！');
-    console.log('你好，我是来自FeHelper的工具Demo：', tabInfo);
+    alert('你好，我是来自JsHelper的工具Demo：hello world！你可以打开控制台看Demo的输出！');
+    console.log('你好，我是来自JsHelper的工具Demo：', tabInfo);
 };

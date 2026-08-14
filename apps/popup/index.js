@@ -1,5 +1,5 @@
 /**
- * FeHelper Popup Menu
+ * JsHelper Popup Menu
  */
 
 import Awesome from '../background/awesome.js'

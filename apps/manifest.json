@@ -1,6 +1,6 @@
 {
-  "name": "FeHelper - JSON格式化、编解码、二维码、开发者工具箱",
-  "short_name": "FeHelper",
+  "name": "JsHelper - JSON格式化、编解码、二维码、开发者工具箱",
+  "short_name": "JsHelper",
   "version": "2026.7.28",
   "manifest_version": 3,
   "description": "30+开发者工具集：JSON格式化/BigInt精度/对比、编解码(Base64/URL/Unicode/Gzip/JWT)、时间戳/FILETIME转换、二维码/条形码、UUID/雪花ID生成、代码美化、正则、取色、Postman、进制转换等，全部功能默认启用，开箱即用！",
@@ -11,7 +11,7 @@
   },
   "action": {
     "default_icon": "static/img/fe-16.png",
-    "default_title": "FeHelper(前端助手)",
+    "default_title": "JsHelper(前端助手)",
     "default_popup": "popup/index.html"
   },
   "background": {

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
     <head>
-        <title>FeHelper弹出页面</title>
+        <title>JsHelper弹出页面</title>
         <meta charset="utf-8">
         <script type="text/javascript" src="theme-boot.js"></script>
         <link rel="stylesheet" href="index.css" />
@@ -14,12 +14,12 @@
                 <div class="fh-brand">
                     <img class="fh-brand-mark" src="../static/img/fe-48.png" alt="" aria-hidden="true" />
                     <div class="fh-brand-copy">
-                        <strong>FeHelper</strong>
+                        <strong>JsHelper</strong>
                         <span>v{{ manifest.version || '-' }}</span>
                     </div>
                 </div>
                 <div class="fh-header-meta">
-                    <div class="fh-mode-switch" role="group" aria-label="FeHelper 模式切换">
+                    <div class="fh-mode-switch" role="group" aria-label="JsHelper 模式切换">
                         <button type="button" class="fh-mode-pill" :class="{ 'is-active': uiMode === 'lite' }" @click="setUiMode('lite')">Lite</button>
                         <button type="button" class="fh-mode-pill" :class="{ 'is-active': uiMode === 'omni' }" @click="setUiMode('omni')">Omni</button>
                     </div>
@@ -36,7 +36,7 @@
                     placeholder="搜索工具、命令或用途"
                     autocomplete="off"
                     spellcheck="false"
-                    aria-label="搜索 FeHelper 工具"
+                    aria-label="搜索 JsHelper 工具"
                     @input="syncActiveTool"
                 />
                 <kbd>/</kbd>
@@ -56,7 +56,7 @@
                 <button type="button" class="fh-primary-button" @click="openOptionsPage">打开工具库</button>
             </div>
 
-            <main v-else class="fh-command-list" role="listbox" aria-label="FeHelper工具列表">
+            <main v-else class="fh-command-list" role="listbox" aria-label="JsHelper工具列表">
                 <div v-if="flatVisibleTools.length === 0" class="fh-empty -compact">
                     <strong>没有匹配的工具</strong>
                     <p>换一个关键词，或者去工具库查看完整列表。</p>
@@ -94,7 +94,7 @@
 
             <footer class="fh-footer">
                 <span>{{ uiMode === 'lite' ? 'Enter 打开' : '↑↓ 选择 · Enter 打开' }}</span>
-                <nav aria-label="FeHelper快捷操作">
+                <nav aria-label="JsHelper快捷操作">
                     <button type="button" @click="openOptionsPage">{{ uiMode === 'lite' ? '更多' : '工具库' }}</button>
                     <button type="button" @click="openOptionsPage">设置</button>
                     <a href="https://github.com/zxlie/FeHelper/issues" @click="openUrl($event)" target="_blank">反馈</a>

@@ -6,7 +6,7 @@ window.MonkeyTemplates = [
         category: '示例',
         list: [
             {
-                mName: 'Demo：百度首页换Logo为Google并自动搜索FeHelper',
+                mName: 'Demo：百度首页换Logo为Google并自动搜索JsHelper',
                 mIncludes: ['https://www.baidu.com', 'https://www.baidu.com/'],
                 mExcludes: [],
                 mScript: `// 简易 Toast
@@ -33,10 +33,10 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   if (lg) lg.src = 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png';
 
   await sleep(1500);
-  toast('2) 输入 FeHelper');
+  toast('2) 输入 JsHelper');
   let kw = document.querySelector('#kw');
   if (kw) {
-    for (let ch of 'FeHelper') { kw.value += ch; await sleep(120); }
+    for (let ch of 'JsHelper') { kw.value += ch; await sleep(120); }
   }
 
   await sleep(1000);
@@ -109,7 +109,7 @@ img, video, picture, iframe, svg, [style*="background-image"] {
     window.addEventListener(ev, e => e.stopPropagation(), true);
   });
   document.oncontextmenu = document.onselectstart = document.oncopy = null;
-  console.log('[FeHelper] 已解除复制/右键限制');
+  console.log('[JsHelper] 已解除复制/右键限制');
 })();`,
                 mStyle: `* { -webkit-user-select: text !important; user-select: text !important; }`,
                 mRunAt: 'document-start',
@@ -162,6 +162,6 @@ window.MonkeyNewGuide = `// 在这里编写你的脚本，可以：
 
 (() => {
     'use strict';
-    console.log('[FeHelper Monkey] hello, ', location.href);
+    console.log('[JsHelper Monkey] hello, ', location.href);
 })();
 `;

@@ -16,7 +16,7 @@
         <div class="panel-heading">
             <h3 class="panel-title">
                 <a href="https://fehelper.com" target="_blank" class="x-a-high">
-                    <img src="../static/img/fe-16.png" alt="fehelper"/> FeHelper：</a>AI（智能助手）
+                    <img src="../static/img/fe-16.png" alt="JsHelper"/> JsHelper：</a>AI（智能助手）
                     <a href="#" class="x-donate-link" @click="openDonateModal($event)"><i class="nav-icon">SP</i>请作者喝咖啡</a>
                     <a class="x-other-tools" @click="openOptionsPage($event)"><i class="icon-plus-circle"></i> 工具市场</a>
                     <a href="#" class="x-history-link fh-nav-btn" @click="onHistoryClick($event)">
@@ -140,7 +140,7 @@
                         <template v-if="currentSession.length">
                             <tr v-for="(msg, idx) in currentSession" :key="msg.id">
                                 <td class="td-icon x-me" v-if="msg.role==='user'"><img src="../static/img/me.png" alt="me"/></td>
-                                <td class="td-icon" v-if="msg.role==='assistant'"><img src="../static/img/fe-16.png" alt="fehelper"/></td>
+                                <td class="td-icon" v-if="msg.role==='assistant'"><img src="../static/img/fe-16.png" alt="JsHelper"/></td>
                                 <td class="td-content">
                                     <b class="x-time">{{msg.time}}</b>
                                     <div class="x-xcontent x-user-content" v-if="msg.role==='user'">{{msg.content}}</div>
@@ -155,7 +155,7 @@
                             </tr>
                             <tr class="x-back-gpt">
                                 <td class="td-icon">
-                                    <img src="../static/img/fe-16.png" alt="fehelper"/></td>
+                                    <img src="../static/img/fe-16.png" alt="JsHelper"/></td>
                                 <td class="td-content"><b class="x-time">{{respResult.respTime}}</b>
                                     <div :id="respResult.id" class="x-xcontent" v-html="respResult.respContent"></div>
                                 </td>

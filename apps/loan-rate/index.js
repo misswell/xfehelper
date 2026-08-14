@@ -1,5 +1,5 @@
 /**
- * FeHelper 贷款计算器工具
+ * JsHelper 贷款计算器工具
  * @author zhaoxianlie
  */
 new Vue({
