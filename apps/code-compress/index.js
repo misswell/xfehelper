@@ -169,7 +169,7 @@ new Vue({
             };
             options.log = console.log;
             try {
-                this.resultContent = require('html-minifier').minify(html, options);
+                this.resultContent = XFeHtmlMinifier.minify(html, options);
                 this.buildCompressInfo(this.sourceContent, this.resultContent);
             } catch (err) {
                 this.hasError = true;
@@ -222,14 +222,5 @@ new Vue({
             chrome.runtime.openOptionsPage();
         },
 
-        openDonateModal: function(event ){
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'code-compress' }
-            });
-        }
     }
 });

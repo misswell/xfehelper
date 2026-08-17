@@ -158,7 +158,7 @@ new Vue({
                     let val = decodeURIComponent(escape(RawDeflate.inflate(atob(h.slice(5)))));
                     previewElm.innerHTML = marked(val);
                     previewElm.querySelectorAll('pre code').forEach((block) => {
-                        hljs.highlightBlock(block);
+                        Prism.highlightElement(block);
                     });
                     document.body.className = 'view';
                 } else {
@@ -189,14 +189,16 @@ new Vue({
                     if (!previewTextArea) {
                         return;
                     }
-                    previewTextArea.value = h2m(source, {
-                        converter: 'CommonMark' // CommonMark | MarkdownExtra
-                    });
+                    previewTextArea.value = new TurndownService({
+                        headingStyle: 'atx',
+                        codeBlockStyle: 'fenced',
+                        bulletListMarker: '*'
+                    }).turndown(source);
                     this.$nextTick(() => this.syncPreviewScroll());
                 } else {
                     previewElm.innerHTML = marked(source);
                     previewElm.querySelectorAll('pre code').forEach((block) => {
-                        hljs.highlightBlock(block);
+                        Prism.highlightElement(block);
                     });
                     this.$nextTick(() => this.syncPreviewScroll());
                     clearTimeout(hashtoTimeoutId);
@@ -790,16 +792,6 @@ new Vue({
             event.preventDefault();
             event.stopPropagation();
             chrome.runtime.openOptionsPage();
-        },
-
-        openDonateModal: function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'html2markdown' }
-            });
         }
     }
 });

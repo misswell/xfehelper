@@ -89,17 +89,6 @@ new Vue({
             }
             chrome.runtime.openOptionsPage();
         },
-        openDonateModal: function (event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'byte-unit' }
-            });
-        },
         copyToClipboard(text) {
             if (!text || !String(text).trim()) return;
             const input = document.createElement('textarea');

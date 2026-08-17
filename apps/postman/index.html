@@ -4,9 +4,7 @@
         <title>简易版Postman</title>
         <meta charset="UTF-8">
 	        <link rel="shortcut icon" href="../static/img/favicon.ico">
-	        <link rel="stylesheet" href="../static/vendor/jquery/jquery-ui.min.css">
-	        <link rel="stylesheet" href="index.css" />
-	        <link rel="stylesheet" href="../static/css/fh-ai-inline.css" />
+        <link rel="stylesheet" href="index.css" />
 	    <link rel="stylesheet" href="../static/css/fehelper-tools.css">
         <script type="text/javascript" src="../static/vendor/evalCore.min.js"></script>
         <script type="text/javascript" src="../static/vendor/vue/vue.js"></script>
@@ -19,7 +17,6 @@
                 <h3 class="panel-title">
                     <a href="https://fehelper.com" target="_blank" class="x-a-high">
                         <img src="../static/img/fe-16.png" alt="XFeHelper"/> XFeHelper</a>：简易版Postman
-                        <a href="#" class="x-donate-link" @click="openDonateModal($event)"><i class="nav-icon">SP</i>请作者喝咖啡</a>
                         <a class="x-other-tools" @click="openOptionsPage($event)"><i class="icon-plus-circle"></i> 工具市场</a>
                     </h3>
             </div>
@@ -101,43 +98,21 @@
 
 	                <div class="ui-mt-10">
 	                    <input class="btn btn-success" type="button" value="发送请求" @click="postman()">
-	                    <input class="btn fh-ai-tool-btn" type="button" value="AI辅助调试" @click="askAiForRequest()">
-	                    <input class="btn fh-ai-tool-btn" type="button" value="诊断响应" @click="askAiForPostman()" :disabled="!resultContent">
 	                </div>
 	            </div>
-
-	            <section class="fh-inline-ai-panel" v-if="aiPanel.visible">
-	                <div class="fh-inline-ai-head">
-	                    <div class="fh-inline-ai-title">
-	                        <strong>{{aiPanel.title}}</strong>
-	                        <span v-if="aiPanel.subtitle">{{aiPanel.subtitle}}</span>
-	                    </div>
-	                    <div class="fh-inline-ai-actions">
-	                        <button type="button" @click="copyAiResult" :disabled="!aiPanel.result">复制</button>
-	                        <button type="button" class="fh-inline-ai-apply" v-if="aiPanel.canApply" @click="applyAiPanelResult" :disabled="!aiPanel.result || aiPanel.loading">{{aiPanel.applyLabel}}</button>
-	                        <button type="button" class="fh-inline-ai-close" @click="closeAiPanel" aria-label="关闭">&times;</button>
-	                    </div>
-	                </div>
-	                <div class="fh-inline-ai-body">
-	                    <div class="fh-inline-ai-status">{{aiPanel.statusText}}</div>
-	                    <div class="fh-inline-ai-output fh-inline-ai-markdown" v-if="!aiPanel.error" v-html="aiPanelResultHtml"></div>
-	                    <pre class="fh-inline-ai-error" v-if="aiPanel.error">{{aiPanel.error}}</pre>
-	                </div>
-	            </section>
-
 
 
 	            <div ref="resultContainer" class="row hide">
                 <div id="tabs">
-                    <ul class="the-tabs">
-                        <li><a href="#tab-content">数据</a></li>
-                        <li><a href="#tab-json">JSON</a></li>
-                        <li><a href="#tab-header">响应头</a></li>
+                    <ul class="the-tabs" role="tablist">
+                        <li :class="{ 'is-active': activeTab === 'content' }" role="presentation"><a href="#tab-content" role="tab" :aria-selected="activeTab === 'content'" @click.prevent="selectTab('content')">数据</a></li>
+                        <li :class="{ 'is-active': activeTab === 'json' }" role="presentation"><a href="#tab-json" role="tab" :aria-selected="activeTab === 'json'" @click.prevent="selectTab('json')">JSON</a></li>
+                        <li :class="{ 'is-active': activeTab === 'header' }" role="presentation"><a href="#tab-header" role="tab" :aria-selected="activeTab === 'header'" @click.prevent="selectTab('header')">响应头</a></li>
                     </ul>
 
-                    <div id="tab-content" class="mod-tab">{{resultContent}}</div>
+                    <div id="tab-content" class="mod-tab" v-show="activeTab === 'content'">{{resultContent}}</div>
 
-                    <div class="mod-tab" id="tab-json">
+                    <div class="mod-tab" id="tab-json" v-show="activeTab === 'json'">
                         <div class="x-toolbar">
                             <span class="x-sort">
                                 <span class="x-stitle">排序：</span>
@@ -157,7 +132,7 @@
                         <div id="jfCallbackName_end" class="callback-name" v-html="jfCallbackName_end"></div>
                     </div>
 
-                    <div id="tab-header" class="mod-tab">
+                    <div id="tab-header" class="mod-tab" v-show="activeTab === 'header'">
                         <table class="table table-hover">
                             <thead>
                             <tr>
@@ -180,9 +155,6 @@
             </div>
         </div>
     </div>
-    <script src="../static/vendor/jquery/jquery-3.3.1.min.js"></script>
-    <script src="../static/vendor/jquery/jquery.extend.js"></script>
-    <script src="../static/vendor/jquery/jquery-ui.min.js"></script>
     <script src="../json-format/json-bigint.js"></script>
     <script src="../json-format/format-lib.js"></script>
     <script src="../json-format/json-abc.js"></script>

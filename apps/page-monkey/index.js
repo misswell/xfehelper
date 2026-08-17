@@ -786,16 +786,6 @@ new Vue({
         },
 
         /* ============ XFeHelper 集成 ============ */
-        openDonateModal(e) {
-            e && e.preventDefault();
-            try {
-                chrome.runtime.sendMessage({
-                    type: 'fh-dynamic-any-thing',
-                    thing: 'open-donate-modal',
-                    params: { toolName: 'page-monkey' }
-                });
-            } catch (err) {}
-        },
         openOptionsPage(e) {
             e && e.preventDefault();
             try { chrome.runtime.openOptionsPage(); } catch (err) {}

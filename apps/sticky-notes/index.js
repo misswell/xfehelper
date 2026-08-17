@@ -30,18 +30,6 @@ let StickyNotes = (() => {
             return false;
         });
 
-        // delete all notes
-        $('#donate-link').click(function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'sticky-notes' }
-            });
-            return false;
-        });
-
         // open options page
         $('#other-tools').click(function (event) {
             event.preventDefault();

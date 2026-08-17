@@ -20,6 +20,7 @@ let Awesome = (() => {
     const TOOL_CONTENT_SCRIPT_TPL = 'DYNAMIC_TOOL:CS:#TOOL-NAME#';
     const TOOL_CONTENT_SCRIPT_CSS_TPL = 'DYNAMIC_TOOL:CS:CSS:#TOOL-NAME#';
     const TOOL_MENU_TPL = `${MENU_STORAGE_PREFIX}#TOOL-NAME#`;
+    const DEV_TOOLS_MY_TOOLS = 'DEV-TOOLS:MY-TOOLS';
     const BUILT_IN_TOOL_NAMES = Object.keys(toolMap);
 
     /**
@@ -62,6 +63,39 @@ let Awesome = (() => {
     })();
 
     let allBuiltInToolsReadyPromise;
+
+    let readAllStorage = () => StorageMgr.get(null).then(storage => storage || {});
+
+    let mergeLocalDevTools = (storage) => {
+        try {
+            const localDevTools = JSON.parse(storage[DEV_TOOLS_MY_TOOLS] || '{}');
+            Object.keys(localDevTools).forEach(tool => {
+                toolMap[tool] = localDevTools[tool];
+            });
+        } catch (e) {
+            // Ignore malformed local tool data and keep built-in tools available.
+        }
+    };
+
+    let getInstallState = (toolName, storage) => {
+        const tool = toolMap[toolName] || {};
+        const toolKey = TOOL_NAME_TPL.replace('#TOOL-NAME#', toolName);
+        const menuKey = TOOL_MENU_TPL.replace('#TOOL-NAME#', toolName);
+
+        let installed = !!storage[toolKey];
+        let menu = String(storage[menuKey]) === '1';
+
+        // 系统预置工具始终可用；本地开发工具还要遵守启用开关。
+        if (tool.systemInstalled) {
+            installed = true;
+        }
+        if (Object.prototype.hasOwnProperty.call(tool, '_devTool')) {
+            installed = installed && tool._enable;
+            menu = menu && tool._enable;
+        }
+
+        return { installed, menu };
+    };
 
     /**
      * 将扩展包内的全部工具标记为已安装，并默认加入右键菜单。
@@ -171,35 +205,18 @@ let Awesome = (() => {
 
         await ensureAllToolsInstalled();
 
-        // 获取本地开发的插件，也拼接进来
-        try {
-            const DEV_TOOLS_MY_TOOLS = 'DEV-TOOLS:MY-TOOLS';
-            let _tools = await StorageMgr.get(DEV_TOOLS_MY_TOOLS);
-            let localDevTools = JSON.parse(_tools || '{}');
-            Object.keys(localDevTools).forEach(tool => {
-                toolMap[tool] = localDevTools[tool];
-            });
-        } catch (e) {
-        }
+        // 一次读取全部状态，避免为每个工具分别读取安装和右键菜单状态。
+        const allStorageData = await readAllStorage();
+        mergeLocalDevTools(allStorageData);
 
         let tools = Object.keys(toolMap);
-        let promises = [];
         tools.forEach(tool => {
-            promises = promises.concat([detectInstall(tool), detectInstall(tool, true)])
+            const state = getInstallState(tool, allStorageData);
+            toolMap[tool].installed = state.installed;
+            toolMap[tool].menu = state.menu;
         });
-        return Promise.all(promises).then(values => {
-            (values || []).forEach((v, i) => {
-                let tool = tools[Math.floor(i / 2)];
-                let key = i % 2 === 0 ? 'installed' : 'menu';
-                toolMap[tool][key] = v;
-                // 本地工具，还需要看是否处于开启状态
-                if (Object.prototype.hasOwnProperty.call(toolMap[tool], '_devTool')) {
-                    toolMap[tool][key] = toolMap[tool][key] && toolMap[tool]._enable;
-                }
-            });
 
-            return toolMap;
-        });
+        return toolMap;
     };
 
     /**
@@ -211,23 +228,10 @@ let Awesome = (() => {
             await ensureAllToolsInstalled();
 
             // 一次性获取所有存储数据，避免多次访问
-            const allStorageData = await new Promise((resolve, reject) => {
-                chrome.storage.local.get(null, result => {
-                    resolve(result || {});
-                });
-            });
+            const allStorageData = await readAllStorage();
 
             // 获取本地开发的插件
-            const DEV_TOOLS_MY_TOOLS = 'DEV-TOOLS:MY-TOOLS';
-            let localDevTools = {};
-            try {
-                localDevTools = JSON.parse(allStorageData[DEV_TOOLS_MY_TOOLS] || '{}');
-                Object.keys(localDevTools).forEach(tool => {
-                    toolMap[tool] = localDevTools[tool];
-                });
-            } catch (e) {
-                // 忽略解析错误
-            }
+            mergeLocalDevTools(allStorageData);
 
             let installedTools = {};
             

@@ -3,17 +3,6 @@
  */
 
 import { buildRenderableTableViewData, canBuildTableViewData } from './table-utils.js';
-import AI from '../aiagent/fh.ai.js';
-import {
-    copyInlineAiResult,
-    createInlineAiState,
-    extractJsonCandidate,
-    getInlineAiTaskFromUrl,
-    renderInlineMarkdown,
-    resetInlineAiState,
-    runInlineToolAi,
-    setInlineAiGuide
-} from '../aiagent/fh.ai-inline.js';
 
 // 一些全局变量
 let editor = {};
@@ -25,195 +14,6 @@ let JSON_WINDOW_NOTE = 'jsonformat:window-note';
 let FH_UI_MODE = 'FH_UI_MODE';
 let JSON_FORMAT_UI_MODE = 'JSON_FORMAT_UI_MODE';
 
-const JSON_DERIVED_AI_TASKS = {
-    structure: {
-        taskKey: 'json-structure-health',
-        title: 'JSON 结构体检',
-        subtitle: '检查字段类型、nullable、数组一致性和潜在脏数据。',
-        instruction: [
-            '请对当前 JSON 做结构体检。',
-            '要求：1. 先给 3 条以内结论；2. 标出类型不稳定、nullable、数组元素结构不一致、疑似脏数据或字段命名问题；3. 给出可执行的 JSONPath/接口调试建议；4. 不生成代码，不解释 JSON 基础知识。'
-        ].join('\n'),
-        outputHint: '用“结论 / 风险字段 / 建议”三段输出。每段控制在 5 条以内。'
-    },
-    typescript: {
-        taskKey: 'json-typescript',
-        title: '生成 TypeScript 类型',
-        subtitle: '根据当前 JSON 样例推断可复制类型。',
-        instruction: [
-            '请根据当前 JSON 样例生成 TypeScript 类型定义。',
-            '要求：1. 根类型命名为 Root；2. 对数组、对象、null、数字和字符串做保守推断；3. 只基于样例出现的字段判断 required/optional，不虚构业务字段；4. 输出先给一句推断策略，再给一个 ```ts 代码块。'
-        ].join('\n'),
-        outputHint: '必须包含一个 ```ts 代码块。代码可直接复制到 TypeScript 项目中。'
-    },
-    schema: {
-        taskKey: 'json-schema',
-        title: '生成 JSON Schema',
-        subtitle: '根据当前 JSON 样例生成校验结构。',
-        instruction: [
-            '请根据当前 JSON 样例生成 JSON Schema。',
-            '要求：1. 使用 JSON Schema Draft 2020-12；2. 根 schema 适配当前样例的对象或数组结构；3. required 只包含样例中稳定出现的字段；4. null 值要用 type 数组或 anyOf 表达；5. 不要写业务上无法从样例确认的限制。'
-        ].join('\n'),
-        outputHint: '必须包含一个 ```json 代码块。先用一句话说明 required/nullable 的推断策略。'
-    },
-    zod: {
-        taskKey: 'json-zod',
-        title: '生成 Zod Schema',
-        subtitle: '根据当前 JSON 样例生成可复用校验代码。',
-        instruction: [
-            '请根据当前 JSON 样例生成 Zod Schema。',
-            '要求：1. 使用 import { z } from "zod"; 2. 根 schema 命名为 RootSchema；3. 导出 type Root = z.infer<typeof RootSchema>; 4. 对 null、数组和嵌套对象做保守推断；5. 不要补充样例里不存在的字段。'
-        ].join('\n'),
-        outputHint: '必须包含一个 ```ts 代码块。代码应该能直接复制到 TypeScript 项目中。'
-    }
-};
-
-const JSON_LOCAL_AI_RUNNABLE_STATUSES = new Set(['available', 'downloadable', 'downloading']);
-const JSON_AI_STATUS_TEXT = {
-    checking: '检测本地 AI',
-    unsupported: '本地 AI 不支持',
-    unavailable: '本地 AI 不可用',
-    downloadable: '模型待下载',
-    downloading: '模型下载中',
-    available: '本地 AI 就绪',
-    error: '状态检测失败'
-};
-
-function createJsonAiAvailabilityState() {
-    return {
-        supported: false,
-        availability: 'checking',
-        message: ''
-    };
-}
-
-function getJsonAiSourceSnapshot(value) {
-    const source = String(value || '');
-    let hash = 0;
-    for (let i = 0; i < source.length; i++) {
-        hash = ((hash << 5) - hash + source.charCodeAt(i)) | 0;
-    }
-    return `${source.length}:${hash}`;
-}
-
-function getJsonValueType(value) {
-    if (value === null) return 'null';
-    if (Array.isArray(value)) return 'array';
-    if (typeof value === 'bigint') return 'integer(bigint)';
-    return typeof value;
-}
-
-function formatJsonPathKey(key) {
-    return /^[A-Za-z_$][\w$]*$/.test(key)
-        ? `.${key}`
-        : `[${JSON.stringify(key)}]`;
-}
-
-function addLimited(list, value, limit = 18) {
-    if (value && list.length < limit && !list.includes(value)) {
-        list.push(value);
-    }
-}
-
-function collectJsonStructureStats(value, path, stats, depth = 0) {
-    stats.nodes += 1;
-    if (depth > 6) {
-        addLimited(stats.depthNotes, `${path}: 深度超过 6 层`);
-        return;
-    }
-
-    if (Array.isArray(value)) {
-        stats.arrays += 1;
-        addLimited(stats.arrayNotes, `${path}: ${value.length} 项`);
-        const itemTypes = new Set(value.slice(0, 50).map(getJsonValueType));
-        if (itemTypes.size > 1) {
-            addLimited(stats.mixedArrays, `${path}: ${Array.from(itemTypes).join(' / ')}`);
-        }
-
-        const objectItems = value.slice(0, 50).filter(item => item && typeof item === 'object' && !Array.isArray(item));
-        if (objectItems.length > 1) {
-            const fieldMap = new Map();
-            objectItems.forEach(item => {
-                Object.keys(item).forEach(key => {
-                    if (!fieldMap.has(key)) {
-                        fieldMap.set(key, { count: 0, types: new Set() });
-                    }
-                    const field = fieldMap.get(key);
-                    field.count += 1;
-                    field.types.add(getJsonValueType(item[key]));
-                });
-            });
-            fieldMap.forEach((field, key) => {
-                const childPath = `${path}[*]${formatJsonPathKey(key)}`;
-                if (field.count < objectItems.length) {
-                    addLimited(stats.optionalFields, `${childPath}: ${field.count}/${objectItems.length} 项出现`);
-                }
-                if (field.types.size > 1) {
-                    addLimited(stats.typeConflicts, `${childPath}: ${Array.from(field.types).join(' / ')}`);
-                }
-                if (field.types.has('null')) {
-                    addLimited(stats.nullables, childPath);
-                }
-            });
-        }
-
-        value.slice(0, 20).forEach((item, index) => {
-            collectJsonStructureStats(item, `${path}[${index}]`, stats, depth + 1);
-        });
-        return;
-    }
-
-    if (value && typeof value === 'object') {
-        stats.objects += 1;
-        const keys = Object.keys(value);
-        addLimited(stats.objectNotes, `${path}: ${keys.length} 字段`);
-        keys.slice(0, 40).forEach(key => {
-            const childPath = `${path}${formatJsonPathKey(key)}`;
-            const childValue = value[key];
-            if (childValue === null) {
-                addLimited(stats.nullables, childPath);
-            }
-            collectJsonStructureStats(childValue, childPath, stats, depth + 1);
-        });
-    }
-}
-
-function buildJsonStructureSummary(source) {
-    try {
-        const jsonObj = parseWithBigInt(source);
-        const stats = {
-            rootType: getJsonValueType(jsonObj),
-            nodes: 0,
-            objects: 0,
-            arrays: 0,
-            objectNotes: [],
-            arrayNotes: [],
-            nullables: [],
-            optionalFields: [],
-            typeConflicts: [],
-            mixedArrays: [],
-            depthNotes: []
-        };
-        collectJsonStructureStats(jsonObj, '$', stats);
-        return [
-            `根类型: ${stats.rootType}`,
-            `扫描节点: ${stats.nodes}，对象: ${stats.objects}，数组: ${stats.arrays}`,
-            stats.objectNotes.length ? `对象结构: ${stats.objectNotes.join('；')}` : '',
-            stats.arrayNotes.length ? `数组结构: ${stats.arrayNotes.join('；')}` : '',
-            stats.nullables.length ? `nullable 字段: ${stats.nullables.join('；')}` : '',
-            stats.optionalFields.length ? `数组可选字段: ${stats.optionalFields.join('；')}` : '',
-            stats.typeConflicts.length ? `类型不稳定: ${stats.typeConflicts.join('；')}` : '',
-            stats.mixedArrays.length ? `混合数组: ${stats.mixedArrays.join('；')}` : '',
-            stats.depthNotes.length ? `深层结构: ${stats.depthNotes.join('；')}` : ''
-        ].filter(Boolean).join('\n');
-    } catch (error) {
-        return `本地结构摘要生成失败: ${error && error.message ? error.message : '未知错误'}`;
-    }
-}
-
-function isJsonDerivedAiTask(task) {
-    return Object.values(JSON_DERIVED_AI_TASKS).some(item => item.taskKey === task);
-}
 
 function syncJsonPageDarkMode(enabled) {
     document.body.classList.toggle('theme-dark', !!enabled);
@@ -244,7 +44,6 @@ new Vue({
         autoDecode: false,
         fireChange: true,
         overrideJson: false,
-        isInUSAFlag: false,
         nestedEscapeParse: false,
         nodeEditSnapshot: '',
         nodeEditActive: false,
@@ -269,9 +68,6 @@ new Vue({
         tableViewSourcePath: '',
         tableViewColumns: [],
         tableViewRows: [],
-        aiPanel: createInlineAiState(),
-        aiAvailability: createJsonAiAvailabilityState(),
-        aiAvailabilityChecking: false,
         jsonPathExamples: [
             { path: '$', description: '根对象（类似 jq: .）' },
             { path: '$.data', description: '获取data属性（类似 jq: .data）' },
@@ -298,8 +94,6 @@ new Vue({
         // 安全获取localStorage值（在沙盒环境中可能不可用）
         this.autoDecode = this.safeGetLocalStorage(AUTO_DECODE) === 'true';
 
-        this.isInUSAFlag = this.isInUSA();
-
         this.jsonLintSwitch = (this.safeGetLocalStorage(JSON_LINT) !== 'false');
         this.overrideJson = (this.safeGetLocalStorage(EDIT_ON_CLICK) === 'true');
         this.nestedEscapeParse = (this.safeGetLocalStorage('jsonformat:nested-escape-parse') === 'true');
@@ -308,7 +102,6 @@ new Vue({
         this.syncWindowNote();
         this.changeLayout(this.currentLayout);
         this.loadUiMode();
-        this.refreshJsonAiAvailability();
 
         editor = CodeMirror.fromTextArea(this.$refs.jsonBox, {
             mode: "text/javascript",
@@ -349,7 +142,6 @@ new Vue({
 
         // 页面加载时自动获取并注入json-format页面的补丁
         this.loadPatchHotfix();
-        this.handleInlineAiLaunch();
         document.addEventListener('keydown', this.handleGlobalKeydown, true);
         document.addEventListener('click', this.handleWindowNoteOutsideClick, true);
     },
@@ -359,23 +151,6 @@ new Vue({
         window.clearTimeout(this.jsonPathCopyNoticeTimer);
     },
     computed: {
-        aiPanelResultHtml() {
-            return renderInlineMarkdown(this.aiPanel.result);
-        },
-        jsonAiStatusText() {
-            const state = this.aiAvailability || createJsonAiAvailabilityState();
-            if (state.message && !JSON_LOCAL_AI_RUNNABLE_STATUSES.has(state.availability)) {
-                return state.message;
-            }
-            return JSON_AI_STATUS_TEXT[state.availability] || JSON_AI_STATUS_TEXT.checking;
-        },
-        canUseJsonLocalAi() {
-            const state = this.aiAvailability || createJsonAiAvailabilityState();
-            return JSON_LOCAL_AI_RUNNABLE_STATUSES.has(state.availability);
-        },
-        jsonAiControlDisabled() {
-            return !this.canUseJsonLocalAi || !!this.aiPanel.loading;
-        },
         sortLabel() {
             return {
                 '0': '默认',
@@ -393,9 +168,6 @@ new Vue({
             let handled = false;
             if (this.windowNoteEditorOpen) {
                 this.closeWindowNoteEditor();
-                handled = true;
-            } else if (this.aiPanel && this.aiPanel.visible) {
-                this.closeAiPanel();
                 handled = true;
             } else if (this.showJsonPathExamplesModal) {
                 this.closeJsonPathExamplesModal();
@@ -415,60 +187,6 @@ new Vue({
             event.preventDefault();
             event.stopPropagation();
             event.stopImmediatePropagation && event.stopImmediatePropagation();
-        },
-
-        async refreshJsonAiAvailability() {
-            if (this.aiAvailabilityChecking) {
-                return this.aiAvailability;
-            }
-            this.aiAvailabilityChecking = true;
-            this.aiAvailability = {
-                ...createJsonAiAvailabilityState(),
-                message: JSON_AI_STATUS_TEXT.checking
-            };
-            try {
-                const state = await AI.getBuiltInAvailability();
-                this.aiAvailability = {
-                    supported: !!(state && state.supported),
-                    availability: (state && state.availability) || 'error',
-                    message: (state && state.message) || ''
-                };
-                return this.aiAvailability;
-            } catch (error) {
-                this.aiAvailability = {
-                    supported: true,
-                    availability: 'error',
-                    message: error && error.message ? error.message : '检测 Chrome 内置 AI 状态失败。'
-                };
-                return this.aiAvailability;
-            } finally {
-                this.aiAvailabilityChecking = false;
-            }
-        },
-
-        async ensureJsonLocalAiReady(taskKey) {
-            const state = await this.refreshJsonAiAvailability();
-            if (JSON_LOCAL_AI_RUNNABLE_STATUSES.has(state.availability)) {
-                return true;
-            }
-            setInlineAiGuide(this.aiPanel, {
-                taskKey: taskKey || 'local-ai-unavailable',
-                title: '本地 AI 不可用',
-                subtitle: 'JSON AI 默认只使用 Chrome 内置 Gemini Nano。',
-                statusText: this.jsonAiStatusText,
-                result: [
-                    state.message || JSON_AI_STATUS_TEXT[state.availability] || JSON_AI_STATUS_TEXT.error,
-                    'XFeHelper 不会在本地模型不可用时把 JSON 自动发送到云端。'
-                ].join('\n')
-            });
-            return false;
-        },
-
-        buildJsonAiRequestContext(input) {
-            return {
-                sourceSnapshot: getJsonAiSourceSnapshot(input),
-                structureSummary: buildJsonStructureSummary(input)
-            };
         },
 
         setResultPlaceholder(html) {
@@ -495,7 +213,7 @@ new Vue({
                 ? '<li>当前已开启“嵌套解析”，如果接口返回的是普通字符串，可先关闭后重试。</li>'
                 : '';
             const rawHint = currentValue.trim()
-                ? '<li>原文已保留在左侧输入框，可按错误定位修正或使用 AI 修复。</li>'
+                ? '<li>原文已保留在左侧输入框，可按错误位置修正。</li>'
                 : '';
             return [
                 '<div class="fh-error-state">',
@@ -811,156 +529,6 @@ new Vue({
             return content ? content.textContent.trim() : '';
         },
 
-        handleInlineAiLaunch() {
-            const task = getInlineAiTaskFromUrl();
-            if (!task) return;
-            if (task === 'json-structure' || JSON_DERIVED_AI_TASKS[task] || isJsonDerivedAiTask(task)) {
-                setInlineAiGuide(this.aiPanel, {
-                    taskKey: task,
-                    title: 'JSON 结构助手',
-                    subtitle: 'AI 只在 JSON 已成功解析后工作。',
-                    result: '粘贴 JSON 并完成格式化后，解析结果右上角会出现本地 AI 动作：结构体检、TS 类型、Schema、Zod。它们默认使用 Chrome 内置 Gemini Nano，不会静默发送到云端。'
-                });
-                return;
-            }
-            setInlineAiGuide(this.aiPanel, {
-                taskKey: task,
-                title: 'JSON AI 修复',
-                subtitle: 'AI 只在解析失败时介入，不替代格式化和校验。',
-                result: '粘贴 JSON 后点击“格式化”。如果解析失败，“解析结果”面板右上角会出现“AI 修复”，可以解释错误并生成可应用的合法 JSON。'
-            });
-        },
-
-        closeAiPanel() {
-            resetInlineAiState(this.aiPanel);
-        },
-
-        copyAiResult() {
-            copyInlineAiResult(this.aiPanel);
-        },
-
-        applyAiPanelResult() {
-            const fixedJson = extractJsonCandidate(this.aiPanel.result);
-            if (!fixedJson) {
-                this.aiPanel.statusText = '没有找到可应用的 JSON 代码块';
-                return;
-            }
-            const currentInput = editor && typeof editor.getValue === 'function' ? editor.getValue() : '';
-            const currentSnapshot = getJsonAiSourceSnapshot(currentInput);
-            if (this.aiPanel.sourceSnapshot && this.aiPanel.sourceSnapshot !== currentSnapshot) {
-                this.aiPanel.statusText = '输入已变化，请重新生成后再应用';
-                return;
-            }
-            try {
-                const jsonObj = parseWithBigInt(fixedJson);
-                if (jsonObj === null || typeof jsonObj !== 'object') {
-                    this.aiPanel.statusText = 'AI 返回的 JSON 不是对象或数组，未应用';
-                    return;
-                }
-            } catch (error) {
-                this.aiPanel.statusText = `AI 返回的 JSON 未通过本地解析校验：${error.message}`;
-                return;
-            }
-            editor.setValue(fixedJson);
-            this.format();
-            this.aiPanel.statusText = '已写回输入框并重新格式化';
-        },
-
-        async askAiForJsonRepair() {
-            const input = editor && typeof editor.getValue === 'function' ? editor.getValue() : '';
-            if (!input.trim()) {
-                setInlineAiGuide(this.aiPanel, {
-                    taskKey: 'repair-json',
-                    title: 'JSON AI 修复',
-                    subtitle: '先粘贴解析失败的 JSON。',
-                    result: '这里不会做泛泛分析。请先粘贴 JSON 并点击格式化，出现解析错误后再让 AI 解释和修复。'
-                });
-                return;
-            }
-            if (!(await this.ensureJsonLocalAiReady('repair-json'))) {
-                return;
-            }
-            const aiContext = this.buildJsonAiRequestContext(input);
-            runInlineToolAi(this.aiPanel, {
-                toolKey: 'json-format',
-                taskKey: 'repair-json',
-                title: '解释并修复 JSON 错误',
-                subtitle: '根据当前解析错误生成可应用修正版。',
-                instruction: '请只围绕当前 JSON 解析错误回答：1. 错误原因；2. 可疑位置；3. 一个合法 JSON 修正版。修正版必须放在 ```json 代码块中。不要解释 JSON 基础知识，不要补充原始 JSON 中不存在的业务字段。',
-                inputLabel: '当前 JSON 输入',
-                input,
-                resultLabel: this.errorMsg ? '当前解析错误' : '当前格式化结果',
-                result: this.getJsonResultText(),
-                outputHint: '先用一两句话定位错误，再给 ```json 代码块。不要输出无关教程。',
-                canApply: true,
-                applyLabel: '应用修正版',
-                provider: 'builtin',
-                sourceSnapshot: aiContext.sourceSnapshot,
-                meta: {
-                    AI模式: 'Chrome 内置 Gemini Nano，本地执行',
-                    JSONLint: this.jsonLintSwitch ? '开启' : '关闭',
-                    自动解码: this.autoDecode ? '开启' : '关闭',
-                    节点编辑: this.overrideJson ? '开启' : '关闭',
-                    嵌套解析: this.nestedEscapeParse ? '开启' : '关闭'
-                }
-            });
-        },
-
-        async askAiForJsonDerivedOutput(kind) {
-            const task = JSON_DERIVED_AI_TASKS[kind];
-            if (!task) return;
-
-            const input = this.jsonFormattedSource || (editor && typeof editor.getValue === 'function' ? editor.getValue() : '');
-            if (!input.trim() || !this.jsonActionReady) {
-                setInlineAiGuide(this.aiPanel, {
-                    taskKey: task.taskKey,
-                    title: task.title,
-                    subtitle: '先粘贴并格式化一段合法 JSON。',
-                    result: '这类 AI 任务需要稳定的 JSON 结构作为上下文。请先粘贴 JSON 并完成格式化，再生成类型、Schema 或 Zod。'
-                });
-                return;
-            }
-            if (!(await this.ensureJsonLocalAiReady(task.taskKey))) {
-                return;
-            }
-            const aiContext = this.buildJsonAiRequestContext(input);
-
-            runInlineToolAi(this.aiPanel, {
-                toolKey: 'json-format',
-                taskKey: task.taskKey,
-                title: task.title,
-                subtitle: task.subtitle,
-                instruction: task.instruction,
-                inputLabel: '当前格式化 JSON',
-                input,
-                resultLabel: '本地结构摘要',
-                result: aiContext.structureSummary,
-                outputHint: task.outputHint,
-                provider: 'builtin',
-                sourceSnapshot: aiContext.sourceSnapshot,
-                meta: {
-                    AI模式: 'Chrome 内置 Gemini Nano，本地执行',
-                    JSONLint: this.jsonLintSwitch ? '开启' : '关闭',
-                    自动解码: this.autoDecode ? '开启' : '关闭',
-                    嵌套解析: this.nestedEscapeParse ? '开启' : '关闭',
-                    输出用途: task.title
-                }
-            });
-        },
-
-        isInUSA: function () {
-            // 通过时区判断是否在美国
-            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const isUSTimeZone = /^America\/(New_York|Chicago|Denver|Los_Angeles|Anchorage|Honolulu)/.test(timeZone);
-
-            // 通过语言判断
-            const language = navigator.language || navigator.userLanguage;
-            const isUSLanguage = language.toLowerCase().indexOf('en-us') > -1;
-
-            // 如果时区和语言都符合美国特征,则认为在美国
-            return (isUSTimeZone && isUSLanguage);
-        },
-
         format: function () {
             this.errorMsg = '';
             this.jsonFormattedSource = '';
@@ -1237,16 +805,6 @@ new Vue({
             event.preventDefault();
             event.stopPropagation();
             chrome.runtime.openOptionsPage();
-        },
-
-        openDonateModal: function(event){
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'json-format' }
-            });
         },
 
         setDemo: function () {

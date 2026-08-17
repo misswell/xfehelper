@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const manualFormatSelect = document.getElementById('manual-format');
     const fileUploadInput = document.getElementById('file-upload');
     const manualFormatContainer = document.getElementById('manual-format-container');
-    const donateLink = document.querySelector('.x-donate-link');
     const otherToolsLink = document.querySelector('.x-other-tools');
 
     const manualInputContainers = [simpleDataContainer, seriesDataContainer, csvDataContainer];
@@ -57,16 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 uploadedData = null;
                 fileUploadInput.value = ''; // 清空文件选择
             }
-        });
-    });
-
-    // 监听打赏链接点击事件
-    donateLink.addEventListener('click', function(event) {
-        event.preventDefault();
-        chrome.runtime.sendMessage({
-            type: 'fh-dynamic-any-thing',
-            thing: 'open-donate-modal', 
-            params: { toolName: 'chart-maker' }
         });
     });
 
@@ -564,7 +553,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 创建一个临时的高分辨率canvas
             const tempCanvas = document.createElement('canvas');
-            const tempCtx = tempCanvas.getContext('2d');
             
             // 设置更高的分辨率
             const scale = 8; // 提升到8倍分辨率
@@ -575,42 +563,21 @@ document.addEventListener('DOMContentLoaded', function() {
             tempCtx.imageSmoothingEnabled = true;
             tempCtx.imageSmoothingQuality = 'high';
             
-            html2canvas(originalCanvas, {
-                backgroundColor: '#ffffff',
-                scale: scale, // 使用8倍缩放
-                width: width,
-                height: height,
-                useCORS: true,
-                allowTaint: true,
-                logging: false,
-                imageTimeout: 0,
-                onclone: (document) => {
-                    const clonedCanvas = document.getElementById('chart-canvas');
-                    if(clonedCanvas) {
-                        clonedCanvas.style.width = width + 'px';
-                        clonedCanvas.style.height = height + 'px';
-                    }
-                },
-                // 添加高级渲染选项
-                canvas: tempCanvas,
-                renderCallback: (canvas) => {
-                    // 应用锐化效果
-                    const ctx = canvas.getContext('2d');
-                    ctx.filter = 'contrast(1.1) saturate(1.2)';
-                }
-            }).then(canvas => {
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.fillStyle = '#ffffff';
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            tempCtx.filter = 'contrast(1.1) saturate(1.2)';
+            tempCtx.drawImage(originalCanvas, 0, 0, tempCanvas.width, tempCanvas.height);
+            tempCtx.filter = 'none';
+
+            Promise.resolve(tempCanvas).then(canvas => {
                 // 移除加载指示器
                 loadingOverlay.remove();
-                
+
                 // 导出图像时使用更高的质量设置
-                let imgUrl;
-                if (format === 'jpg') {
-                    // JPEG使用最高质量
-                    imgUrl = canvas.toDataURL('image/jpeg', 1.0);
-                } else {
-                    // PNG使用无损压缩
-                    imgUrl = canvas.toDataURL('image/png');
-                }
+                let imgUrl = format === 'jpg'
+                    ? canvas.toDataURL('image/jpeg', 1.0)
+                    : canvas.toDataURL('image/png');
                 
                 // 创建下载链接
                 const link = document.createElement('a');
@@ -642,10 +609,18 @@ document.addEventListener('DOMContentLoaded', function() {
         chartWrapper.appendChild(loadingOverlay);
         
         setTimeout(() => {
-            html2canvas(document.getElementById('chart-canvas'), {
-                backgroundColor: '#ffffff',
-                scale: 2
-            }).then(canvas => {
+            const sourceCanvas = document.getElementById('chart-canvas');
+            const canvas = document.createElement('canvas');
+            canvas.width = sourceCanvas.width * 2;
+            canvas.height = sourceCanvas.height * 2;
+            const context = canvas.getContext('2d');
+            context.fillStyle = '#ffffff';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.imageSmoothingEnabled = true;
+            context.imageSmoothingQuality = 'high';
+            context.drawImage(sourceCanvas, 0, 0, canvas.width, canvas.height);
+
+            Promise.resolve(canvas).then(canvas => {
                 // 移除加载指示器
                 loadingOverlay.remove();
                 
@@ -734,4 +709,4 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateChartTypeOptions(dataFormat) {
         // 由于移除了图表类型下拉框，这个函数现在仅记录当前数据格式，不再修改任何选项
     }
-}); 
+});

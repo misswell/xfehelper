@@ -89,7 +89,7 @@ fileInput.addEventListener('change', function (e) {
     if (!file) return;
     const reader = new FileReader();
     const ext = file.name.split('.').pop().toLowerCase();
-    if (["xlsx", "xls"].includes(ext)) {
+    if (ext === 'xlsx') {
         // 读取Excel文件
         reader.onload = function (evt) {
             try {
@@ -122,7 +122,7 @@ fileInput.addEventListener('change', function (e) {
         };
         reader.readAsText(file);
     } else {
-        showError('仅支持Excel（.xlsx/.xls）或CSV文件！');
+        showError('仅支持Excel（.xlsx）或CSV文件！');
     }
 });
 
@@ -235,20 +235,6 @@ if (copyBtn) {
         clearError();
     });
 } 
-
-// 打赏按钮
-const donateBtn = document.querySelector('.x-donate-link');
-if (donateBtn) {
-    donateBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        chrome.runtime.sendMessage({
-            type: 'fh-dynamic-any-thing',
-            thing: 'open-donate-modal',
-            params: { toolName: 'excel2json' }
-        }); 
-    });
-}
 
 // 工具市场按钮
 const toolMarketBtn = document.querySelector('.x-other-tools');

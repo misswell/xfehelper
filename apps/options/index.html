@@ -59,14 +59,6 @@
                 </span>
                 <span class="fh-action-meta">打开</span>
             </button>
-            <button type="button" class="fh-side-action is-donate" @click="openDonateModal">
-                <span class="fh-action-icon" aria-hidden="true">SP</span>
-                <span class="fh-action-copy">
-                    <strong>请作者喝咖啡</strong>
-                    <small>支持 XFeHelper 持续更新</small>
-                </span>
-                <span class="fh-action-meta">支持</span>
-            </button>
         </nav>
 
         <section class="fh-side-section" v-if="uiMode === 'omni'">
@@ -154,7 +146,6 @@
                                 <span v-if="tool.installed">已安装</span>
                                 <span v-if="tool.systemInstalled">系统内置</span>
                                 <span v-if="tool.favorite">已收藏</span>
-                                <span v-if="isAiEnhancedTool(tool.key)" class="tool-meta-ai">AI扩展</span>
                             </div>
                         </div>
                     </div>
@@ -175,57 +166,12 @@
                                 @click="toggleFavorite(tool.key)">
                             {{tool.favorite ? '已收藏' : '收藏'}}
                         </button>
-                        <button class="btn btn-info btn-xs"
-                                v-if="isAiEnhancedTool(tool.key)"
-                                @click="openAiFeature(getAiFeaturePack(tool.key))">
-                            AI入口
-                        </button>
                     </div>
                 </article>
             </div>
             </section>
 
             <aside class="fh-context-rail" v-if="uiMode === 'omni'">
-                <section :class="['fh-ai-console', aiStatusClass]">
-                    <div class="fh-ai-console-main">
-                        <div class="fh-ai-console-copy">
-                            <p class="fh-eyebrow">XFeHelper AI</p>
-                            <h2>{{aiPanelTitle}}</h2>
-                            <p>{{aiModelMessage}}</p>
-                        </div>
-                        <div class="fh-ai-console-actions">
-                            <button v-if="showAiPrimaryAction" type="button" class="btn btn-success" @click="handleAiPrimaryAction" :disabled="aiModelBusy">
-                                {{aiPrimaryActionLabel}}
-                            </button>
-                            <button type="button" class="btn btn-default" @click="openAiAgent()">打开 AI 助手</button>
-                            <button type="button" class="btn btn-info" @click="checkBuiltInAiStatus({ notify: true })" :disabled="aiModelBusy">
-                                {{aiRefreshActionLabel}}
-                            </button>
-                        </div>
-                    </div>
-                    <div class="fh-ai-status-card">
-                        <span :class="['fh-ai-status-dot', aiStatusClass]"></span>
-                        <div>
-                            <strong>{{aiStatusCardTitle}}</strong>
-                            <small>Chrome Built-in AI / Gemini Nano</small>
-                        </div>
-                        <div class="fh-ai-progress" v-if="aiModelStatus === 'downloading' || aiModelProgressPercent > 0 && aiModelProgressPercent < 100">
-                            <span :style="{ width: aiModelProgressPercent + '%' }"></span>
-                            <em>{{aiModelProgressPercent}}%</em>
-                        </div>
-                    </div>
-                    <div class="fh-ai-feature-grid">
-                        <button v-for="pack in aiFeaturePacks" :key="pack.toolKey" type="button" class="fh-ai-feature-card" @click="openAiFeature(pack)">
-                            <span class="fh-ai-feature-badge">{{pack.badge}}</span>
-                            <span>
-                                <strong>{{pack.title}}</strong>
-                                <small>{{pack.desc}}</small>
-                            </span>
-                            <em>{{aiModelStatus === 'available' ? '打开工具' : '先启用模型'}}</em>
-                        </button>
-                    </div>
-                </section>
-
                 <section class="fh-recommendations" v-if="visibleRecommendationCards.length">
                     <div class="fh-section-head">
                         <div>
@@ -347,7 +293,7 @@
                                     <input type="radio" name="fh_ui_mode" id="FH_UI_MODE_OMNI" value="omni" :checked="uiMode === 'omni'" @change="setUiMode('omni')"/>
                                     <span>
                                         <strong>Omni</strong>
-                                        <small>保留当前满血能力，Popup、AI 入口和 JSON 扩展操作全部展开。</small>
+                                        <small>保留完整能力，Popup 和 JSON 扩展操作全部展开。</small>
                                     </span>
                                 </label>
                             </fieldset>
@@ -524,31 +470,6 @@
             <div class="settings-footer">
                 <button class="btn btn-success" @click="saveSettings">保存</button>
                 <button class="btn btn-default" @click="closeSettings">取消</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="settings-modal donate-modal" v-if="showDonateModal" v-cloak ref="donateModal" @keydown="handleModalKeydown($event, 'donate')">
-        <div class="settings-dialog" role="dialog" aria-modal="true" aria-labelledby="donateDialogTitle" tabindex="-1">
-            <div class="settings-header">
-                <div>
-                    <p class="fh-eyebrow">Support</p>
-                    <h3 id="donateDialogTitle">支持 XFeHelper 持续维护</h3>
-                </div>
-                <button type="button" class="close-btn" @click="closeDonateModal" aria-label="关闭">×</button>
-            </div>
-            <div class="settings-body">
-                <div class="donate-content">
-                    <p class="donate-desc">{{donate.text}}我会尽量抽时间保持更新。</p>
-                    <div class="donate-qrcode">
-                        <img :src="donate.image" alt="微信打赏二维码" class="donate-image">
-                        <p class="donate-text">微信打赏，鼓励升级</p>
-                    </div>
-                </div>
-            </div>
-            <div class="settings-footer">
-                <button class="btn btn-success" @click="closeDonateModal">我已打赏</button>
-                <button class="btn btn-default" @click="closeDonateModal">以后再说</button>
             </div>
         </div>
     </div>

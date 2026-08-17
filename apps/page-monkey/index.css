@@ -123,20 +123,12 @@ a:hover { text-decoration: underline; }
     line-height: 1.5;
 }
 
-/* 让 bootstrap 自带的 .x-donate-link / .x-other-tools 在 flex 布局下表现正常 */
+/* 让 bootstrap 自带的 .x-other-tools 在 flex 布局下表现正常 */
 .fh-app .panel-title > .x-other-tools {
     position: static !important;
     top: auto !important;
     float: none !important;
     margin-left: 0 !important;
-}
-.fh-app .panel-title > .x-donate-link {
-    position: static !important;
-    float: none !important;
-    right: auto !important;
-    top: auto !important;
-    margin: 0 !important;
-    padding: 0 11px !important;
 }
 
 /* ============ 子工具栏（page-monkey 自有功能按钮） ============ */

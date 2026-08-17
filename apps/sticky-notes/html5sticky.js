@@ -483,11 +483,7 @@ html5sticky.stripTags = function (input, allowed) {
 html5sticky.export = function () {
 
     let allKeys = (localStorage.getItem(STICKYNOTES_ALLKEYS) || '').split(',');
-    let zipper = null;
-    if (allKeys.length) {
-        zipper = new JSZip();
-    }
-    let zpFolder = {};
+    const zipFiles = {};
     allKeys.forEach(key => {
 
         if (!/\|text/.test(key)) {
@@ -499,109 +495,99 @@ html5sticky.export = function () {
 
         dated = localStorage.getItem(id + '|dated');
         folderid = localStorage.getItem(id + '|folderid') || '0';
-        if (!zpFolder[folderid]) {
-            let forderName = html5sticky.findFolderNameById(folderid);
-            zpFolder[folderid] = zipper.folder(forderName);
-        }
+        let forderName = html5sticky.findFolderNameById(folderid);
 
         // get text info
         temp_array = localStorage.getItem(id + '|text').split('|');
         htext = temp_array[0];
         ptext = temp_array[1];
 
-        zpFolder[folderid].file(htext + '.txt', [
+        zipFiles[forderName + '/' + htext + '.txt'] = fflate.strToU8([
             '# title：' + htext,
             '# date：' + dated,
             '# content：\n' + ptext
         ].join('\n\n'));
     });
 
-    if (zipper) {
-        zipper.generateAsync({type: "blob"})
-            .then(function (content) {
-                let elA = document.createElement('a');
-                elA.style.cssText = 'position:absolute;top:-1000px;left:-10000px;';
-                elA.setAttribute('download', '我的便签笔记-' + (new Date * 1) + '.zip');
-                elA.href = URL.createObjectURL(new Blob([content], {type: 'application/octet-stream'}));
-                document.body.appendChild(elA);
-                elA.click();
-            });
+    if (Object.keys(zipFiles).length) {
+        const content = fflate.zipSync(zipFiles);
+        let elA = document.createElement('a');
+        elA.style.cssText = 'position:absolute;top:-1000px;left:-10000px;';
+        elA.setAttribute('download', '我的便签笔记-' + (new Date * 1) + '.zip');
+        elA.href = URL.createObjectURL(new Blob([content], {type: 'application/octet-stream'}));
+        document.body.appendChild(elA);
+        elA.click();
     }
 };
 
 // 导入笔记
 html5sticky.importNotes = function () {
-
-    let Model = (function () {
-        zip.useWebWorkers = false;
-
-        let URL = window.webkitURL || window.mozURL || window.URL;
-
-        return {
-            getEntries: function (file, onend) {
-                zip.createReader(new zip.BlobReader(file), function (zipReader) {
-                    zipReader.getEntries(onend);
-                }, function (e) {
-                    console.log(e);
-                });
-            },
-
-            getEntryFile: function (entry, onend, onprogress) {
-                entry.getData(new zip.TextWriter(), function (text) {
-                    onend(text);
-                }, onprogress);
-            }
-        };
-    })();
-
     let fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'application/zip';
     fileInput.style.cssText = 'position:absolute;top:-100px;left:-100px';
-    fileInput.addEventListener('change', function (evt) {
-        Model.getEntries(fileInput.files[0], function (entries) {
-            let counter = 0;
-            let size = entries.filter((entry) => !entry.directory).length;
-            entries.forEach(function (entry) {
-                if (entry.directory) {
-                    counter++;
-                    let fname = entry.filename.replace(/\//, '');
-                    let folders = html5sticky.loadFolders();
-                    if (!folders[fname]) {
-                        html5sticky.saveFolder(fname, new Date().getTime());
-                    }
-                } else {
-                    Model.getEntryFile(entry, function (text) {
+    fileInput.addEventListener('change', async function () {
+        let file = fileInput.files && fileInput.files[0];
+        if (!file) return;
 
-                        let identifier = html5sticky.getIdentifier();
-                        let htext = text.split('# date：')[0].split('# title：')[1].trim();
-                        let dtext = text.split('# date：')[1].split('# content：')[0].trim();
-                        let ptext = text.split('# content：')[1].trim().replace(/\r?\n/g, '<br />');
-                        let folderId = html5sticky.findFolderByName(entry.filename.split('/')[0]);
-
-                        // 先存key，再存数据
-                        let allKeys = (localStorage.getItem(STICKYNOTES_ALLKEYS) || '').split(',');
-                        allKeys.push(identifier + '|text');
-                        allKeys.push(identifier + '|bgcolor');
-                        allKeys.push(identifier + '|dated');
-                        allKeys.push(identifier + '|folderid');
-                        localStorage.setItem(STICKYNOTES_ALLKEYS, allKeys.join(','));
-
-                        localStorage.setItem(identifier + '|text', htext + '|' + ptext);
-                        localStorage.setItem(identifier + '|bgcolor', html5sticky.getColor());
-                        localStorage.setItem(identifier + '|dated', dtext);
-                        localStorage.setItem(identifier + '|folderid', folderId);
-
-                        counter++;
-                        if (counter === size) {
-                            html5sticky.showMessage('#9BED87', 'black', '操作成功！共导入' + counter + '条笔记！', () => {
-                                location.reload();
-                            });
-                        }
-                    });
-                }
+        try {
+            let archive = fflate.unzipSync(new Uint8Array(await file.arrayBuffer()));
+            let decoder = new TextDecoder();
+            let entries = Object.entries(archive).filter(([filename]) => {
+                return !filename.endsWith('/') && /\.txt$/i.test(filename);
             });
-        });
+
+            // fflate 不会额外生成目录项，从文件路径恢复导出时的文件夹。
+            let folderNames = new Set();
+            entries.forEach(([filename]) => {
+                let slashIndex = filename.indexOf('/');
+                if (slashIndex > 0) folderNames.add(filename.slice(0, slashIndex));
+            });
+            let folders = html5sticky.loadFolders();
+            folderNames.forEach(fname => {
+                if (!folders[fname]) html5sticky.saveFolder(fname, new Date().getTime());
+            });
+
+            let counter = 0;
+            entries.forEach(([filename, bytes]) => {
+                let text = decoder.decode(bytes);
+                let titlePart = text.split('# date：')[0].split('# title：')[1];
+                let datePart = text.split('# date：')[1];
+                let contentPart = text.split('# content：')[1];
+                if (!titlePart || !datePart || contentPart === undefined) return;
+
+                let identifier = html5sticky.getIdentifier();
+                let htext = titlePart.trim();
+                let dtext = datePart.split('# content：')[0].trim();
+                let ptext = contentPart.trim().replace(/\r?\n/g, '<br />');
+                let folderId = html5sticky.findFolderByName(filename.split('/')[0]);
+
+                // 先存key，再存数据
+                let allKeys = (localStorage.getItem(STICKYNOTES_ALLKEYS) || '').split(',');
+                allKeys.push(identifier + '|text');
+                allKeys.push(identifier + '|bgcolor');
+                allKeys.push(identifier + '|dated');
+                allKeys.push(identifier + '|folderid');
+                localStorage.setItem(STICKYNOTES_ALLKEYS, allKeys.join(','));
+
+                localStorage.setItem(identifier + '|text', htext + '|' + ptext);
+                localStorage.setItem(identifier + '|bgcolor', html5sticky.getColor());
+                localStorage.setItem(identifier + '|dated', dtext);
+                localStorage.setItem(identifier + '|folderid', folderId);
+                counter++;
+            });
+
+            if (counter) {
+                html5sticky.showMessage('#9BED87', 'black', '操作成功！共导入' + counter + '条笔记！', () => {
+                    location.reload();
+                });
+            } else {
+                html5sticky.showMessage('#FFE16B', 'black', 'ZIP 中没有可导入的便签笔记！');
+            }
+        } catch (err) {
+            console.error('便签 ZIP 导入失败', err);
+            html5sticky.showMessage('#FFB3B3', 'black', 'ZIP 文件读取失败，请使用本工具导出的文件！');
+        }
     }, false);
 
     document.body.appendChild(fileInput);

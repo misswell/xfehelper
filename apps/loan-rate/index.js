@@ -320,16 +320,6 @@ new Vue({
             this.revRate = guessRate(this.money, this.months, this.revAllAmount, parseInt(this.paybackMode));
         },
 
-        openDonateModal: function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'loan-rate' }
-            });
-        },  
-
         openOptionsPage: function(event) {
             event.preventDefault();
             event.stopPropagation();

@@ -128,27 +128,6 @@ body {
     left: 100%;
 }
 
-.navbar-actions .donate-link {
-    background: rgba(255, 107, 107, 0.2);
-    border: 1px solid rgba(255, 107, 107, 0.3);
-}
-
-.navbar-actions .donate-link:hover {
-    background: rgba(255, 107, 107, 0.3);
-    border-color: rgba(255, 107, 107, 0.5);
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-}
-
-.navbar-actions .donate-link .nav-icon {
-    color: #ff6b6b;
-    animation: heartbeat 2s ease-in-out infinite;
-}
-
-.navbar-actions .donate-link:hover .nav-icon {
-    color: #ff5252;
-    animation: heartbeat 1s ease-in-out infinite;
-}
-
 .navbar-actions .other-tools-link {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -167,15 +146,6 @@ body {
 .navbar-actions .other-tools-link:hover .nav-icon {
     color: #26d0ce;
     animation: rotate 0.6s ease-in-out;
-}
-
-@keyframes heartbeat {
-    0%, 14%, 28%, 42%, 70% {
-        transform: scale(1);
-    }
-    7%, 21%, 35% {
-        transform: scale(1.1);
-    }
 }
 
 @keyframes rotate {
@@ -254,7 +224,6 @@ body {
 /* 移除旧的导航栏样式 */
 .x-a-high,
 .x-other-tools,
-.x-donate-link,
 .icon-plus-circle {
     display: none;
 }
@@ -1092,4 +1061,4 @@ body {
     .action-buttons-top .btn-warning {
         background: linear-gradient(135deg, #e0a800 0%, #dc3545 100%);
     }
-} 
+}

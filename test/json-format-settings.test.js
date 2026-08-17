@@ -56,11 +56,11 @@ describe('json-format settings regression guards', () => {
         expect(source).toContain("this.uiMode = String(result[JSON_FORMAT_UI_MODE] || result[FH_UI_MODE] || '').toLowerCase() === 'omni' ? 'omni' : 'lite';");
         expect(html).toContain("['fh-top-shell', uiMode === 'lite' ? 'is-lite' : 'is-omni']");
         expect(html).toContain("v-if=\"uiMode === 'lite'\"");
-        expect(html).toContain('请作者喝咖啡');
+        expect(html).not.toContain('请作者喝咖啡');
         expect(html).not.toContain('>设置</button>');
         expect(html).toContain('class="fh-header-actions fh-header-actions-omni"');
         expect(html).toContain('class="fh-header-tail fh-header-tail-omni"');
-        expect(html).toContain('class="fh-lite-support fh-donate-action"');
+        expect(html).not.toContain('fh-donate-action');
         expect(html).toContain('id="jsonWindowNote"');
         expect(html).toContain('class="fh-window-note-trigger"');
         expect(html).toContain('class="fh-window-note-chip"');
@@ -92,7 +92,6 @@ describe('json-format settings regression guards', () => {
         expect(css).toContain('.fh-json-tool.fh-json-tool-lite {\n    padding: 4px 5px 5px;\n    gap: 5px;');
         expect(css).toContain('.fh-json-tool.fh-json-tool-lite .fh-tool-header {\n    min-height: 38px;\n    padding: 4px 9px;');
         expect(css).toContain('.fh-json-tool.fh-json-tool-lite .fh-mode-note');
-        expect(css).toContain('.fh-json-tool.fh-json-tool-lite .fh-lite-support {\n    height: 26px;');
         expect(css).toContain('#sortBar,\n#sortBarLite');
         expect(css).toContain('.fh-json-tool .fh-lite-sort-trigger');
         expect(css).toContain('.fh-json-tool .fh-lite-sort-options');
@@ -177,6 +176,7 @@ describe('json-format settings regression guards', () => {
     it('content-script scopes advanced auto-format controls to Omni mode', () => {
         const source = readSource('apps/json-format/content-script.js');
         const cssSource = readSource('apps/json-format/content-script.css');
+        const pageCss = readSource('apps/json-format/index.css');
         const formatLibSource = readSource('apps/json-format/format-lib.js');
         const backgroundSource = readSource('apps/background/background.js');
 
@@ -192,8 +192,8 @@ describe('json-format settings regression guards', () => {
         expect(source).toContain('class="setting-section-title">运行</div>');
         expect(source).toContain('class="setting-section-title">解析与排序</div>');
         expect(source).toContain('class="setting-section-title">显示</div>');
-        expect(source).toContain('class="setting-donate-link"');
-        expect(source).toContain('请作者喝咖啡');
+        expect(source).not.toContain('setting-donate-link');
+        expect(source).not.toContain('请作者喝咖啡');
         expect(source).toContain("input type=\"checkbox\" name=\"nestedParse\"");
         expect(source).not.toContain("input type=\"checkbox\" name=\"compactMode\"");
         expect(source).not.toContain("默认使用紧凑视图");
@@ -292,8 +292,8 @@ describe('json-format settings regression guards', () => {
         expect(source).toContain('_syncFormatterEscapeState();');
         expect(source).toContain('_syncFormatterStatusBarState();');
         expect(source).toContain('_applyToolbarDisplayState();');
-        expect(source).toContain("sPanel.find('.setting-donate-link').on('click', _openDonateModal);");
-        expect(source).toContain("thing: 'open-donate-modal'");
+        expect(source).not.toContain('setting-donate-link');
+        expect(source).not.toContain('open-donate-modal');
         expect(formatLibSource).toContain('let statusBarEnabled = true;');
         expect(formatLibSource).toContain('setStatusBarEnabled: function(enabled)');
         expect(formatLibSource).toContain('search: function(query)');
@@ -376,10 +376,10 @@ describe('json-format settings regression guards', () => {
         expect(cssSource).toContain('.item-line.item-line-wrap');
         expect(cssSource).toContain('.string.string-long');
         expect(cssSource).toContain('html.fh-jf .x-toolbar.fh-json-viewbar .fh-viewbar-actions > .x-other-tools');
-        expect(cssSource).toContain('html.fh-jf .x-toolbar.fh-json-viewbar .fh-viewbar-actions > .x-donate-link');
-        expect(cssSource).toContain('.mod-setting-panel .setting-donate-link');
-        expect(cssSource).toContain('text-underline-offset: 3px;');
-        expect(cssSource).toContain('html.fh-jf body.theme-dark .mod-setting-panel .setting-donate-link');
+        expect(cssSource).not.toContain('x-donate-link');
+        expect(cssSource).not.toContain('setting-donate-link');
+        expect(pageCss).toContain('text-underline-offset: 3px;');
+        expect(cssSource).not.toContain('请作者喝咖啡');
         expect(cssSource).toContain('--fh-surface: #1d2430;');
         expect(cssSource).toContain('html.fh-jf body.theme-dark .x-toolbar.fh-json-viewbar .mod-setting-panel');
         expect(cssSource).toContain('html.fh-jf body.theme-dark .mod-setting-panel label');

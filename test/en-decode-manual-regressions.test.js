@@ -27,13 +27,11 @@ describe('en-decode manual regressions', () => {
         expect(() => EncodeUtils.tolerantUrlDecode('%E0%A4%A')).not.toThrow();
     });
 
-    it('manual and AI decode paths use tolerant URL decode helpers', () => {
+    it('manual decode uses tolerant URL decode helpers', () => {
         const page = readSource('apps/en-decode/index.js');
-        const analyzer = readSource('apps/en-decode/ai-decode-analyzer.js');
 
         expect(page).toContain('EncodeUtils.tolerantUrlDecode(this.sourceContent)');
         expect(page).toContain('EncodeUtils.formatDecodedText(EncodeUtils.utf8Decode(EncodeUtils.base64Decode(this.sourceContent)))');
-        expect(analyzer).toContain('EncodeUtils.tolerantUrlDecode(text, {plusAsSpace: true})');
-        expect(analyzer).toContain('EncodeUtils.tolerantUrlDecode(rawValue)');
+        expect(page).not.toContain('ai-decode-analyzer');
     });
 });

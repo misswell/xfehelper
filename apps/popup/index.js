@@ -29,7 +29,6 @@ const TOOL_BADGES = {
     'en-decode': 'EN',
     'code-beautify': 'JS',
     'code-compress': 'ZIP',
-    'aiagent': 'AI',
     'timestamp': 'TS',
     'password': 'PW',
     'totp-auth': '2FA',

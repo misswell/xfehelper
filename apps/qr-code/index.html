@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="../static/img/favicon.ico">
     <link rel="stylesheet" href="../static/css/fehelper-tools.css">
-    <link rel="stylesheet" href="../static/css/fh-ai-inline.css" />
     <link rel="stylesheet" href="index.css" />
     <script type="text/javascript" src="../static/vendor/evalCore.min.js"></script>
     <script type="text/javascript" src="../static/vendor/vue/vue.js"></script>
@@ -23,7 +22,6 @@
                     <span class="fh-tool-actions qr-header-actions">
                         <button type="button" class="x-switch qr-mode-switch" ref="btnSwitch" @click="trans">{{!qrEncodeMode? '生成二维码' : '解码/扫码'}}</button>
                         <a class="x-other-tools" @click="openOptionsPage($event)"><i class="icon-plus-circle"></i> 工具市场</a>
-                        <a href="#" class="x-donate-link" id="donateLink" @click="openDonateModal($event)"><i class="nav-icon">SP</i>请作者喝咖啡</a>
                     </span>
                 </h3>
             </div>
@@ -38,10 +36,6 @@
                             <span>待生成内容</span>
                         </div>
                         <textarea class="form-control mod-textarea" id="codeSource" ref="codeSource" v-model="textContent" placeholder="输入链接、文本，或描述 Wi-Fi / 名片 / 日程二维码"></textarea>
-                        <div class="qr-recipe-row" v-show="codeType==='qrcode'">
-                            <button type="button" v-for="recipe in qrRecipes" :key="recipe.key" @click="useQrRecipe(recipe)">{{recipe.label}}</button>
-                            <button type="button" class="fh-ai-tool-btn qr-ai-build-btn" @click="askAiForQrPayload">AI 生成内容</button>
-                        </div>
                     </section>
 
                     <section class="qr-card qr-center">
@@ -96,7 +90,6 @@
                         <div class="section-title">
                             <span>生成结果</span>
                             <div class="action-buttons" v-if="showResult">
-                                <button type="button" class="btn-action fh-ai-tool-btn" @click="askAiForQrQuality" :disabled="!textContent.trim()">AI 体检</button>
                                 <button class="btn-action" id="copy_button" @click="copyQR">复制</button>
                                 <button class="btn-action" id="download_button" @click="downloadQR">下载</button>
                             </div>
@@ -104,28 +97,6 @@
                         <div id="preview"><svg id="barcodeSvg" style="display:none"></svg></div>
                     </section>
                 </div>
-                <section class="fh-inline-ai-panel qr-ai-panel qr-ai-panel-below" v-if="aiPanel.visible && (aiPanel.taskKey === 'audit-qr' || aiPanel.taskKey === 'build-payload')">
-                    <div class="fh-inline-ai-head">
-                        <div class="fh-inline-ai-title">
-                            <strong>{{aiPanel.title}}</strong>
-                            <span v-if="aiPanel.subtitle">{{aiPanel.subtitle}}</span>
-                        </div>
-                        <div class="fh-inline-ai-actions">
-                            <button type="button" @click="copyAiResult" :disabled="!aiPanel.result">复制</button>
-                            <button type="button" class="fh-inline-ai-apply" v-if="aiPanel.canApply" @click="applyAiPanelResult" :disabled="!aiPanel.result || aiPanel.loading">{{aiPanel.applyLabel}}</button>
-                            <button type="button" class="fh-inline-ai-close" @click="closeAiPanel" aria-label="关闭">&times;</button>
-                        </div>
-                    </div>
-                    <div class="fh-inline-ai-body">
-                        <div class="fh-inline-ai-input" v-if="aiPanelInputHtml">
-                            <div class="fh-inline-ai-section-label">输入内容</div>
-                            <div class="fh-inline-ai-output fh-inline-ai-markdown fh-inline-ai-input-content" v-html="aiPanelInputHtml"></div>
-                        </div>
-                        <div class="fh-inline-ai-status">{{aiPanel.statusText}}</div>
-                        <div class="fh-inline-ai-output fh-inline-ai-markdown" v-if="!aiPanel.error" v-html="aiPanelResultHtml"></div>
-                        <pre class="fh-inline-ai-error" v-if="aiPanel.error">{{aiPanel.error}}</pre>
-                    </div>
-                </section>
             </div>
 
             <!-- 二维码解码模式 -->
@@ -150,30 +121,8 @@
                 <section class="qr-card decoder-right">
                     <div class="section-title">
                         <span>解码结果</span>
-                        <button type="button" class="btn-action fh-ai-tool-btn" @click="askAiForDecodedResult" :disabled="!resultContent">AI 识别</button>
                     </div>
                     <textarea id="decodeResult" title="点击自动选择" placeholder="解码结果将显示在这里..." readonly ref="resultBox" @click="select()" v-model="resultContent" class="form-control mod-textarea"></textarea>
-                    <section class="fh-inline-ai-panel qr-ai-panel" v-if="aiPanel.visible">
-                        <div class="fh-inline-ai-head">
-                            <div class="fh-inline-ai-title">
-                                <strong>{{aiPanel.title}}</strong>
-                                <span v-if="aiPanel.subtitle">{{aiPanel.subtitle}}</span>
-                            </div>
-                            <div class="fh-inline-ai-actions">
-                                <button type="button" @click="copyAiResult" :disabled="!aiPanel.result">复制</button>
-                                <button type="button" class="fh-inline-ai-close" @click="closeAiPanel" aria-label="关闭">&times;</button>
-                            </div>
-                        </div>
-                        <div class="fh-inline-ai-body">
-                            <div class="fh-inline-ai-input" v-if="aiPanelInputHtml">
-                                <div class="fh-inline-ai-section-label">输入内容</div>
-                                <div class="fh-inline-ai-output fh-inline-ai-markdown fh-inline-ai-input-content" v-html="aiPanelInputHtml"></div>
-                            </div>
-                            <div class="fh-inline-ai-status">{{aiPanel.statusText}}</div>
-                            <div class="fh-inline-ai-output fh-inline-ai-markdown" v-if="!aiPanel.error" v-html="aiPanelResultHtml"></div>
-                            <pre class="fh-inline-ai-error" v-if="aiPanel.error">{{aiPanel.error}}</pre>
-                        </div>
-                    </section>
                 </section>
             </div>
 
@@ -192,7 +141,7 @@
     <script type="text/javascript" src="../static/vendor/jquery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="../static/vendor/jquery/jquery.colorpicker.js"></script>
     <script type="text/javascript" src="../static/vendor/jquery/jquery.qrcode.min.js"></script>
-    <script type="text/javascript" src="../static/vendor/zxing/zxing.min.js"></script>
+    <script type="text/javascript" src="../static/vendor/jsqr/jsqr.min.js"></script>
     <script type="text/javascript" src="../static/vendor/jsbarcode/JsBarcode.all.min.js"></script>
     <script type="text/javascript" src="../html2markdown/libs/marked.js"></script>
     <script src="../static/js/dark-mode.js"></script>

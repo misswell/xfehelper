@@ -166,16 +166,6 @@ new Vue({
             event.stopPropagation();
             chrome.runtime.openOptionsPage();
         },
-        openDonateModal: function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'password' }
-            });
-        },
-        
         loadPatchHotfix() {
             // 页面加载时自动获取并注入页面的补丁
             chrome.runtime.sendMessage({

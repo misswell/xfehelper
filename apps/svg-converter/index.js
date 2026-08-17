@@ -1275,21 +1275,6 @@ new Vue({
         },
 
         /**
-         * 打开打赏弹窗
-         */
-        openDonateModal: function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: {
-                    toolName: 'svg-converter'
-                }
-            });
-        },
-
-        /**
          * 打开工具市场
          */
         openOptionsPage: function (event) {

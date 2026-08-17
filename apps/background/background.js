@@ -16,6 +16,10 @@ import {
     isInjectableTabUrl
 } from './url-policy.js';
 
+// Only these page tools need jQuery. Keep the set stable so content-script
+// injection does not allocate it for every tool on every page load.
+const CONTENT_SCRIPT_JQUERY_TOOLS = new Set(['json-format', 'code-beautify', 'grid-ruler']);
+
 
 let BgPageInstance = (function () {
 
@@ -143,10 +147,15 @@ let BgPageInstance = (function () {
     let _getContentScriptFiles = function (tool) {
         let files = [];
 
+        // 只为真正使用 jQuery 的页面工具按需注入，避免每个网页打开时
+        // 都通过 manifest 预加载这份依赖。
+        if (CONTENT_SCRIPT_JQUERY_TOOLS.has(tool)) {
+            files.push('static/vendor/jquery/jquery-3.3.1.min.js');
+        }
+
         switch (tool) {
             case 'json-format':
                 files.push(
-                    'static/vendor/jquery/jquery-3.3.1.min.js',
                     'json-format/json-bigint.js',
                     'json-format/json-auto-utils.js',
                     'json-format/format-lib.js',
@@ -165,7 +174,8 @@ let BgPageInstance = (function () {
         opts = opts || {};
         const silent = opts.silent !== false;
 
-        // FH工具脚本注入
+        // 内置工具与开发者自定义工具共用一次 storage 快照，避免每次页面
+        // 加载都重复读取全部已安装工具状态。
         Awesome.getInstalledTools().then(tools => {
 
             // 注入js
@@ -187,10 +197,7 @@ let BgPageInstance = (function () {
                     });
                 }
             });
-        });
-
-        // 其他开发者自定义工具脚本注入======For FH DevTools
-        Awesome.getInstalledTools().then(tools => {
+            // 其他开发者自定义工具脚本注入======For FH DevTools
             let list = Object.keys(tools).filter(tool => tools[tool]._devTool);
 
             // 注入js脚本
@@ -202,41 +209,6 @@ let BgPageInstance = (function () {
                             }
                         });
                     }));
-        });
-    };
-
-    /**
-     * 打开打赏弹窗
-     * @param {string} toolName - 工具名称
-     */
-    FeHelperBg.gotoDonateModal = function (toolName) {
-        chrome.tabs.query({currentWindow: true}, function (tabs) {
-
-            Settings.getOptions((opts) => {
-                let isOpened = false;
-                let tabId;
-                let reg = new RegExp("^chrome.*\\/options\\/index.html\\?donate_from=" + toolName + "$", "i");
-                for (let i = 0, len = tabs.length; i < len; i++) {
-                    if (reg.test(tabs[i].url)) {
-                        isOpened = true;
-                        tabId = tabs[i].id;
-                        break;
-                    }
-                }
-
-                if (!isOpened) {
-                    let url = `/options/index.html?donate_from=${toolName}`;
-                    chrome.tabs.create({ url,active: true });
-                } else {
-                    chrome.tabs.update(tabId, {highlighted: true}).then(tab => {
-                        chrome.tabs.reload(tabId);
-                    });
-                }
-                // 记录工具使用
-                Statistics.recordToolUsage('donate',{from: toolName});
-
-            });
-
         });
     };
 
@@ -781,10 +753,6 @@ let BgPageInstance = (function () {
                     // 打开插件选项页面
                     case 'open-options-page':
                         chrome.runtime.openOptionsPage();
-                        break;
-                    // 打开打赏弹窗
-                    case 'open-donate-modal':
-                        FeHelperBg.gotoDonateModal(request.params.toolName);
                         break;
                     // 通过 chrome.scripting.executeScript 注入脚本文件（CSP安全）
                     case 'inject-scripts-to-tab':

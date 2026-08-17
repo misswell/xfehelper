@@ -481,16 +481,6 @@ new Vue({
             chrome.runtime.openOptionsPage();
         },
 
-        openDonateModal: function(event){
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'mock-data' }
-            });
-        },
-
         /**
          * 显示消息提示
          */
@@ -570,4 +560,4 @@ new Vue({
             }
         }
     }
-}); 
+});

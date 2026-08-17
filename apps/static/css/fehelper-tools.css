@@ -340,20 +340,6 @@ body.fh-modern.theme-dark .fh-nav-btn:hover {
     color: #c7d8ff !important;
 }
 
-body.fh-modern.theme-dark .x-donate-link,
-body.fh-modern.theme-dark .x-donate-link > a {
-    border-color: rgba(91, 214, 159, 0.42) !important;
-    background: rgba(91, 214, 159, 0.14) !important;
-    color: #8de8ba !important;
-}
-
-body.fh-modern.theme-dark .x-donate-link:hover,
-body.fh-modern.theme-dark .x-donate-link:hover > a {
-    border-color: rgba(141, 232, 186, 0.58) !important;
-    background: rgba(91, 214, 159, 0.2) !important;
-    color: #b8f4d4 !important;
-}
-
 body.fh-modern.theme-dark .table,
 body.fh-modern.theme-dark table.table,
 body.fh-modern.theme-dark table {
@@ -762,7 +748,6 @@ body.fh-modern .fh-tool-header-actions .x-xdemo {
 }
 
 body.fh-modern .fh-tool-header-actions .x-other-tools,
-body.fh-modern .fh-tool-header-actions .x-donate-link,
 body.fh-modern .fh-tool-header-actions .x-switch,
 body.fh-modern .fh-tool-header-actions .fh-nav-btn,
 body.fh-modern .fh-tool-header-actions .x-xdemo,
@@ -837,7 +822,7 @@ body.fh-modern .page-header > h1 {
     flex: 1 1 auto;
 }
 
-body.fh-modern .panel-title > span:first-child:not(.x-donate-link),
+body.fh-modern .panel-title > span:first-child,
 body.fh-modern .page-header > h1 {
     margin: 0;
     color: var(--fh-text);
@@ -847,8 +832,6 @@ body.fh-modern .page-header > h1 {
 }
 
 body.fh-modern .x-other-tools,
-body.fh-modern .x-donate-link,
-body.fh-modern .x-donate-link > a,
 body.fh-modern .panel-title > .x-switch,
 body.fh-modern .page-header > .x-switch,
 body.fh-modern .fh-tool-actions > .x-switch {
@@ -877,68 +860,26 @@ body.fh-modern .fh-tool-actions > .x-switch {
 }
 
 body.fh-modern .mod-head-actions > .x-other-tools,
-body.fh-modern .mod-head-actions > .x-donate-link,
 body.fh-modern .fh-tool-actions > .x-other-tools,
-body.fh-modern .fh-tool-actions > .x-donate-link,
 body.fh-modern .fh-tool-actions > .x-switch {
     flex: 0 0 auto;
 }
 
-body.fh-modern .fh-tool-header-actions .x-donate-link,
-body.fh-modern .panel-title > .x-donate-link,
-body.fh-modern .panel-title > span.x-donate-link,
-body.fh-modern .page-header > .x-donate-link,
-body.fh-modern .mod-head-actions > .x-donate-link,
-body.fh-modern .fh-tool-actions > .x-donate-link,
-body.fh-modern .qr-header-actions > .x-donate-link,
-body.fh-modern .navbar-actions > .x-donate-link {
-    order: 99;
-}
-
 body.fh-modern .panel-title > .x-other-tools,
-body.fh-modern .panel-title > .x-donate-link,
-body.fh-modern .panel-title > span.x-donate-link,
 body.fh-modern .panel-title > .x-switch,
 body.fh-modern .page-header > .x-other-tools,
-body.fh-modern .page-header > .x-donate-link,
 body.fh-modern .page-header > .x-switch,
 body.fh-modern .mod-head-actions > .x-other-tools,
-body.fh-modern .mod-head-actions > .x-donate-link,
 body.fh-modern .fh-tool-actions > .x-other-tools,
-body.fh-modern .fh-tool-actions > .x-donate-link,
 body.fh-modern .fh-tool-actions > .x-switch {
     margin-left: auto;
 }
 
 body.fh-modern .panel-title > .x-switch ~ .x-other-tools,
-body.fh-modern .panel-title > .x-switch ~ .x-donate-link,
-body.fh-modern .panel-title > .x-other-tools ~ .x-donate-link,
-body.fh-modern .panel-title > .x-donate-link ~ .x-other-tools,
-body.fh-modern .panel-title > span.x-donate-link ~ .x-other-tools,
 body.fh-modern .page-header > .x-switch ~ .x-other-tools,
-body.fh-modern .page-header > .x-switch ~ .x-donate-link,
-body.fh-modern .page-header > .x-other-tools ~ .x-donate-link,
-body.fh-modern .page-header > .x-donate-link ~ .x-other-tools,
-body.fh-modern .mod-head-actions > .x-other-tools ~ .x-donate-link,
-body.fh-modern .mod-head-actions > .x-donate-link ~ .x-other-tools,
 body.fh-modern .fh-tool-actions > .x-other-tools,
-body.fh-modern .fh-tool-actions > .x-donate-link,
 body.fh-modern .fh-tool-actions > .x-switch {
     margin-left: 0;
-}
-
-body.fh-modern .x-donate-link:not(a) {
-    min-height: 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-}
-
-body.fh-modern .x-donate-link:not(a):hover {
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-    transform: none;
 }
 
 body.fh-modern .fh-page-tip {
@@ -962,13 +903,6 @@ body.fh-modern .fh-tool-actions > .x-switch {
     color: #1d4ed8;
 }
 
-body.fh-modern .x-donate-link,
-body.fh-modern .x-donate-link > a {
-    border-color: #bbf7d0;
-    background: var(--fh-success-soft);
-    color: var(--fh-success);
-}
-
 body.fh-modern .x-other-tools:hover {
     border-color: #93c5fd;
     background: #dbeafe;
@@ -985,15 +919,6 @@ body.fh-modern .fh-tool-actions > .x-switch:hover {
     color: #1e40af;
     box-shadow: none;
     text-decoration: none;
-    transform: translateY(-1px);
-}
-
-body.fh-modern .x-donate-link:hover,
-body.fh-modern .x-donate-link:hover > a {
-    border-color: #86efac;
-    background: #dcfce7;
-    color: #047857;
-    box-shadow: none;
     transform: translateY(-1px);
 }
 
@@ -1305,8 +1230,6 @@ body.fh-modern input[type="reset"]:focus {
     body.fh-modern .example-links a:focus-visible,
     body.fh-modern .x-toolbox a:focus-visible,
     body.fh-modern .x-other-tools:focus-visible,
-    body.fh-modern .x-donate-link:focus-visible,
-    body.fh-modern .x-donate-link > a:focus-visible,
     body.fh-modern .x-switch:focus-visible,
     body.fh-modern .fh-nav-btn:focus-visible,
     body.fh-modern .x-xdemo:focus-visible {
@@ -1630,11 +1553,9 @@ body.fh-modern img[alt="loading"] {
     }
 
     body.fh-modern .panel-title > .x-other-tools,
-    body.fh-modern .panel-title > .x-donate-link,
     body.fh-modern .page-header > .x-other-tools,
-    body.fh-modern .page-header > .x-donate-link,
     body.fh-modern .mod-head-actions > .x-other-tools,
-    body.fh-modern .mod-head-actions > .x-donate-link {
+    body.fh-modern .mod-head-actions > .x-other-tools {
         margin-left: 0;
     }
 }

@@ -336,19 +336,18 @@ new Vue({
                 let arrPromise = files.map(file => this.getContentFromLocal(toolName, file));
 
                 Promise.all(arrPromise).then(contents => {
-                    let zipper = new JSZip();
-                    let zipPkg = zipper.folder(toolName);
-                    files.forEach((file, index) => zipPkg.file(file, contents[index]));
+                    const zipFiles = {};
+                    files.forEach((file, index) => {
+                        zipFiles[`${toolName}/${file}`] = fflate.strToU8(contents[index]);
+                    });
 
-                    zipper.generateAsync({type: "blob"})
-                        .then(function (content) {
-                            let elA = document.createElement('a');
-                            elA.style.cssText = 'position:absolute;top:-1000px;left:-10000px;';
-                            elA.setAttribute('download', `${toolName}.zip`);
-                            elA.href = URL.createObjectURL(new Blob([content], {type: 'application/octet-stream'}));
-                            document.body.appendChild(elA);
-                            elA.click();
-                        });
+                    const content = fflate.zipSync(zipFiles);
+                    let elA = document.createElement('a');
+                    elA.style.cssText = 'position:absolute;top:-1000px;left:-10000px;';
+                    elA.setAttribute('download', `${toolName}.zip`);
+                    elA.href = URL.createObjectURL(new Blob([content], {type: 'application/octet-stream'}));
+                    document.body.appendChild(elA);
+                    elA.click();
                 });
             });
         },
@@ -410,97 +409,79 @@ new Vue({
         },
 
         loadTool(upgradeMode, upgradeToolName) {
-            let Model = (function () {
-                zip.useWebWorkers = false;
-
-                return {
-                    getEntries: function (file, onend) {
-                        zip.createReader(new zip.BlobReader(file), function (zipReader) {
-                            zipReader.getEntries(onend);
-                        }, function (e) {
-                            console.log(e);
-                        });
-                    },
-
-                    getEntryFile: function (entry, onend, onprogress) {
-                        entry.getData(new zip.TextWriter(), function (text) {
-                            onend(text);
-                        }, onprogress);
-                    }
-                };
-            })();
-
             let fileInput = document.createElement('input');
             fileInput.type = 'file';
             fileInput.accept = 'application/zip';
             fileInput.style.cssText = 'position:absolute;top:-100px;left:-100px';
-            fileInput.addEventListener('change', (evt) => {
-                let toolName = fileInput.files[0].name.replace('.zip', '');
+            fileInput.addEventListener('change', async () => {
+                let file = fileInput.files && fileInput.files[0];
+                if (!file) return;
+
+                let toolName = file.name.replace(/\.zip$/i, '');
                 if (upgradeMode && upgradeToolName !== toolName) {
                     return this.toast(`请确保上传${upgradeToolName}.zip进行更新！`);
                 }
-                Model.getEntries(fileInput.files[0], (entries) => {
-                    entries = entries.filter(entry => !entry.directory && /\.(html|js|css)$/.test(entry.filename));
-                    let reg = /(fh-config\.js|index\.html|content-script\.(js|css))$/;
-                    let entPart1 = entries.filter(en => reg.test(en.filename));
-                    let entPart2 = entries.filter(en => !reg.test(en.filename));
-                    let configEntry = entPart1.find(en => /fh-config\.js$/.test(en.filename));
-                    let mainEntries = entPart1.filter(en => !/fh-config\.js$/.test(en.filename));
+                try {
+                    const archive = fflate.unzipSync(new Uint8Array(await file.arrayBuffer()));
+                    const decoder = new TextDecoder();
+                    const entries = Object.entries(archive)
+                        .filter(([filename]) => !filename.endsWith('/') && /\.(html|js|css)$/i.test(filename))
+                        .map(([filename, bytes]) => ({filename, content: decoder.decode(bytes)}));
+                    const reg = /(fh-config\.js|index\.html|content-script\.(js|css))$/;
+                    const entPart1 = entries.filter(entry => reg.test(entry.filename));
+                    const entPart2 = entries.filter(entry => !reg.test(entry.filename));
+                    const configEntry = entPart1.find(entry => /fh-config\.js$/.test(entry.filename));
+                    const mainEntries = entPart1.filter(entry => !/fh-config\.js$/.test(entry.filename));
                     let activeToolName = toolName;
 
-                    let processMainEntries = () => {
-                        mainEntries.forEach((entry) => {
-                            Model.getEntryFile(entry, (fileContent) => {
-                                let fileName = entry.filename.split('/').pop();
-                                try {
-                                    if (fileName === 'index.html') {
-                                        let result = this.htmlTplEncode(activeToolName, fileContent);
-                                        this.saveContentToLocal(activeToolName, fileName, result.html, true);
+                    const processMainEntries = () => {
+                        mainEntries.forEach(entry => {
+                            const fileName = entry.filename.split('/').pop();
+                            try {
+                                if (fileName === 'index.html') {
+                                    const result = this.htmlTplEncode(activeToolName, entry.content);
+                                    this.saveContentToLocal(activeToolName, fileName, result.html, true);
 
-                                        // 所有被引用的静态文件都在这里进行遍历
-                                        entPart2.forEach(jcEntry => {
-                                            Model.getEntryFile(jcEntry, jcContent => {
-                                                Object.keys(result.jsCss).forEach(tp => {
-                                                    result.jsCss[tp].some(file => {
-                                                        const importedName = this.resolveImportedZipAssetName(activeToolName, file[0], jcEntry.filename);
-                                                        if (importedName) {
-                                                            this.saveContentToLocal(activeToolName, importedName, jcContent);
-                                                            return true;
-                                                        }
-                                                    });
-                                                });
-                                            });
-                                        });
-                                    } else if (['content-script.js', 'content-script.css'].includes(fileName)) {
-                                        this.saveContentToLocal(activeToolName, fileName, fileContent);
-                                    }
-                                } catch (err) {
-                                    this.toast(`${fileName} 文件发生错误：${err.message}`);
+                                    // 仅保存 index.html 实际引用的脚本和样式，避免把无关文件写入本地工具。
+                                    entPart2.forEach(assetEntry => {
+                                        Object.keys(result.jsCss).some(type => result.jsCss[type].some(asset => {
+                                            const importedName = this.resolveImportedZipAssetName(
+                                                activeToolName,
+                                                asset[0],
+                                                assetEntry.filename
+                                            );
+                                            if (!importedName) return false;
+                                            this.saveContentToLocal(activeToolName, importedName, assetEntry.content);
+                                            return true;
+                                        }));
+                                    });
+                                } else if (['content-script.js', 'content-script.css'].includes(fileName)) {
+                                    this.saveContentToLocal(activeToolName, fileName, entry.content);
                                 }
-                            });
+                            } catch (err) {
+                                this.toast(`${fileName} 文件发生错误：${err.message}`);
+                            }
                         });
                         this.toast('工具更新成功！');
                     };
 
                     if (configEntry) {
-                        Model.getEntryFile(configEntry, (fileContent) => {
-                            try {
-                                let json = JSON.parse(fileContent);
-                                this.addToolConfigs(json);
-                                let configToolNames = Object.keys(json);
-                                if (!upgradeMode && configToolNames.length === 1) {
-                                    activeToolName = configToolNames[0];
-                                }
-                            } catch (err) {
-                                this.toast(`fh-config.js 文件发生错误：${err.message}`);
-                                return;
+                        try {
+                            const config = JSON.parse(configEntry.content);
+                            this.addToolConfigs(config);
+                            const configToolNames = Object.keys(config);
+                            if (!upgradeMode && configToolNames.length === 1) {
+                                activeToolName = configToolNames[0];
                             }
-                            processMainEntries();
-                        });
-                    } else {
-                        processMainEntries();
+                        } catch (err) {
+                            this.toast(`fh-config.js 文件发生错误：${err.message}`);
+                            return;
+                        }
                     }
-                });
+                    processMainEntries();
+                } catch (err) {
+                    this.toast(`ZIP 文件读取失败：${err.message || err}`);
+                }
             }, false);
 
             document.body.appendChild(fileInput);

@@ -17,7 +17,6 @@
                 </a>
             </div>
             <div class="navbar-actions panel-title">
-                <a href="#" class="x-donate-link"><i class="nav-icon">SP</i>请作者喝咖啡</a>
                 <a class="x-other-tools"><i class="icon-plus-circle"></i> 工具市场</a>
             </div>
         </div>
@@ -28,7 +27,7 @@
                     <div class="input-zone">
                         <div class="input-ops">
                             <div class="input-ops-row">
-                                <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display: none;"/>
+                                <input type="file" id="fileInput" accept=".xlsx,.csv" style="display: none;"/>
                                 <a href="#" class="btn btn-secondary example-btn btn-file-input" data-example="simple">选择Excel/CSV文件</a>
                                 <a href="#" class="link-btn" data-example="simple">示例：简单表格</a>
                                 <a href="#" class="link-btn" data-example="user">示例：用户信息</a>
@@ -54,8 +53,9 @@
         </div>
     </div>
     <script type="text/javascript" src="../static/vendor/evalCore.min.js"></script>
-    <!-- xlsx.full.min.js 复用 chart-maker/lib 目录下的文件 -->
-    <script src="../chart-maker/lib/xlsx.full.min.js"></script>
+    <!-- 轻量 XLSX 读取器复用扩展内已有的 fflate -->
+    <script src="../static/vendor/fflate/fflate.min.js"></script>
+    <script src="../static/vendor/xlsx-lite/xlsx-lite.js"></script>
     <script src="../static/js/tool-layout.js"></script>
     <script src="index.js" type="module"></script>
 </body>

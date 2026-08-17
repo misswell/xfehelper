@@ -83,22 +83,12 @@ describe('options page UX policy', () => {
         expect(optionsHtml).toContain('v-if="hasActiveFilter"');
     });
 
-    it('keeps AI console actions distinct and status copy concise', () => {
+    it('does not expose removed AI or donation surfaces', () => {
         const optionsSource = readSource('apps/options/index.js');
         const optionsHtml = readSource('apps/options/index.html');
-        const primaryActionVisibility = sourceBetween(optionsSource, 'showAiPrimaryAction() {', 'aiRefreshActionLabel()');
-        const statusCardTitle = sourceBetween(optionsSource, 'aiStatusCardTitle() {', 'aiPanelTitle()');
 
-        expect(optionsHtml).toContain('v-if="showAiPrimaryAction"');
-        expect(primaryActionVisibility).toContain("return this.aiModelStatus !== 'available';");
-        expect(optionsSource).not.toContain('打开 JSON 修复');
-        expect(optionsSource).not.toContain('openPrimaryAiFeature');
-        expect(optionsHtml).toContain('@click="checkBuiltInAiStatus({ notify: true })"');
-        expect(optionsHtml).toContain('{{aiRefreshActionLabel}}');
-        expect(optionsHtml).toContain('{{aiStatusCardTitle}}');
-        expect(optionsHtml).not.toContain('{{aiStatusLabel}}');
-        expect(statusCardTitle).toContain("return 'Gemini Nano 已可用';");
-        expect(statusCardTitle).not.toContain('建议优先使用 XFeHelper AI');
+        expect(optionsSource).not.toMatch(/\bAI\b|aiagent|LanguageModel|Gemini Nano/);
+        expect(optionsHtml).not.toMatch(/\bAI\b|aiagent|Gemini Nano|请作者喝咖啡|donate/i);
     });
 
     it('keeps the removed popup AI router out of popup and settings', () => {
@@ -153,10 +143,9 @@ describe('options page UX policy', () => {
         const optionsHtml = readSource('apps/options/index.html');
         const optionsSource = readSource('apps/options/index.js');
 
-        expect(optionsHtml.match(/role="dialog"/g)).toHaveLength(3);
-        expect(optionsHtml.match(/aria-modal="true"/g)).toHaveLength(3);
+        expect(optionsHtml.match(/role="dialog"/g)).toHaveLength(2);
+        expect(optionsHtml.match(/aria-modal="true"/g)).toHaveLength(2);
         expect(optionsHtml).toContain('@keydown="handleModalKeydown($event, \'settings\')"');
-        expect(optionsHtml).toContain('@keydown="handleModalKeydown($event, \'donate\')"');
         expect(optionsHtml).toContain('@keydown="handleModalKeydown($event, \'confirm\')"');
         expect(optionsSource).toContain('focusModal(refName)');
         expect(optionsSource).toContain('handleModalKeydown(event, modalType)');

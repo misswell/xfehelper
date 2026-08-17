@@ -131,9 +131,12 @@ describe('issue #594-#596 regressions', () => {
         expect(source).toContain('normalizeZipEntryPath(fileName)');
         expect(source).toContain('stripZipRootPath(fileName)');
         expect(source).toContain('resolveImportedZipAssetName(toolName, htmlAssetRef, zipEntryName)');
+        expect(source).toContain('fflate.unzipSync');
         expect(source).toContain('let activeToolName = toolName;');
         expect(source).toContain('activeToolName = configToolNames[0];');
-        expect(source).toContain('this.resolveImportedZipAssetName(activeToolName, file[0], jcEntry.filename)');
+        expect(source).toContain('this.resolveImportedZipAssetName(');
+        expect(source).toContain('activeToolName,');
+        expect(source).toContain('asset[0],');
         expect(source).not.toContain('file[0].indexOf(jcEntry.filename) > -1');
     });
 });

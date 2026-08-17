@@ -660,16 +660,6 @@ window.JsonAutoFormat = (() => {
         _scheduleExcludedOriginPromptAutoTuck(1500);
     };
 
-    let _openDonateModal = e => {
-        e && e.preventDefault();
-        e && e.stopPropagation();
-        chrome.runtime.sendMessage({
-            type: 'fh-dynamic-any-thing',
-            thing: 'open-donate-modal',
-            params: { toolName: 'json-format' }
-        });
-    };
-
     let _prepareSourceForFormatter = async source => {
         if (!formatOptions.autoDecode) {
             return source;
@@ -695,20 +685,6 @@ window.JsonAutoFormat = (() => {
     };
 
     let _getHtmlFragment = () => {
-
-        // 判断当前地区是否在美国
-        const isInUSA = () => {
-            // 通过时区判断是否在美国
-            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const isUSTimeZone = /^America\/(New_York|Chicago|Denver|Los_Angeles|Anchorage|Honolulu)/.test(timeZone);
-
-            // 通过语言判断
-            const language = navigator.language || navigator.userLanguage;
-            const isUSLanguage = language.toLowerCase().indexOf('en-us') > -1;
-
-            // 如果时区和语言都符合美国特征,则认为在美国
-            return (isUSTimeZone && isUSLanguage);
-        };
 
         return [
             '<div id="jfToolbar" class="x-toolbar fh-json-viewbar" style="display:none">' +
@@ -765,8 +741,7 @@ window.JsonAutoFormat = (() => {
             '       </svg><span>高级定制</span></span>' +
             '       <span class="fh-collapse-icon" role="button" tabindex="0" title="收起工具栏" aria-label="收起工具栏"><img src="' + chrome.runtime.getURL('static/img/fe-16.png') + '" alt="" aria-hidden="true"></span>' +
             '       <a id="toggleBtn" title="收起工具栏" aria-expanded="true"><span class="fh-toggle-label">收起</span></a>' +
-            '       <a class="x-other-tools' + (isInUSA() ? ' x-other-tools-us' : '') + '" style="cursor:pointer"><span>工具市场</span></a>' +
-            '       <span class="x-donate-link' + (isInUSA() ? ' x-donate-link-us' : '') + '"><a href="#" id="donateLink"><i class="nav-icon">SP</i><span>请作者喝咖啡</span></a></span>' +
+            '       <a class="x-other-tools" style="cursor:pointer"><span>工具市场</span></a>' +
             '    </span>' +
             '</div>',
             '<div id="formattingMsg"><span class="x-loading"></span>格式化中...</div>',
@@ -858,10 +833,6 @@ window.JsonAutoFormat = (() => {
                     <li><label><input type="radio" name="skinId" value="5">github模式（纵享丝滑）</label></li>
                     <li><label><input type="radio" name="skinId" value="6">素人模式（清心寡欲）</label></li>
                </ul>
-
-               <div class="setting-support-link">
-                    <a href="#" class="setting-donate-link"><span class="setting-donate-badge">SP</span><span>请作者喝咖啡</span></a>
-               </div>
 
                <div class="btns">
                     <input type="submit" class="xjf-btn" name="submit" value="完成">
@@ -974,7 +945,6 @@ window.JsonAutoFormat = (() => {
             });
 
             sPanel.find('input[name="close"]').on('click', () => sPanel.hide());
-            sPanel.find('.setting-donate-link').on('click', _openDonateModal);
 
         } else if (sPanel[0].offsetHeight) {
             return sPanel.hide();
@@ -1095,8 +1065,6 @@ window.JsonAutoFormat = (() => {
 
         $('.fe-feedback .x-settings').click(e => _createSettingPanel());
         $('#jsonGetCorrectCnt').click(e => _getCorrectContent());
-
-        $('.x-toolbar .x-donate-link').on('click', _openDonateModal);
 
         _bindOmniToolbar();
         

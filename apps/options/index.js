@@ -2,8 +2,6 @@ import Awesome from '../background/awesome.js'
 import MSG_TYPE from '../static/js/common.js';
 import Settings from './settings.js';
 import Statistics from '../background/statistics.js';
-import AI from '../aiagent/fh.ai.js';
-import { AI_FEATURE_PACKS } from '../aiagent/fh.ai-features.js';
 
 const FH_UI_MODE = 'FH_UI_MODE';
 const FH_OPTIONS_UI_MODE = 'FH_OPTIONS_UI_MODE';
@@ -15,7 +13,7 @@ const TOOL_CATEGORIES = [
     { key: 'dev', name: '开发工具类', tools: ['json-format', 'json-diff', 'code-beautify', 'code-compress', 'postman', 'websocket', 'regexp','page-timing'] },
     { key: 'encode', name: '编解码转换类', tools: ['en-decode', 'trans-radix', 'timestamp', 'trans-color'] },
     { key: 'image', name: '图像处理类', tools: ['qr-code', 'image-base64', 'svg-converter', 'chart-maker', 'poster-maker' ,'screenshot', 'color-picker'] },
-    { key: 'productivity', name: '效率工具类', tools: ['aiagent', 'sticky-notes', 'html2markdown', 'page-monkey'] },
+    { key: 'productivity', name: '效率工具类', tools: ['sticky-notes', 'html2markdown', 'page-monkey'] },
     { key: 'calculator', name: '计算工具类', tools: ['crontab', 'loan-rate', 'password', 'uuid-gen', 'totp-auth'] },
     { key: 'other', name: '其他工具', tools: [] }
 ];
@@ -28,7 +26,6 @@ const TOOL_BADGES = {
     'en-decode': 'EN',
     'code-beautify': 'JS',
     'code-compress': 'ZIP',
-    'aiagent': 'AI',
     'timestamp': 'TS',
     'password': 'PW',
     'totp-auth': '2FA',
@@ -55,16 +52,6 @@ const TOOL_BADGES = {
     'svg-converter': 'SVG',
     'poster-maker': 'PS',
     'datetime-calc': 'DT'
-};
-
-const AI_STATUS_TEXT = {
-    checking: '正在检测 Chrome 内置 AI 模型状态',
-    unsupported: '当前浏览器不支持 Chrome 内置 AI',
-    unavailable: '当前设备暂不满足本机 AI 运行条件',
-    downloadable: 'Gemini Nano 模型可下载，点击即可启用',
-    downloading: '正在下载 Gemini Nano 本机模型',
-    available: 'Gemini Nano 已可用，建议优先使用 XFeHelper AI',
-    error: 'AI 模型状态检测失败'
 };
 
 // Vue实例
@@ -100,13 +87,6 @@ new Vue({
         jsonFormatKeyLimit: DEFAULT_JSON_KEY_LIMIT,
         isFirefox: false, // 是否Firefox浏览器
 
-        // 打赏相关
-        showDonateModal: false,
-        donate: {
-            text: '感谢你对XFeHelper的认可和支持！',
-            image: './donate.jpeg'
-        },
-
         // 确认对话框
         confirmDialog: {
             show: false,
@@ -122,12 +102,6 @@ new Vue({
 
         recentCount: 0,
         versionChecked: false,
-        aiModelStatus: 'checking',
-        aiModelProgress: 0,
-        aiModelBusy: false,
-        aiModelMessage: AI_STATUS_TEXT.checking,
-        aiFeaturePacks: AI_FEATURE_PACKS,
-        
         // 推荐卡片配置，后续可从服务端获取
         recommendationCards: [
             {
@@ -193,13 +167,8 @@ new Vue({
         this.checkBrowserType();
         // 检查版本更新
         this.checkVersionUpdate();
-        this.checkBuiltInAiStatus();
-        
         // 加载远程推荐卡片配置
         this.loadRemoteRecommendationCards();
-        
-        // 检查URL中是否有donate_from参数
-        this.checkDonateParam();
 
         // 页面加载时自动获取并注入options页面的补丁
         this.loadPatchHotfix();
@@ -311,60 +280,6 @@ new Vue({
                 this.sortType !== 'default';
         },
 
-        aiStatusLabel() {
-            return AI_STATUS_TEXT[this.aiModelStatus] || this.aiModelMessage || '等待检测';
-        },
-
-        aiStatusClass() {
-            return `is-${this.aiModelStatus || 'checking'}`;
-        },
-
-        aiModelProgressPercent() {
-            return Math.round(Math.max(0, Math.min(1, this.aiModelProgress || 0)) * 100);
-        },
-
-        aiPrimaryActionLabel() {
-            if (this.aiModelBusy) return this.aiModelStatus === 'downloading' ? '模型下载中' : '正在检测';
-            if (this.aiModelStatus === 'downloadable' || this.aiModelStatus === 'downloading') return '下载并启用模型';
-            if (this.aiModelStatus === 'unsupported' || this.aiModelStatus === 'unavailable') return '打开云端 AI 设置';
-            return '检测 AI 能力';
-        },
-
-        showAiPrimaryAction() {
-            return this.aiModelStatus !== 'available';
-        },
-
-        aiRefreshActionLabel() {
-            return this.aiModelBusy && this.aiModelStatus === 'checking' ? '检测中' : '重新检测';
-        },
-
-        aiStatusCardTitle() {
-            switch (this.aiModelStatus) {
-                case 'available':
-                    return 'Gemini Nano 已可用';
-                case 'downloadable':
-                    return 'Gemini Nano 可下载';
-                case 'downloading':
-                    return '正在下载 Gemini Nano';
-                case 'unsupported':
-                    return '浏览器暂不支持本机 AI';
-                case 'unavailable':
-                    return '当前设备暂不可用';
-                case 'checking':
-                    return '正在检测模型状态';
-                case 'error':
-                    return '检测失败';
-                default:
-                    return '等待检测';
-            }
-        },
-
-        aiPanelTitle() {
-            return this.aiModelStatus === 'available'
-                ? 'XFeHelper AI 已就绪，核心工具已接入'
-                : '开启 XFeHelper AI，先准备 Chrome 本机 Gemini 模型';
-        },
-
         visibleRecommendationCards() {
             return (this.recommendationCards || []).filter(card => card && !card.isAd);
         },
@@ -443,161 +358,6 @@ new Vue({
             }
         },
 
-        async checkBuiltInAiStatus(options = {}) {
-            const notify = !!(options && options.notify);
-            this.aiModelBusy = true;
-            this.aiModelStatus = 'checking';
-            this.aiModelMessage = AI_STATUS_TEXT.checking;
-            try {
-                const result = await AI.getBuiltInAvailability();
-                this.applyBuiltInAiStatus({
-                    status: result.availability,
-                    progress: result.availability === 'available' ? 1 : 0,
-                    message: result.message
-                });
-                if (notify) {
-                    this.showInPageNotification({
-                        title: 'XFeHelper AI',
-                        message: `检测完成：${this.aiStatusCardTitle}`
-                    });
-                }
-            } catch (error) {
-                const message = error && error.message ? error.message : AI_STATUS_TEXT.error;
-                this.applyBuiltInAiStatus({
-                    status: 'error',
-                    message
-                });
-                if (notify) {
-                    this.showInPageNotification({
-                        title: 'XFeHelper AI',
-                        message: `检测失败：${message}`
-                    });
-                }
-            } finally {
-                this.aiModelBusy = false;
-            }
-        },
-
-        async prepareBuiltInAiModel() {
-            if (this.aiModelStatus === 'available') {
-                this.openAiAgent();
-                return;
-            }
-            if (this.aiModelStatus === 'unsupported' || this.aiModelStatus === 'unavailable') {
-                this.openAiAgent();
-                return;
-            }
-
-            this.aiModelBusy = true;
-            try {
-                await AI.prepareBuiltInModel(payload => {
-                    if (payload && payload.provider === 'builtin') {
-                        this.applyBuiltInAiStatus(payload);
-                    }
-                });
-                await chrome.storage.local.set({ fh_ai_provider: 'builtin' });
-                this.applyBuiltInAiStatus({
-                    status: 'available',
-                    progress: 1,
-                    message: AI_STATUS_TEXT.available
-                });
-                this.showInPageNotification({
-                    title: 'XFeHelper AI',
-                    message: 'Gemini Nano 已准备好，可以使用本机 AI 能力。'
-                });
-            } catch (error) {
-                const message = this.formatBuiltInAiError(error);
-                this.applyBuiltInAiStatus({ status: 'error', message });
-                this.showInPageNotification({
-                    title: 'XFeHelper AI',
-                    message
-                });
-            } finally {
-                this.aiModelBusy = false;
-            }
-        },
-
-        applyBuiltInAiStatus(payload) {
-            const status = payload && payload.status ? payload.status : 'error';
-            const progress = typeof payload.progress === 'number' ? payload.progress : 0;
-            const message = this.formatBuiltInAiStatus(status, progress, payload.message);
-
-            this.aiModelStatus = status;
-            this.aiModelProgress = Math.max(0, Math.min(1, progress));
-            this.aiModelMessage = message;
-
-            chrome.storage.local.set({
-                fh_ai_builtin_status_snapshot: {
-                    status,
-                    progress: this.aiModelProgress,
-                    message,
-                    checkedAt: Date.now()
-                }
-            });
-        },
-
-        formatBuiltInAiStatus(status, progress, message) {
-            if (message) return message;
-            if (status === 'downloading') {
-                const percent = Math.round(Math.max(0, Math.min(1, progress || 0)) * 100);
-                return percent > 0 && percent < 100
-                    ? `正在下载 Gemini Nano 本机模型（${percent}%），完成后会自动启用。`
-                    : '正在下载 Gemini Nano 本机模型，完成后会自动启用。';
-            }
-            return AI_STATUS_TEXT[status] || AI_STATUS_TEXT.error;
-        },
-
-        formatBuiltInAiError(error) {
-            const message = error && error.message ? error.message : AI_STATUS_TEXT.error;
-            return message.replace('BUILTIN_AI_UNAVAILABLE:', '');
-        },
-
-        async handleAiPrimaryAction() {
-            if (this.aiModelStatus === 'checking' || this.aiModelStatus === 'error') {
-                await this.checkBuiltInAiStatus();
-                if (this.aiModelStatus === 'available') {
-                    this.openAiAgent();
-                }
-                return;
-            }
-            await this.prepareBuiltInAiModel();
-        },
-
-        async openAiAgent(prompt, aiFeature) {
-            const params = new URLSearchParams();
-            params.set('provider', 'builtin');
-            if (aiFeature) {
-                params.set('aiFeature', aiFeature);
-            }
-            if (prompt) {
-                params.set('prompt', prompt);
-                if (this.aiModelStatus === 'available') {
-                    params.set('autoSend', '1');
-                }
-            }
-            const suffix = params.toString() ? `?${params.toString()}` : '';
-            chrome.tabs.create({
-                url: chrome.runtime.getURL(`aiagent/index.html${suffix}`)
-            });
-        },
-
-        openAiFeature(pack) {
-            if (!pack) return;
-            const params = new URLSearchParams();
-            params.set('aiTask', pack.entryTask || 'guide');
-            chrome.tabs.create({
-                url: chrome.runtime.getURL(`${pack.toolKey}/index.html?${params.toString()}`)
-            });
-        },
-
-        getAiFeaturePack(toolKey) {
-            return this.aiFeaturePacks.find(pack => pack.toolKey === toolKey);
-        },
-
-        isAiEnhancedTool(toolKey) {
-            return !!this.getAiFeaturePack(toolKey);
-        },
-        
         // 更新"其他工具"类别，将未分类的工具添加到此类别
         updateOtherCategory(allToolKeys) {
             // 获取所有已分类的工具
@@ -1583,17 +1343,6 @@ new Vue({
             this.showSettingsModal = false;
         },
 
-        // 显示打赏模态框
-        openDonateModal() {
-            this.showDonateModal = true;
-            this.focusModal('donateModal');
-        },
-
-        // 关闭打赏模态框
-        closeDonateModal() {
-            this.showDonateModal = false;
-        },
-
         // 显示确认对话框
         showConfirm(options) {
             this.confirmDialog = {
@@ -1630,8 +1379,6 @@ new Vue({
         closeModalByType(modalType) {
             if (modalType === 'settings') {
                 this.closeSettings();
-            } else if (modalType === 'donate') {
-                this.closeDonateModal();
             } else if (modalType === 'confirm') {
                 this.cancelConfirm();
             }
@@ -1798,65 +1545,6 @@ new Vue({
             }
         },
 
-
-        // 检查URL中的donate_from参数并显示打赏弹窗
-        checkDonateParam() {
-            try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const donateFrom = urlParams.get('donate_from');
-                
-                if (donateFrom) {
-                    // 记录打赏来源
-                    chrome.storage.local.set({
-                        'fehelper_donate_from': donateFrom,
-                        'fehelper_donate_time': Date.now()
-                    });
-                    
-                    // 等待工具数据加载完成
-                    this.$nextTick(() => {
-                        // 在所有工具中查找匹配项
-                        let matchedTool = null;
-                        
-                        // 首先尝试直接匹配工具key
-                        if (this.originalTools && this.originalTools[donateFrom]) {
-                            matchedTool = this.originalTools[donateFrom];
-                        } else if (this.originalTools) {
-                            // 如果没有直接匹配，尝试在所有工具中查找部分匹配
-                            for (const [key, tool] of Object.entries(this.originalTools)) {
-                                if (key.includes(donateFrom) || donateFrom.includes(key) ||
-                                    (tool.name && tool.name.includes(donateFrom)) || 
-                                    (donateFrom && donateFrom.includes(tool.name))) {
-                                    matchedTool = tool;
-                                    break;
-                                }
-                            }
-                        }
-                        
-                        // 更新打赏文案
-                        if (matchedTool) {
-                            this.donate.text = `看起来【${matchedTool.name}】工具帮助到了你，感谢你的认可！`;
-                        } else {
-                            // 没有匹配到特定工具，使用通用文案
-                            this.donate.text = `感谢你对XFeHelper的认可和支持！`;
-                        }
-                        
-                        // 显示打赏弹窗
-                        this.showDonateModal = true;
-                    });
-
-                    // 埋点：自动触发options
-                    chrome.runtime.sendMessage({
-                        type: 'fh-dynamic-any-thing',
-                        thing: 'statistics-tool-usage',
-                        params: {
-                            tool_name: 'donate'
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error('处理打赏参数时出错:', error);
-            }
-        },
 
         // 补充 getRecentCount，保证模板调用不报错，且数据源唯一
         async getRecentCount() {

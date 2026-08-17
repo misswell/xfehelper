@@ -639,16 +639,6 @@ window.vueApp = new Vue({
             chrome.runtime.openOptionsPage();
         },
 
-        openDonateModal: function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'json-diff' }
-            });
-        },
-
         loadPatchHotfix: function() {
             chrome.runtime.sendMessage({
                 type: 'fh-dynamic-any-thing',

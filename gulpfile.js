@@ -72,7 +72,7 @@ const BROWSER_PATCHES = {
         };
         // Firefox CSP 需要 wasm-unsafe-eval / worker-src / connect-src 列表
         manifest.content_security_policy = {
-            extension_pages: "script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; object-src 'self'; connect-src 'self' blob: https://chrome.fehelper.com https://api.siliconflow.cn https://baidufe.com https://www.baidufe.com https://img.shields.io;"
+            extension_pages: "script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; object-src 'self'; connect-src 'self' blob: https://chrome.fehelper.com https://img.shields.io;"
         };
         return manifest;
     }
@@ -95,7 +95,11 @@ function cleanOutput(outputDir = 'output-chrome') {
 
 // 复制静态资源
 function copyAssets(outputDir = 'output-chrome/apps') {
-    return gulp.src(['apps/**/*.{gif,png,jpg,jpeg,cur,ico,woff2,svg,md,txt,json}']).pipe(gulp.dest(outputDir));
+    return gulp.src([
+        'apps/**/*.{gif,png,jpg,jpeg,cur,ico,woff2,svg,md,txt,json}',
+        '!apps/poster-maker/webfonts/fa-solid-900.woff2',
+        '!apps/static/img/loading.gif'
+    ]).pipe(gulp.dest(outputDir));
 }
 
 // 处理JSON文件
@@ -106,7 +110,14 @@ function processJson(outputDir = 'output-chrome/apps') {
 
 // 处理HTML文件
 function processHtml(outputDir = 'output-chrome/apps') {
-    return gulp.src('apps/**/*.html').pipe(htmlmin({collapseWhitespace: true})).pipe(gulp.dest(outputDir));
+    return gulp.src('apps/**/*.html').pipe(htmlmin({
+        collapseWhitespace: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        removeEmptyAttributes: true,
+        collapseBooleanAttributes: true,
+        useShortDoctype: true
+    })).pipe(gulp.dest(outputDir));
 }
 
 // 合并 & 压缩 js
@@ -129,11 +140,23 @@ function processJs(outputDir = 'output-chrome/apps') {
     };
     const shouldSkipProcessing = (file) => {
         const relativePath = path.relative(path.join(process.cwd(), 'apps'), file.path);
-        return relativePath === 'chart-maker/lib/xlsx.full.min.js' 
+        return relativePath === 'chart-maker/lib/xlsx.full.min.js'
+            || relativePath === 'chart-maker/lib/xlsx.mini.min.js'
             || relativePath === 'static/vendor/evalCore.min.js' 
-            || relativePath === 'code-compress/htmlminifier.min.js';
+            || relativePath === 'code-compress/htmlminifier.min.js'
+            || relativePath === 'code-compress/htmlminifier-lite.js'
+            || relativePath === 'static/vendor/jsqr/jsqr.min.js'
+            || relativePath === 'static/vendor/html-to-image/html-to-image.js';
     };
-    return gulp.src('apps/**/*.js')
+    return gulp.src([
+        'apps/**/*.js',
+        // These libraries were replaced by smaller, actively used alternatives.
+        // Keep the source files available for reference, but never copy them into
+        // a release package.
+        '!apps/static/vendor/jszip/**/*.js',
+        '!apps/static/vendor/zxing/**/*.js',
+        '!apps/chart-maker/lib/html2canvas.min.js'
+    ])
         .pipe(jsMerge())
         .pipe(gulpIf(file => !shouldSkipProcessing(file), babel({
             presets: [
@@ -151,7 +174,9 @@ function processJs(outputDir = 'output-chrome/apps') {
 // 合并 & 压缩 css
 function processCss(outputDir = 'output-chrome/apps') {
     // Keep shared CSS as @import instead of inlining Bootstrap/Codemirror into every tool page.
-    return gulp.src('apps/**/*.css').pipe(uglifycss()).pipe(gulp.dest(outputDir));
+    return gulp.src(['apps/**/*.css', '!apps/poster-maker/css/all.min.css'])
+        .pipe(uglifycss())
+        .pipe(gulp.dest(outputDir));
 }
 
 // 添加图片压缩任务
@@ -180,7 +205,10 @@ function zipPackage(outputRoot = 'output-chrome', cb) {
     if (outputRoot === 'output-firefox') {
         pkgName = 'xfehelper.xpi';
     }
-    shell.exec(`cd ${outputRoot}/apps && rm -rf ../${pkgName} && zip -r ../${pkgName} ./* > /dev/null && cd ../../`);
+    // -9 maximizes deflate compression; -X removes platform metadata and -D
+    // omits empty directory entries. Chrome resolves files by their paths, so
+    // these ZIP-level changes do not alter the extension runtime.
+    shell.exec(`cd ${outputRoot}/apps && rm -f ../${pkgName} && zip -9 -X -D -r ../${pkgName} ./* > /dev/null && cd ../../`);
     let size = fs.statSync(`${outputRoot}/${pkgName}`).size;
     size = pretty(size);
     console.log('\n\n================================================================================');

@@ -145,16 +145,6 @@
     $('btnParseSnowflake').addEventListener('click', parseSnowflake);
     $('btnGenNanoId').addEventListener('click', generateNanoIds);
 
-    $('btnDonate').addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        chrome.runtime.sendMessage({
-            type: 'fh-dynamic-any-thing',
-            thing: 'open-donate-modal',
-            params: { toolName: 'uuid-gen' }
-        });
-    });
-
     $('btnOptions').addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();

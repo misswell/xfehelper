@@ -276,7 +276,7 @@ td .x-panel .x-tips {
     transition: transform 0.3s ease;
 }
 
-.x-switch:hover,.x-donate-link:hover {
+.x-switch:hover {
     background-color: #dbeafe;
     color: #1d4ed8;
     text-decoration: none;
@@ -288,12 +288,6 @@ td .x-panel .x-tips {
     transform: rotate(180deg);
     opacity: 1;
 }
-.x-donate-link {
-    margin: 0 10px;
-    font-size: 12px;
-    font-weight: normal;
-}
-
 form {
     display: none;
 }
@@ -361,35 +355,6 @@ form {
 .btn-action:hover {
     background-color: #ced4da;
     color: #212529;
-}
-
-.fh-ai-tool-btn {
-    border: 1px solid rgba(37, 99, 235, 0.24);
-    background: #eef5ff;
-    color: #1d4ed8;
-    font-weight: 600;
-    border-radius: 6px;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-}
-
-.fh-ai-tool-btn:hover,
-.fh-ai-tool-btn:focus {
-    border-color: rgba(37, 99, 235, 0.5);
-    background: #dbeafe;
-    color: #1e40af;
-    transform: translateY(-1px);
-}
-
-.btn-action.fh-ai-tool-btn {
-    padding: 4px 10px;
-    font-size: 12px;
-}
-
-.qr-ai-build-btn {
-    height: 28px;
-    padding: 0 10px;
-    font-size: 12px;
-    line-height: 1;
 }
 
 /* Style for successful copy */
@@ -699,8 +664,7 @@ body.fh-modern .title-text-wrapper-text {
 }
 
 body.fh-modern .qr-header-actions .x-switch,
-body.fh-modern .qr-header-actions .x-other-tools,
-body.fh-modern .qr-header-actions .x-donate-link {
+body.fh-modern .qr-header-actions .x-other-tools {
     margin: 0;
 }
 
@@ -736,11 +700,6 @@ body.fh-modern .qr-header-actions .x-switch:hover {
     color: #1e40af;
     box-shadow: none;
     transform: translateY(-1px);
-}
-
-body.fh-modern .qr-header-actions .x-donate-link,
-body.fh-modern .qr-header-actions .x-donate-link:hover {
-    text-decoration: none;
 }
 
 /* QR workbench taste pass */
@@ -841,8 +800,7 @@ body.fh-modern .qr-header-actions {
 }
 
 body.fh-modern .qr-header-actions .x-switch,
-body.fh-modern .qr-header-actions .x-other-tools,
-body.fh-modern .qr-header-actions .x-donate-link {
+body.fh-modern .qr-header-actions .x-other-tools {
     min-height: 30px;
     padding: 0 11px;
     font-size: 12px;
@@ -952,22 +910,6 @@ body.fh-modern .btn-action:disabled {
     cursor: not-allowed;
     opacity: 0.55;
     transform: none;
-}
-
-body.fh-modern .fh-ai-tool-btn,
-body.fh-modern .btn-action.fh-ai-tool-btn {
-    border-color: rgba(37, 99, 235, 0.26);
-    background: var(--qr-primary-soft);
-    color: var(--qr-primary-strong);
-    font-weight: 800;
-}
-
-body.fh-modern .fh-ai-tool-btn:hover,
-body.fh-modern .fh-ai-tool-btn:focus {
-    border-color: rgba(37, 99, 235, 0.46);
-    background: #dce9ff;
-    color: #1e40af;
-    transform: translateY(-1px);
 }
 
 body.fh-modern #codeSource,
@@ -1187,57 +1129,6 @@ body.fh-modern .decoder-tips i {
     font-weight: 760;
 }
 
-body.fh-modern .qr-ai-panel {
-    margin: 0;
-    border-width: 1px 0 0;
-    border-color: var(--qr-line-soft);
-    border-radius: 0;
-    box-shadow: none;
-}
-
-body.fh-modern .qr-ai-panel-below {
-    margin-top: 12px;
-    border-width: 1px;
-    border-color: var(--qr-line);
-    border-radius: var(--qr-radius);
-    background: var(--qr-card);
-    overflow: hidden;
-}
-
-body.fh-modern .qr-ai-panel .fh-inline-ai-output {
-    max-height: 150px;
-}
-
-body.fh-modern .qr-ai-panel-below .fh-inline-ai-output {
-    max-height: 210px;
-}
-
-body.fh-modern .fh-inline-ai-input {
-    margin-bottom: 8px;
-}
-
-body.fh-modern .fh-inline-ai-section-label {
-    margin-bottom: 5px;
-    color: var(--qr-muted);
-    font-size: 12px;
-    font-weight: 760;
-    line-height: 1.2;
-}
-
-body.fh-modern .fh-inline-ai-input-content {
-    max-height: 110px;
-    background: #f8fafc;
-}
-
-body.fh-modern .qr-ai-panel .fh-inline-ai-head {
-    min-height: 38px;
-    padding: 7px 10px;
-}
-
-body.fh-modern .qr-ai-panel .fh-inline-ai-body {
-    padding: 8px 10px 10px;
-}
-
 body.fh-modern.theme-dark {
     --qr-bg: #131a24;
     --qr-card: #1d2634;
@@ -1279,8 +1170,7 @@ body.fh-modern.theme-dark .qr-left,
 body.fh-modern.theme-dark .qr-center,
 body.fh-modern.theme-dark .qr-right,
 body.fh-modern.theme-dark .decoder-left,
-body.fh-modern.theme-dark .decoder-right,
-body.fh-modern.theme-dark .qr-ai-panel-below {
+body.fh-modern.theme-dark .decoder-right {
     border-color: var(--qr-line);
     background: var(--qr-card);
 }
@@ -1293,8 +1183,7 @@ body.fh-modern.theme-dark .section-title {
 
 body.fh-modern.theme-dark #codeSource,
 body.fh-modern.theme-dark #decodeResult,
-body.fh-modern.theme-dark .upload-panel,
-body.fh-modern.theme-dark .fh-inline-ai-input-content {
+body.fh-modern.theme-dark .upload-panel {
     border-color: var(--qr-line);
     background: #171f2b;
     color: var(--qr-text);
@@ -1337,8 +1226,7 @@ body.fh-modern.theme-dark .x-select {
 
 body.fh-modern.theme-dark .control-item label,
 body.fh-modern.theme-dark .drag-drop-text,
-body.fh-modern.theme-dark .decoder-tips,
-body.fh-modern.theme-dark .fh-inline-ai-section-label {
+body.fh-modern.theme-dark .decoder-tips {
     color: var(--qr-muted);
 }
 
@@ -1364,8 +1252,6 @@ body.fh-modern.theme-dark .qr-recipe-row button:focus {
     color: var(--qr-primary-strong);
 }
 
-body.fh-modern.theme-dark .fh-ai-tool-btn,
-body.fh-modern.theme-dark .btn-action.fh-ai-tool-btn,
 body.fh-modern.theme-dark .qr-header-actions .x-switch,
 body.fh-modern.theme-dark .x-other-tools,
 body.fh-modern.theme-dark .panel-title > .x-switch,
@@ -1377,26 +1263,10 @@ body.fh-modern.theme-dark .fh-tool-actions > .x-switch {
 }
 
 body.fh-modern.theme-dark .qr-header-actions .x-switch:hover,
-body.fh-modern.theme-dark .x-other-tools:hover,
-body.fh-modern.theme-dark .fh-ai-tool-btn:hover,
-body.fh-modern.theme-dark .fh-ai-tool-btn:focus {
+body.fh-modern.theme-dark .x-other-tools:hover {
     border-color: rgba(138, 176, 255, 0.64);
     background: rgba(93, 141, 245, 0.24);
     color: #c7d8ff;
-}
-
-body.fh-modern.theme-dark .x-donate-link,
-body.fh-modern.theme-dark .x-donate-link > a {
-    border-color: rgba(91, 214, 159, 0.42);
-    background: rgba(91, 214, 159, 0.14);
-    color: #8de8ba;
-}
-
-body.fh-modern.theme-dark .x-donate-link:hover,
-body.fh-modern.theme-dark .x-donate-link:hover > a {
-    border-color: rgba(141, 232, 186, 0.58);
-    background: rgba(91, 214, 159, 0.2);
-    color: #b8f4d4;
 }
 
 body.fh-modern.theme-dark #confirm_button,

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">XFeHelper</title>
+  <desc id="desc">Blue and red geometric X and F mark</desc>
+  <defs>
+    <clipPath id="rounded-square">
+      <rect width="128" height="128" rx="24" />
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#rounded-square)">
+    <rect width="64" height="128" fill="#498EF0" />
+    <rect x="64" width="64" height="128" fill="#EA0000" />
+
+    <!-- The X keeps the new XFeHelper name visible at every size. -->
+    <path d="M16 26h12l16 25 16-25h12L51 60l21 42H60L44 69l-16 33H16l21-42z" fill="#fff" />
+
+    <!-- The F mirrors the original FE wordmark while simplifying the small mark. -->
+    <path d="M78 26h35v11H90v17h21v11H90v37H78z" fill="#fff" />
+  </g>
+</svg>

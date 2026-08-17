@@ -19,41 +19,31 @@ textarea.form-control.f-param {
     height:90px;
 }
 
-.ui-widget {
-    font-family: Arial,sans-serif;
-    font-size:14px;
-}
-.ui-widget-content {
-    border:none;
-}
-
-.ui-widget-header {
-    background: #fff;
-    border:none;
-    border-bottom: 1px solid #ccc;
-    border-radius: 0;
-    box-shadow: 0px 2px #f1f1f1;
-}
-
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-    background: none;
-    border:0;
-}
-
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
-    background: none;
-    color: #48b;
-    border:0;
-}
-.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited {
-    color: #48b;
-}
-
 .ui-tabs {
     padding-bottom: 5em;
 }
-.ui-tabs .ui-tabs-nav {
-    margin-top:30px;
+.the-tabs {
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    margin: 30px 0 0;
+    padding: 0 0 1px;
+    list-style: none;
+    border-bottom: 1px solid #ccc;
+}
+.the-tabs li a {
+    display: block;
+    padding: 8px 14px;
+    color: #555;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+}
+.the-tabs li a:hover,
+.the-tabs li.is-active a {
+    color: #48b;
+}
+.the-tabs li.is-active a {
+    border-bottom-color: #48b;
 }
 .table {
     font-size: 14px;
@@ -68,22 +58,6 @@ textarea.form-control.f-param {
     background-color: #f5f5f5;
     border-radius: 6px;
     border: 1px solid #eee;
-}
-
-.fh-ai-tool-btn {
-    margin-left: 8px;
-    border: 1px solid rgba(37, 99, 235, 0.24);
-    border-radius: 4px;
-    background: #eef5ff;
-    color: #1d4ed8;
-    font-weight: 600;
-}
-
-.fh-ai-tool-btn:hover,
-.fh-ai-tool-btn:focus {
-    border-color: rgba(37, 99, 235, 0.5);
-    background: #dbeafe;
-    color: #1e40af;
 }
 
 #jfContent_pre {

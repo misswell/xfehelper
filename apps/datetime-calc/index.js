@@ -1172,19 +1172,6 @@ function loadPatchHotfix() {
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
     TimestampApp.init();
-    // 打赏按钮点击事件
-    var donateBtn = document.querySelector('.x-donate-link');
-    if (donateBtn) {
-        donateBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'datetime-calc' }
-            });
-        });
-    }
     // 更多工具按钮点击事件
     var moreToolsBtn = document.querySelector('.x-other-tools');
     if (moreToolsBtn) {

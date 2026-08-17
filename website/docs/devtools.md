@@ -1,8 +1,8 @@
 # 开发者工具
 
-FeHelper 开发者工具用于创建和维护本地自定义 FH 工具。当前支持两类工具：
+XFeHelper 开发者工具用于创建和维护本地自定义 FH 工具。当前支持两类工具：
 
-- 页面工具：点击后打开 FeHelper 的动态工具页，适合表单、转换器、可视化面板等有独立 UI 的工具。
+- 页面工具：点击后打开 XFeHelper 的动态工具页，适合表单、转换器、可视化面板等有独立 UI 的工具。
 - noPage 工具：点击右键菜单或弹窗入口后直接在当前网页执行，适合页面取数、页面标记、快捷操作等不需要打开新页的工具。
 
 本文示例已经按当前 MV3 版本验证：页面工具会运行在 `dynamic/sandbox.html` 隔离沙箱里，noPage 工具会从 `chrome.storage.local` 读取 `content-script.js` 后注入当前网页。
@@ -52,7 +52,7 @@ fh-doc-qa/
 - `contentScript`：旧字段别名，仍兼容；新工具建议使用 `contentScriptJs`。
 - `updateUrl`：远程更新入口；本地工具可留空。
 
-安装后 FeHelper 会把配置保存到 `DEV-TOOLS:MY-TOOLS`，并自动追加内部字段 `_devTool` / `_enable`。
+安装后 XFeHelper 会把配置保存到 `DEV-TOOLS:MY-TOOLS`，并自动追加内部字段 `_devTool` / `_enable`。
 
 ## 页面工具
 
@@ -107,12 +107,12 @@ window.__FH_DOC_QA_TOOL_RAN__ = true;
 
 运行方式：
 
-1. 打开 FeHelper 配置页里的“开发者工具”。
+1. 打开 XFeHelper 配置页里的“开发者工具”。
 2. 创建本地工具，或导入包含上述文件的 zip 包。
 3. 在弹窗或配置页安装并打开 `fh-doc-qa`。
 4. 页面应显示 `FH_CUSTOM_TOOL_OK`。
 
-实现细节：保存或导入时，FeHelper 会把 `index.html` 中的外链 CSS/JS 转成内部 `<dynamic>` 标记，并把内容保存到 `DYNAMIC_TOOL:<toolId>`、`../<toolId>/index.css`、`../<toolId>/index.js`。运行时 `dynamic/index.html?tool=<toolId>` 会读取这些内容，再放入 sandbox iframe。
+实现细节：保存或导入时，XFeHelper 会把 `index.html` 中的外链 CSS/JS 转成内部 `<dynamic>` 标记，并把内容保存到 `DYNAMIC_TOOL:<toolId>`、`../<toolId>/index.css`、`../<toolId>/index.js`。运行时 `dynamic/index.html?tool=<toolId>` 会读取这些内容，再放入 sandbox iframe。
 
 ## noPage 工具
 
@@ -164,7 +164,7 @@ body[data-fh-doc-no-page="FH_NOPAGE_OK"] {
 运行方式：
 
 1. 安装并启用该工具。
-2. 在普通网页中从 FeHelper 弹窗或右键菜单触发该工具。
+2. 在普通网页中从 XFeHelper 弹窗或右键菜单触发该工具。
 3. 页面 DOM 应出现 `data-fh-doc-no-page="FH_NOPAGE_OK"`。
 
 ## 运行限制

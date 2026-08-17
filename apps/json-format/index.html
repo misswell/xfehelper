@@ -4,7 +4,6 @@
         <title>JSON 格式化工具</title>
 	        <meta charset="UTF-8">
 	        <link rel="stylesheet" href="index.css" />
-	        <link rel="stylesheet" href="../static/css/fh-ai-inline.css" />
 		<script type="text/javascript" src="../static/vendor/evalCore.min.js"></script>
         <script type="text/javascript" src="../static/vendor/vue/vue.js"></script>
     </head>
@@ -101,12 +100,6 @@
                             <button type="button" :class="{active: uiMode === 'lite'}" @click="setUiMode('lite')">Lite</button>
                             <button type="button" :class="{active: uiMode === 'omni'}" @click="setUiMode('omni')">Omni</button>
                         </div>
-                        <button
-                            v-if="!isInUSAFlag"
-                            type="button"
-                            class="fh-lite-support"
-                            @click="openDonateModal($event)"
-                        >请作者喝咖啡</button>
                     </div>
 
                     <div class="fh-toolbar-tail fh-toolbar-tail-omni" v-else>
@@ -114,14 +107,13 @@
                         <button type="button" class="fh-link-action" ref="demoLink1" @click="setDemo">JSON 片段</button>
                         <a class="fh-link-action" href="http://t.weather.sojson.com/api/weather/city/101030100" target="_blank">在线 JSON</a>
                         <a class="fh-link-action" href="/options/index.html?query=数据Mock工具" target="_blank" @click="jumpToMockDataTool($event)">Mock 数据</a>
-                        <button type="button" class="fh-link-action" v-if="!isInUSAFlag" @click="openOptionsPage($event)">工具市场</button>
+                        <button type="button" class="fh-link-action" @click="openOptionsPage($event)">工具市场</button>
                     </nav>
                     <div class="fh-header-tail fh-header-tail-omni">
                         <div class="fh-mode-switch" role="group" aria-label="XFeHelper 模式切换">
                             <button type="button" :class="{active: uiMode === 'lite'}" @click="setUiMode('lite')">Lite</button>
                             <button type="button" :class="{active: uiMode === 'omni'}" @click="setUiMode('omni')">Omni</button>
                         </div>
-                        <button type="button" class="fh-lite-support fh-donate-action" v-if="!isInUSAFlag" @click="openDonateModal($event)">请作者喝咖啡</button>
                     </div>
                     </div>
                 </div>
@@ -216,21 +208,11 @@
                             <h2>解析结果</h2>
                         </div>
                         <div class="fh-pane-actions">
-                            <button type="button" class="fh-pane-ai-action fh-ai-tool-btn" v-if="errorMsg && canUseJsonLocalAi" @click="askAiForJsonRepair" :disabled="jsonAiControlDisabled" :title="jsonAiStatusText">AI 修复</button>
                             <div class="fh-json-error-actions" v-if="errorMsg && (nestedEscapeParse || uiMode === 'lite')">
                                 <button type="button" class="fh-pane-tool-action fh-error-tool-action" v-if="nestedEscapeParse" @click="retryWithoutNestedEscapeParse">关闭嵌套解析后重试</button>
                                 <button type="button" class="fh-pane-tool-action fh-error-tool-action" v-if="uiMode === 'lite'" @click="setUiMode('omni')">切到 Omni</button>
                             </div>
                             <template v-else>
-                                <div class="fh-json-ai-actions" v-if="jsonActionReady && canUseJsonLocalAi" aria-label="JSON AI 生成">
-                                    <button type="button" class="fh-json-ai-trigger" :title="jsonAiStatusText" aria-haspopup="true">AI</button>
-                                    <div class="fh-json-ai-menu" role="menu" aria-label="JSON AI 动作">
-                                        <button type="button" class="fh-pane-ai-action fh-ai-tool-btn" role="menuitem" title="检查字段类型、nullable 和数组一致性" @click="askAiForJsonDerivedOutput('structure')" :disabled="jsonAiControlDisabled">体检</button>
-                                        <button type="button" class="fh-pane-ai-action fh-ai-tool-btn" role="menuitem" title="生成 TypeScript 类型" @click="askAiForJsonDerivedOutput('typescript')" :disabled="jsonAiControlDisabled">TS 类型</button>
-                                        <button type="button" class="fh-pane-ai-action fh-ai-tool-btn" role="menuitem" title="生成 JSON Schema" @click="askAiForJsonDerivedOutput('schema')" :disabled="jsonAiControlDisabled">Schema</button>
-                                        <button type="button" class="fh-pane-ai-action fh-ai-tool-btn" role="menuitem" title="生成 Zod Schema" @click="askAiForJsonDerivedOutput('zod')" :disabled="jsonAiControlDisabled">Zod</button>
-                                    </div>
-                                </div>
                                 <button type="button" class="xjf-btn fh-jsonpath-trigger fh-pane-tool-action" v-if="jsonActionReady" @click="openJsonPathModal">提取</button>
                                 <button type="button" class="xjf-btn fh-jsonpath-trigger fh-pane-tool-action" v-if="tableViewReady" @click="openTableViewModal">表格</button>
                                 <span id="optionBar" class="fh-option-bar" v-show="jsonActionReady"></span>
@@ -246,27 +228,6 @@
                     </div>
                 </section>
             </main>
-
-            <div class="fh-inline-ai-modal-mask" v-if="aiPanel.visible" @click.self="closeAiPanel">
-                <section class="fh-inline-ai-modal" role="dialog" aria-modal="true" aria-labelledby="jsonAiRepairTitle">
-                    <div class="fh-inline-ai-head">
-                        <div class="fh-inline-ai-title">
-                            <strong id="jsonAiRepairTitle">{{aiPanel.title}}</strong>
-                            <span v-if="aiPanel.subtitle">{{aiPanel.subtitle}}</span>
-                        </div>
-                        <div class="fh-inline-ai-actions">
-                            <button type="button" @click="copyAiResult" :disabled="!aiPanel.result">复制</button>
-                            <button type="button" class="fh-inline-ai-apply" v-if="aiPanel.canApply" @click="applyAiPanelResult" :disabled="!aiPanel.result || aiPanel.loading">{{aiPanel.applyLabel}}</button>
-                            <button type="button" class="fh-inline-ai-close" @click="closeAiPanel" aria-label="关闭">&times;</button>
-                        </div>
-                    </div>
-                    <div class="fh-inline-ai-body">
-                        <div class="fh-inline-ai-status">{{aiPanel.statusText}}</div>
-                        <div class="fh-inline-ai-output fh-inline-ai-markdown fh-inline-ai-modal-output" v-if="!aiPanel.error" v-html="aiPanelResultHtml"></div>
-                        <pre class="fh-inline-ai-error fh-inline-ai-modal-output" v-if="aiPanel.error">{{aiPanel.error}}</pre>
-                    </div>
-                </section>
-            </div>
 
             <div id="jsonPathModal" class="jsonpath-modal" v-show="showJsonPathModal" @click="closeJsonPathModal">
                 <div class="jsonpath-modal-content" @click.stop>

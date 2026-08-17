@@ -272,15 +272,5 @@ new Vue({
             }
         },
 
-        // 打开打赏页面
-        openDonateModal: function(event){
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'image-base64' }
-            });
-        },
     }
 });

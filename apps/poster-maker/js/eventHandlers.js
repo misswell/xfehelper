@@ -62,20 +62,6 @@ export function setupEventListeners() {
     });
   }
 
-  // 请作者喝咖啡
-  const donateLink = document.getElementById('donate-link');
-  if (donateLink) {
-    donateLink.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      chrome.runtime.sendMessage({
-        type: 'fh-dynamic-any-thing', 
-        thing: 'open-donate-modal',
-        params: { toolName: 'poster-maker' }
-      });
-    });
-  }
-
   // 工具市场
   const otherTools = document.getElementById('other-tools');
   if (otherTools) {

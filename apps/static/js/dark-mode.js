@@ -53,11 +53,6 @@ var DarkModeMgr = (function () {
 	    -ms-filter: url("#_fh_filter_invert_back");
 	    -webkit-filter: url("#_fh_filter_invert_back");
 	}
-	html[dark-mode="on"] img[src*="donate.jpeg"] {
-	    filter: url("#_fh_filter_invert_grayscale");
-	    -ms-filter: url("#_fh_filter_invert_grayscale");
-	    -webkit-filter: url("#_fh_filter_invert_grayscale");
-	}
 	`;
 
     let isFirefox = /Firefox/.test(navigator.userAgent);

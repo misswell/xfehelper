@@ -99,16 +99,6 @@ new Vue({
             });
         },
 
-        openDonateModal: function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'trans-radix' }
-            });
-        },
-
         openOptionsPage: function(event) {
             event.preventDefault();
             event.stopPropagation();

@@ -1670,16 +1670,6 @@ new Vue({
             document.querySelector('#contabContentBox .example span.clickable').click();
         },
 
-        openDonateModal: function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'crontab' }
-            });
-        },
-
         openOptionsPage: function(event) {  
             event.preventDefault();
             event.stopPropagation();
@@ -1687,4 +1677,3 @@ new Vue({
         }
     }
 });
-

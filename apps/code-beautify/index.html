@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="../static/img/favicon.ico">
 	    <link rel="stylesheet" href="index.css"/>
-	    <link rel="stylesheet" href="../static/css/fh-ai-inline.css"/>
     <link rel="stylesheet" href="../static/css/fehelper-tools.css">
     <script type="text/javascript" src="../static/vendor/evalCore.min.js"></script>
     <script type="text/javascript" src="../static/vendor/vue/vue.js"></script>
@@ -24,7 +23,6 @@
                     <a href="#" @click.prevent="loadExample('xml',$event)" class="example-link">XML示例</a>
                     <a href="#" @click.prevent="loadExample('sql',$event)" class="example-link">SQL示例</a>
                 </span>
-                <a href="#" class="x-donate-link" @click="openDonateModal($event)"><i class="nav-icon">SP</i>请作者喝咖啡</a>
                 <a class="x-other-tools" @click="openOptionsPage($event)"><i class="icon-plus-circle"></i> 工具市场</a>
             </h3>
         </div>
@@ -57,27 +55,8 @@
             </div>
 
             <button id="btnFormat" class="btn btn-success ui-fl-r" @click="format">格式化</button>
-	            <button id="btnAiCode" class="btn fh-ai-tool-btn ui-fl-r ui-mr-10" v-show="showCopyBtn" @click="askAiForCode">AI 解释代码</button>
 	            <button id="btnCopy" class="btn btn-warning ui-fl-r ui-mr-10" @click="copy" v-show="showCopyBtn">复制结果</button>
 	        </div>
-	        <section class="fh-inline-ai-panel" v-if="aiPanel.visible">
-	            <div class="fh-inline-ai-head">
-	                <div class="fh-inline-ai-title">
-	                    <strong>{{aiPanel.title}}</strong>
-	                    <span v-if="aiPanel.subtitle">{{aiPanel.subtitle}}</span>
-	                </div>
-	                <div class="fh-inline-ai-actions">
-	                    <button type="button" @click="copyAiResult" :disabled="!aiPanel.result">复制</button>
-	                    <button type="button" class="fh-inline-ai-apply" v-if="aiPanel.canApply" @click="applyAiPanelResult" :disabled="!aiPanel.result || aiPanel.loading">{{aiPanel.applyLabel}}</button>
-	                    <button type="button" class="fh-inline-ai-close" @click="closeAiPanel" aria-label="关闭">&times;</button>
-	                </div>
-	            </div>
-	            <div class="fh-inline-ai-body">
-	                <div class="fh-inline-ai-status">{{aiPanel.statusText}}</div>
-	                <div class="fh-inline-ai-output fh-inline-ai-markdown" v-if="!aiPanel.error" v-html="aiPanelResultHtml"></div>
-	                <pre class="fh-inline-ai-error" v-if="aiPanel.error">{{aiPanel.error}}</pre>
-	            </div>
-	        </section>
 	        <div class="row" id="jfContent" ref="jfContentBox" v-html="resultContent"></div>
     </div>
 </div>

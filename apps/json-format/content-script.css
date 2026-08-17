@@ -792,41 +792,6 @@ html.fh-jf svg:not(:root) {
 .mod-setting-panel .btns {
     margin-top:20px;
 }
-.mod-setting-panel .setting-support-link {
-    margin: 14px 0 2px;
-    padding: 12px 0 0;
-    border-top: 1px solid #e2e8f0;
-}
-.mod-setting-panel .setting-donate-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #0f8a5f;
-    font-weight: 700;
-    line-height: 1.3;
-    text-decoration: underline;
-    text-decoration-color: rgba(15, 138, 95, 0.42);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-}
-.mod-setting-panel .setting-donate-link:hover {
-    color: #047857;
-    text-decoration-color: currentColor;
-}
-.mod-setting-panel .setting-donate-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    border-radius: 999px;
-    background: #d1fae5;
-    color: #047857;
-    font-size: 10px;
-    font-weight: 800;
-    line-height: 1;
-    text-decoration: none;
-}
 .mod-setting-panel input[name="close"] {
     margin-left:20px;
 }
@@ -858,44 +823,6 @@ html.fh-jf svg:not(:root) {
     position: relative;
     top: -2px;
 }
-.fe-feedback>a.x-other-tools-us {
-    display: none;
-}
-.fe-feedback>.x-donate-link {
-    line-height: 18px;
-    color: #2563eb;
-    cursor: pointer;
-    text-decoration: none;
-    border: none;
-    white-space: nowrap;
-    margin-right: auto;
-    border-radius: 20px;
-    background-color: #eff6ff;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    box-shadow: 0 1px 2px rgba(37, 99, 235, 0.1);
-    padding: 4px 12px;
-    margin: 0 10px;
-    font-size: 12px;
-    font-weight: normal;
-}
-.fe-feedback>.x-donate-link-us {
-    display: none;
-}
-.fe-feedback>.x-donate-link a{
-    color: #333;
-    text-decoration: none;
-}
-.fe-feedback>.x-donate-link:hover {
-    background-color: #dbeafe;
-    color: #1d4ed8;
-    text-decoration: none;
-    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.15);
-    transform: translateY(-1px);
-}
-
-
 .fe-feedback>a.x-other-tools .icon-plus-circle {
     display: inline-block;
     width: 16px;
@@ -1034,7 +961,6 @@ html.fh-jf body.fh-json-compact .fh-viewbar-brand {
 html.fh-jf body.fh-json-compact .fh-viewbar-logo span,
 html.fh-jf body.fh-json-compact .fh-viewbar-title-divider,
 html.fh-jf body.fh-json-compact .fh-viewbar-title,
-html.fh-jf body.fh-json-compact .fh-viewbar-actions > .x-donate-link,
 html.fh-jf body.fh-json-compact .fh-viewbar-actions > .x-other-tools {
     display: none;
 }
@@ -1091,8 +1017,7 @@ html.fh-jf body.fh-json-compact .fh-json-search-count {
 }
 
 html.fh-jf body.fh-ui-mode-lite .fh-omni-tools,
-html.fh-jf body.fh-ui-mode-lite .fh-viewbar-actions > .x-other-tools,
-html.fh-jf body.fh-ui-mode-lite .fh-viewbar-actions > .x-donate-link {
+html.fh-jf body.fh-ui-mode-lite .fh-viewbar-actions > .x-other-tools {
     display: none !important;
 }
 
@@ -1290,8 +1215,7 @@ html.fh-jf .fh-auto-mode-switch button.selected {
     color: #fff;
 }
 
-html.fh-jf .x-toolbar.fh-json-viewbar .fh-viewbar-actions > .x-other-tools,
-html.fh-jf .x-toolbar.fh-json-viewbar .fh-viewbar-actions > .x-donate-link {
+html.fh-jf .x-toolbar.fh-json-viewbar .fh-viewbar-actions > .x-other-tools {
     display: none !important;
 }
 
@@ -1525,7 +1449,6 @@ html.fh-jf .fh-viewbar-actions {
 
 html.fh-jf .fh-viewbar-actions > .x-settings,
 html.fh-jf .fh-viewbar-actions > #toggleBtn,
-html.fh-jf .fh-viewbar-actions > .x-donate-link,
 html.fh-jf .fh-viewbar-actions > .x-other-tools,
 html.fh-jf .fh-viewbar-actions > .xjf-btn {
     position: static;
@@ -1580,52 +1503,15 @@ html.fh-jf .fh-viewbar-actions > #toggleBtn .fh-toggle-label {
     white-space: nowrap !important;
 }
 
-html.fh-jf .fh-viewbar-actions > .x-donate-link {
-    border-color: #bbf7d0;
-    background: #f0fdf4;
-    color: #0f8a5f;
-}
-
-html.fh-jf .fh-viewbar-actions > .x-donate-link:hover {
-    border-color: #86efac;
-    background: #dcfce7;
-    color: #047857;
-    box-shadow: none;
-}
-
-html.fh-jf .fh-viewbar-actions > .x-donate-link a,
 html.fh-jf .fh-viewbar-actions > .x-other-tools,
 html.fh-jf .fh-viewbar-actions > #toggleBtn {
     color: inherit;
     text-decoration: none;
 }
 
-html.fh-jf .fh-viewbar-actions > .x-donate-link a {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap !important;
-}
-
 html.fh-jf .fh-viewbar-actions > .x-settings span,
-html.fh-jf .fh-viewbar-actions > .x-donate-link span,
 html.fh-jf .fh-viewbar-actions > .x-other-tools span {
     white-space: nowrap !important;
-}
-
-html.fh-jf .fh-viewbar-actions .nav-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 17px;
-    height: 17px;
-    border-radius: 999px;
-    background: #d1fae5;
-    color: #047857;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 800;
-    line-height: 1;
 }
 
 html.fh-jf .fh-viewbar-actions > .x-other-tools {
@@ -1639,11 +1525,6 @@ html.fh-jf .fh-viewbar-actions > .x-other-tools:hover {
     border-color: #bfdbfe;
     background: #dbeafe;
     color: #1e40af;
-}
-
-html.fh-jf .fh-viewbar-actions > .x-donate-link-us,
-html.fh-jf .fh-viewbar-actions > .x-other-tools-us {
-    display: none;
 }
 
 html.fh-jf .x-toolbar.fh-json-viewbar .mod-setting-panel {
@@ -1687,7 +1568,6 @@ html.fh-jf .x-toolbar.fh-json-viewbar.t-collapse .fh-viewbar-main,
 html.fh-jf .x-toolbar.fh-json-viewbar.t-collapse .fh-viewbar-actions > .fh-auto-mode-switch,
 html.fh-jf .x-toolbar.fh-json-viewbar.t-collapse .fh-viewbar-actions > #fhJsonExcludeSite,
 html.fh-jf .x-toolbar.fh-json-viewbar.t-collapse .fh-viewbar-actions > .x-settings,
-html.fh-jf .x-toolbar.fh-json-viewbar.t-collapse .fh-viewbar-actions > .x-donate-link,
 html.fh-jf .x-toolbar.fh-json-viewbar.t-collapse .fh-viewbar-actions > .x-other-tools {
     display: none;
 }
@@ -2038,18 +1918,6 @@ html.fh-jf .theme-dark .item .quote {
 html.fh-jf .theme-dark .item .expand {
     color:#fff;
 }
-html.fh-jf .theme-dark .x-donate-link {
-    background-color: #222;
-    border: 1px solid #444;
-    color: #ddd;
-}
-html.fh-jf .theme-dark .x-donate-link:hover {
-    background-color: #333;
-}
-
-html.fh-jf .theme-dark .x-donate-link a {
-    color: #ddd;
-}
 html.fh-jf .theme-dark .x-other-tools {
     background-color: #222;
     border: 1px solid #444;
@@ -2149,18 +2017,6 @@ html.fh-jf body.theme-dark .x-toolbar.fh-json-viewbar .xjf-btn:hover {
     background: #30363d;
     color: #f0f6fc;
 }
-html.fh-jf body.theme-dark .fh-viewbar-actions > .x-donate-link {
-    border-color: #22543d;
-    background: #10291f;
-    color: #7ee2ac;
-}
-html.fh-jf body.theme-dark .fh-viewbar-actions > .x-donate-link a {
-    color: inherit;
-}
-html.fh-jf body.theme-dark .fh-viewbar-actions .nav-icon {
-    background: #164832;
-    color: #9af0bc;
-}
 html.fh-jf body.theme-dark .fh-viewbar-actions > .x-other-tools {
     border-color: #25456f;
     background: #14253f;
@@ -2254,25 +2110,6 @@ html.fh-jf body.theme-dark .mod-setting-panel .xjf-btn:hover {
     border-color: var(--fh-accent);
     background: #273244;
     color: #f0f6fc;
-}
-
-html.fh-jf body.theme-dark .mod-setting-panel .setting-support-link {
-    border-top-color: var(--fh-line);
-}
-
-html.fh-jf body.theme-dark .mod-setting-panel .setting-donate-link {
-    color: var(--fh-accent-strong);
-    text-decoration-color: rgba(138, 176, 255, 0.46);
-}
-
-html.fh-jf body.theme-dark .mod-setting-panel .setting-donate-link:hover {
-    color: #b7ccff;
-    text-decoration-color: currentColor;
-}
-
-html.fh-jf body.theme-dark .mod-setting-panel .setting-donate-badge {
-    background: rgba(93, 141, 245, 0.18);
-    color: var(--fh-accent-strong);
 }
 
 html.fh-jf body.theme-dark #statusBar {

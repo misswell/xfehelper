@@ -1434,21 +1434,7 @@ function initOldVersionFeatures() {
  * 初始化通用功能
  */
 function initCommonFeatures() {
-    // 打赏和其他工具链接
-    const donateLink = document.getElementById('donateLink');
     const otherToolsBtn = document.getElementById('btnOtherTools');
-
-    if (donateLink) {
-        donateLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            chrome.runtime.sendMessage({
-                type: 'fh-dynamic-any-thing',
-                thing: 'open-donate-modal',
-                params: { toolName: 'regexp' }
-            });
-        });
-    }
 
     if (otherToolsBtn) {
         otherToolsBtn.addEventListener('click', function(event) {

@@ -531,42 +531,13 @@ window.downloadPoster = function(format = 'png', quality = 0.9) {
     return;
   }
   
-  // 优化的html2canvas配置
+  // html-to-image 配置：保留原尺寸，再通过 pixelRatio 提升导出清晰度。
   const canvasOptions = {
-    scale: format === 'png' ? 3 : 2, // 提高缩放比例以获得更清晰的输出
-    useCORS: true,
-    allowTaint: true,
+    pixelRatio: format === 'png' ? 3 : 2,
+    cacheBust: true,
     backgroundColor: format === 'png' ? null : 'white',
-    imageTimeout: 30000, // 30秒超时
-    logging: false,
-    onclone: function(clonedDoc) {
-      try {
-        const clonedImages = clonedDoc.getElementsByTagName('img');
-        Array.from(clonedImages).forEach(img => {
-          img.style.width = '100%';
-          img.style.height = '100%';
-          img.style.maxWidth = 'none';
-          img.style.objectFit = 'cover';
-          img.style.imageRendering = 'high-quality';
-          img.style.webkitFontSmoothing = 'antialiased';
-          img.style.mozOsxFontSmoothing = 'grayscale';
-          
-          if (img.naturalWidth && img.naturalHeight) {
-            img.setAttribute('width', img.naturalWidth);
-            img.setAttribute('height', img.naturalHeight);
-          }
-          
-          // 确保图片已加载
-          if (!img.complete) {
-            return new Promise((resolve) => {
-              img.onload = resolve;
-            });
-          }
-        });
-      } catch (error) {
-        console.error('克隆文档时发生错误:', error);
-      }
-    }
+    canvasWidth: previewWidth,
+    canvasHeight: previewHeight
   };
 
   // 使用Promise.race来添加超时处理
@@ -575,7 +546,7 @@ window.downloadPoster = function(format = 'png', quality = 0.9) {
   });
 
   Promise.race([
-    html2canvas(posterPreview, canvasOptions),
+    htmlToImage.toCanvas(posterPreview, canvasOptions),
     timeoutPromise
   ]).then(canvas => {
     try {

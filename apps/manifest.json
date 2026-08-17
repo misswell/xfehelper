@@ -3,7 +3,7 @@
   "short_name": "XFeHelper",
   "version": "2026.7.28",
   "manifest_version": 3,
-  "description": "30+开发者工具集：JSON格式化/BigInt精度/对比、编解码(Base64/URL/Unicode/Gzip/JWT)、时间戳/FILETIME转换、二维码/条形码、UUID/雪花ID生成、代码美化、正则、取色、Postman、进制转换等，全部功能默认启用，开箱即用！",
+  "description": "30+款前端开发工具：JSON格式化、编解码、二维码、代码美化、正则、时间戳、UUID、图表、Excel转换等，全部功能默认启用，开箱即用。",
   "icons": {
     "16": "static/img/fe-16.png",
     "48": "static/img/fe-48.png",
@@ -73,24 +73,6 @@
         ],
         "matches": ["<all_urls>"]
       }
-  ],
-  "content_scripts": [
-    {
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "file://*/*"
-      ],
-      "exclude_globs": [
-        "https://chrome.google.com/*"
-      ],
-      "js": [
-        "static/vendor/jquery/jquery-3.3.1.min.js",
-        "static/vendor/evalCore.min.js"
-      ],
-      "run_at": "document_idle",
-      "all_frames": false
-    }
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'self'",

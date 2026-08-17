@@ -7,18 +7,11 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../static/css/fehelper-tools.css">
     <link rel="icon" href="chart-icon.svg" type="image/svg+xml">
-    <!-- 引入Chart.js及其插件 (改为本地引用) -->
+    <!-- Chart.js 负责常规图表绘制；数据标签由 chart-generator 内置插件处理 -->
     <script src="lib/chart.min.js"></script>
-    <!-- 引入html2canvas库用于导出图片 (改为本地引用) -->
-    <script src="lib/html2canvas.min.js"></script>
-    <!-- 引入XLSX库用于解析Excel文件 (改为本地引用) -->
-    <script src="lib/xlsx.full.min.js"></script>
-    <!-- 引入Hammer.js用于图表交互 (改为本地引用) -->
-    <script src="lib/hammer.min.js"></script>
-    <!-- 引入Chart.js缩放插件 (改为本地引用) -->
-    <script src="lib/chartjs-plugin-zoom.min.js"></script>
-    <!-- 引入Chart.js数据标签插件 -->
-    <script src="lib/chartjs-plugin-datalabels.min.js"></script>
+    <!-- 轻量 XLSX 读取器复用扩展内已有的 fflate -->
+    <script src="../static/vendor/fflate/fflate.min.js"></script>
+    <script src="../static/vendor/xlsx-lite/xlsx-lite.js"></script>
     <script type="text/javascript" src="../static/vendor/evalCore.min.js"></script>
 </head>
 <body class="fh-modern">
@@ -29,7 +22,6 @@
                 <span class="fehelper-text">XFeHelper</span>
             </a>
             <span class="page-title-suffix">：图表生成器</span>
-            <a href="#" class="x-donate-link"><i class="nav-icon">SP</i>请作者喝咖啡</a>
             <a class="x-other-tools"><i class="icon-plus-circle"></i> 工具市场</a>
         </div>
     </div>
@@ -319,4 +311,4 @@
     <script src="main.js"></script>
     <script src="chart-generator.js"></script>
 </body>
-</html> 
+</html>

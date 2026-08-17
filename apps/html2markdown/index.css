@@ -74,8 +74,7 @@ body.fh-modern #pageContainer .fh-tool-header-actions {
 
 body.fh-modern #pageContainer .fh-tool-header-actions .x-xdemo,
 body.fh-modern #pageContainer .fh-tool-header-actions .x-other-tools,
-body.fh-modern #pageContainer .fh-tool-header-actions .x-switch,
-body.fh-modern #pageContainer .fh-tool-header-actions .x-donate-link {
+body.fh-modern #pageContainer .fh-tool-header-actions .x-switch {
     flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
@@ -101,12 +100,6 @@ body.fh-modern #pageContainer .fh-tool-header-actions .x-switch {
     color: #1d4ed8;
 }
 
-body.fh-modern #pageContainer .fh-tool-header-actions .x-donate-link {
-    border-color: #bbf7d0;
-    background: #f0fdf4;
-    color: #0f8a5f;
-}
-
 body.fh-modern #pageContainer .fh-tool-header-actions .x-xdemo:hover,
 body.fh-modern #pageContainer .fh-tool-header-actions .x-other-tools:hover {
     border-color: #cbd5e1;
@@ -119,13 +112,6 @@ body.fh-modern #pageContainer .fh-tool-header-actions .x-switch:hover {
     border-color: #93c5fd;
     background: #dbeafe;
     color: #1e40af;
-    text-decoration: none !important;
-}
-
-body.fh-modern #pageContainer .fh-tool-header-actions .x-donate-link:hover {
-    border-color: #86efac;
-    background: #dcfce7;
-    color: #047857;
     text-decoration: none !important;
 }
 
@@ -842,24 +828,12 @@ body.fh-modern.theme-dark #pageContainer .fh-tool-header-actions .x-switch {
     color: var(--fh-text);
 }
 
-body.fh-modern.theme-dark #pageContainer .fh-tool-header-actions .x-donate-link {
-    border-color: rgba(91, 214, 159, 0.28);
-    background: rgba(91, 214, 159, 0.14);
-    color: #8ee8bd;
-}
-
 body.fh-modern.theme-dark #pageContainer .fh-tool-header-actions .x-xdemo:hover,
 body.fh-modern.theme-dark #pageContainer .fh-tool-header-actions .x-other-tools:hover,
 body.fh-modern.theme-dark #pageContainer .fh-tool-header-actions .x-switch:hover {
     border-color: #5d8df5;
     background: #263650;
     color: #c9dcff;
-}
-
-body.fh-modern.theme-dark #pageContainer .fh-tool-header-actions .x-donate-link:hover {
-    border-color: rgba(91, 214, 159, 0.44);
-    background: rgba(91, 214, 159, 0.2);
-    color: #b7f5d5;
 }
 
 body.fh-modern.theme-dark .mod-toolbar {

@@ -21,7 +21,6 @@
                         <a href="#" @click.prevent="loadExample('js',$event)">js示例</a>
                         <a href="#" @click.prevent="loadExample('css',$event)">css示例</a>
                     </span>
-                    <a href="#" class="x-donate-link" @click="openDonateModal($event)"><i class="nav-icon">SP</i>请作者喝咖啡</a>
                     <a class="x-other-tools" @click="openOptionsPage($event)"><i class="icon-plus-circle"></i> 工具市场</a>
                 </h3>
             </div>
@@ -61,15 +60,7 @@
         </div>
     </div>
 
-    <script src="../static/vendor/uglifyjs3/minify.js"></script>
-    <script src="../static/vendor/uglifyjs3/utils.js"></script>
-    <script src="../static/vendor/uglifyjs3/ast.js"></script>
-    <script src="../static/vendor/uglifyjs3/parse.js"></script>
-    <script src="../static/vendor/uglifyjs3/transform.js"></script>
-    <script src="../static/vendor/uglifyjs3/scope.js"></script>
-    <script src="../static/vendor/uglifyjs3/output.js"></script>
-    <script src="../static/vendor/uglifyjs3/compress.js"></script>
-    <script type="text/javascript" src="uglifyjs3.js"></script>
+    <script type="text/javascript" src="uglifyjs3-lite.js"></script>
 
     <script src="../static/vendor/codemirror/codemirror.js"></script>
     <script src="../static/vendor/codemirror/javascript.js"></script>
@@ -79,7 +70,7 @@
     <script src="../static/vendor/codemirror/active-line.js"></script>
     <script src="../static/vendor/codemirror/matchbrackets.js"></script>
     <script src="../static/vendor/codemirror/placeholder.js"></script>
-    <script type="text/javascript" src="htmlminifier.min.js"></script>
+    <script type="text/javascript" src="htmlminifier-lite.js"></script>
     <script src="../static/js/tool-layout.js"></script>
     <script type="text/javascript" src="index.js"></script>
 

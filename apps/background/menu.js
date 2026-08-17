@@ -36,7 +36,7 @@ const TOOL_MENU_GROUPS = [
     {
         id: 'efficiency-generate',
         title: '效率与生成',
-        tools: ['aiagent', 'sticky-notes', 'mock-data', 'password', 'crontab', 'loan-rate', 'naotu', 'excel2json']
+        tools: ['sticky-notes', 'mock-data', 'password', 'crontab', 'loan-rate', 'naotu', 'excel2json']
     }
 ];
 

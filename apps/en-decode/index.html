@@ -5,7 +5,6 @@
         <meta charset="UTF-8">
         <link rel="shortcut icon" href="../static/img/favicon.ico">
         <link rel="stylesheet" href="index.css" />
-        <link rel="stylesheet" href="../static/css/fh-ai-inline.css" />
         <link rel="stylesheet" href="../static/css/fehelper-tools.css">
         <script type="text/javascript" src="../static/vendor/evalCore.min.js"></script>
         <script type="text/javascript" src="../static/vendor/vue/vue.js"></script>
@@ -18,7 +17,6 @@
                 <h3 class="panel-title">
                     <a href="https://fehelper.com" target="_blank" class="x-a-high">
                         <img src="../static/img/fe-16.png" alt="XFeHelper"/> XFeHelper</a>：信息编解码工具
-                    <a href="#" class="x-donate-link" @click="openDonateModal($event)"><i class="nav-icon">SP</i>请作者喝咖啡</a>
                     <a class="x-other-tools" @click="openOptionsPage($event)"><i class="icon-plus-circle"></i> 工具市场</a>
                 </h3>
             </div>
@@ -88,29 +86,9 @@
 
                 <div class="encode-actions">
                     <input id="btnCodeChange" class="btn btn-sm btn-success" type="button" value="转换" @click="convert()">
-                    <input id="btnAiDecode" class="btn btn-sm fh-ai-tool-btn" type="button" value="AI解码" @click="askAiForEncode()" :disabled="!sourceContent.trim()">
                     <input id="btnCodeClear" class="btn btn-sm btn-warning" type="button" value="清空" @click="clear()">
                 </div>
             </aside>
-
-            <section class="fh-inline-ai-panel" v-if="aiPanel.visible">
-                <div class="fh-inline-ai-head">
-                    <div class="fh-inline-ai-title">
-                        <strong>{{aiPanel.title}}</strong>
-                        <span v-if="aiPanel.subtitle">{{aiPanel.subtitle}}</span>
-                    </div>
-                    <div class="fh-inline-ai-actions">
-                        <button type="button" @click="copyAiResult" :disabled="!aiPanel.result">复制</button>
-                        <button type="button" class="fh-inline-ai-apply" v-if="aiPanel.canApply" @click="applyAiPanelResult" :disabled="!aiPanel.result || !aiBestCandidate">{{aiPanel.applyLabel}}</button>
-                        <button type="button" class="fh-inline-ai-close" @click="closeAiPanel" aria-label="关闭">&times;</button>
-                    </div>
-                </div>
-                <div class="fh-inline-ai-body">
-                    <div class="fh-inline-ai-status">{{aiPanel.statusText}}</div>
-                    <div class="fh-inline-ai-output fh-inline-ai-markdown" v-if="!aiPanel.error" v-html="aiPanelResultHtml"></div>
-                    <pre class="fh-inline-ai-error" v-if="aiPanel.error">{{aiPanel.error}}</pre>
-                </div>
-            </section>
 
             <section id="rst" class="encode-card encode-result-card" v-show="resultContent.length || urlResult">
                 <div class="encode-card-head">
@@ -149,7 +127,7 @@
             </section>
         </div>
     </div>
-    <script type="text/javascript" src="he.js"></script>
+    <script type="text/javascript" src="html-entities-lite.js"></script>
     <script src="../static/vendor/jquery/jquery-3.3.1.min.js"></script>
     <script src="../static/js/tool-layout.js"></script>
     <script type="module" src="index.js"></script>

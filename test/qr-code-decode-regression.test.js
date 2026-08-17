@@ -13,11 +13,9 @@ describe('qr-code decode regression guards', () => {
         expect(source).toContain('_decodeImageWithRetries');
         expect(source).toContain('_createQrDecodeCandidates');
         expect(source).toContain('_drawQrDecodeCanvas');
-        expect(source).toContain('BrowserQRCodeReader');
-        expect(source).toContain('BrowserMultiFormatReader(hints, 300)');
-        expect(source).toContain('DecodeHintType.TRY_HARDER');
-        expect(source).toContain('DecodeHintType.POSSIBLE_FORMATS');
-        expect(source).toContain('BarcodeFormat.QR_CODE');
+        expect(source).toContain('_decodeQrSource');
+        expect(source).toContain("typeof jsQR !== 'function'");
+        expect(source).toContain("inversionAttempts: 'attemptBoth'");
         expect(source).toContain("label: 'padded'");
         expect(source).toContain("label: 'scaled'");
         expect(source).toContain("label: 'contrast'");

@@ -179,7 +179,7 @@
         if (node === brandLink || node.contains(brandLink)) {
             return false;
         }
-        if (node.matches('.x-donate-link, .x-other-tools, .x-switch, .fh-nav-btn, .example-links, .x-xdemo, .x-toolbox, .x-gmt-setting, .fh-tool-actions, .qr-header-actions, .navbar-actions, .mod-head-actions')) {
+        if (node.matches('.x-other-tools, .x-switch, .fh-nav-btn, .example-links, .x-xdemo, .x-toolbox, .x-gmt-setting, .fh-tool-actions, .qr-header-actions, .navbar-actions, .mod-head-actions')) {
             return true;
         }
         if (node.matches('button')) {
@@ -229,38 +229,22 @@
             .trim();
     }
 
-    function isDonateAction(node) {
-        return isElement(node) && node.matches('.x-donate-link');
-    }
-
-    function moveDonateActionsLast(container) {
-        if (!container || !isElement(container)) {
-            return;
-        }
-        Array.from(container.children)
-            .filter(isDonateAction)
-            .forEach(node => container.appendChild(node));
-    }
-
     function appendActions(actionsWrap, actionNodes) {
         let regularNodes = [];
-        let donateNodes = [];
 
         actionNodes.forEach(node => {
             if (!node || isBlankNode(node)) {
                 return;
             }
-            (isDonateAction(node) ? donateNodes : regularNodes).push(node);
+            regularNodes.push(node);
         });
 
-        regularNodes.concat(donateNodes).forEach(node => {
+        regularNodes.forEach(node => {
             if (isElement(node)) {
                 node.classList.add('fh-header-action-item');
-                moveDonateActionsLast(node);
             }
             actionsWrap.appendChild(node);
         });
-        moveDonateActionsLast(actionsWrap);
     }
 
     function rebuildHeader(container, brandLink, titleNodes, actionNodes) {
