@@ -128,6 +128,30 @@ var DarkModeMgr = (function () {
         return readLocalSetting(key);
     }
 
+    function hasDarkModePreference(settings) {
+        if (settings && (
+            Object.prototype.hasOwnProperty.call(settings, 'AUTO_DARK_MODE') ||
+            Object.prototype.hasOwnProperty.call(settings, 'ALWAYS_DARK_MODE')
+        )) {
+            return true;
+        }
+
+        try {
+            return localStorage.getItem('AUTO_DARK_MODE') !== null ||
+                localStorage.getItem('ALWAYS_DARK_MODE') !== null;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function shouldUsePageDefaultDark() {
+        let body = document.body;
+        return !!(
+            body &&
+            body.getAttribute('data-default-theme') === 'dark'
+        );
+    }
+
     function readChromeStorageSettings(callback) {
         if (
             typeof chrome === 'undefined' ||
@@ -164,6 +188,9 @@ var DarkModeMgr = (function () {
         }
 
         if (!auto) {
+            if (!hasDarkModePreference(settings) && shouldUsePageDefaultDark()) {
+                return true;
+            }
             return false;
         }
 

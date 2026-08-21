@@ -2449,3 +2449,935 @@ body.theme-dark .fh-tableview-kv td:first-child {
         flex-direction: column;
     }
 }
+
+/*
+ * Ink + Volt JSON workbench
+ *
+ * This is the page-level skin for the standalone formatter. It deliberately
+ * keeps the formatter's DOM and CodeMirror contract intact while replacing
+ * the legacy blue-gray card language with the extension's new dark-first
+ * workbench system.
+ */
+html.fh-jf {
+    --fh-bg: #0d120f;
+    --fh-surface: #151c17;
+    --fh-surface-raised: #1b251d;
+    --fh-surface-soft: #202c22;
+    --fh-line: #304233;
+    --fh-line-strong: #526652;
+    --fh-line-soft: #263529;
+    --fh-text: #eef5e9;
+    --fh-muted: #a0afa0;
+    --fh-faint: #758576;
+    --fh-accent: #c6f36c;
+    --fh-accent-strong: #a9d856;
+    --fh-accent-soft: rgba(198, 243, 108, 0.14);
+    --fh-accent-ink: #172315;
+    --fh-success: #a5d969;
+    --fh-danger: #ef8586;
+    --fh-danger-soft: rgba(239, 133, 134, 0.13);
+    --fh-warning: #e0a662;
+    --fh-warning-soft: rgba(224, 166, 98, 0.13);
+    --fh-radius: 16px;
+    --fh-radius-sm: 10px;
+    --fh-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+    --fh-shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.16);
+    --fh-mono: "SFMono-Regular", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+    --fh-sans: "Avenir Next", "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+    color-scheme: dark;
+}
+
+html.fh-jf body.theme-default {
+    --fh-bg: #eef3ed;
+    --fh-surface: #f8fbf7;
+    --fh-surface-raised: #ffffff;
+    --fh-surface-soft: #e4ece2;
+    --fh-line: #c8d5c5;
+    --fh-line-strong: #9dad98;
+    --fh-line-soft: #dbe5d8;
+    --fh-text: #172218;
+    --fh-muted: #5e6d61;
+    --fh-faint: #7d8b7e;
+    --fh-accent: #b9ea63;
+    --fh-accent-strong: #93c447;
+    --fh-accent-soft: rgba(185, 234, 99, 0.24);
+    --fh-accent-ink: #172315;
+    --fh-success: #5c9c36;
+    --fh-danger: #ba535a;
+    --fh-danger-soft: rgba(186, 83, 90, 0.12);
+    --fh-warning: #a66c2c;
+    --fh-warning-soft: rgba(166, 108, 44, 0.12);
+    --fh-shadow: 0 18px 42px rgba(39, 58, 39, 0.08);
+    --fh-shadow-soft: 0 10px 26px rgba(39, 58, 39, 0.06);
+    color-scheme: light;
+}
+
+html.fh-jf body.theme-dark {
+    --fh-bg: #0d120f;
+    --fh-surface: #151c17;
+    --fh-surface-raised: #1b251d;
+    --fh-surface-soft: #202c22;
+    --fh-line: #304233;
+    --fh-line-strong: #526652;
+    --fh-line-soft: #263529;
+    --fh-text: #eef5e9;
+    --fh-muted: #a0afa0;
+    --fh-faint: #758576;
+    --fh-accent: #c6f36c;
+    --fh-accent-strong: #a9d856;
+    --fh-accent-soft: rgba(198, 243, 108, 0.14);
+    --fh-accent-ink: #172315;
+    --fh-success: #a5d969;
+    --fh-danger: #ef8586;
+    --fh-danger-soft: rgba(239, 133, 134, 0.13);
+    --fh-warning: #e0a662;
+    --fh-warning-soft: rgba(224, 166, 98, 0.13);
+    --fh-radius: 16px;
+    --fh-radius-sm: 10px;
+    --fh-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+    --fh-shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.16);
+    --fh-mono: "SFMono-Regular", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+    --fh-sans: "Avenir Next", "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+    color-scheme: dark;
+}
+
+html.fh-jf,
+html.fh-jf body {
+    min-width: 0;
+    min-height: 100%;
+    background: var(--fh-bg) !important;
+    color: var(--fh-text) !important;
+    font-family: var(--fh-sans);
+}
+
+html.fh-jf body {
+    font-size: 13px;
+    overflow-x: hidden;
+}
+
+html.fh-jf ::selection {
+    background: var(--fh-accent);
+    color: var(--fh-accent-ink);
+}
+
+html.fh-jf .fh-json-tool {
+    position: relative;
+    isolation: isolate;
+    min-height: 100dvh;
+    padding: clamp(12px, 2vw, 26px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background:
+        radial-gradient(circle at 88% -8%, rgba(198, 243, 108, 0.11), transparent 27rem),
+        radial-gradient(circle at 4% 108%, rgba(101, 151, 109, 0.09), transparent 32rem),
+        var(--fh-bg);
+}
+
+html.fh-jf body.theme-default .fh-json-tool {
+    background:
+        radial-gradient(circle at 88% -8%, rgba(185, 234, 99, 0.22), transparent 27rem),
+        radial-gradient(circle at 4% 108%, rgba(129, 176, 122, 0.12), transparent 32rem),
+        var(--fh-bg);
+}
+
+html.fh-jf .fh-json-tool::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.18;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: linear-gradient(to bottom, black, transparent 78%);
+}
+
+html.fh-jf body.theme-default .fh-json-tool::before {
+    opacity: 0.1;
+    background-image: linear-gradient(rgba(32, 57, 38, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(32, 57, 38, 0.08) 1px, transparent 1px);
+}
+
+html.fh-jf .fh-top-shell {
+    display: grid;
+    gap: 10px;
+}
+
+html.fh-jf .fh-tool-header,
+html.fh-jf .fh-command-bar,
+html.fh-jf .fh-pane,
+html.fh-jf .jsonpath-modal-content {
+    border: 1px solid var(--fh-line) !important;
+    background: color-mix(in srgb, var(--fh-surface) 96%, transparent) !important;
+    box-shadow: var(--fh-shadow-soft) !important;
+}
+
+html.fh-jf .fh-tool-header {
+    position: sticky;
+    top: 12px;
+    z-index: 30;
+    min-height: 62px;
+    padding: 12px 14px;
+    border-radius: var(--fh-radius);
+    align-items: center;
+    gap: 18px;
+    backdrop-filter: blur(18px);
+}
+
+html.fh-jf .fh-brand-block {
+    gap: 9px;
+}
+
+html.fh-jf .fh-brand {
+    height: 32px;
+    gap: 8px;
+    color: var(--fh-text) !important;
+    font-size: 14px;
+    font-weight: 850;
+    letter-spacing: -0.02em;
+}
+
+html.fh-jf .fh-brand img {
+    width: 22px;
+    height: 22px;
+    padding: 4px;
+    border: 1px solid var(--fh-line-strong);
+    border-radius: 8px;
+    background: var(--fh-surface-raised);
+}
+
+html.fh-jf .fh-title-divider {
+    color: var(--fh-line-strong);
+    font-size: 17px;
+}
+
+html.fh-jf .fh-brand-block h1 {
+    color: var(--fh-text);
+    font-size: 17px;
+    font-weight: 860;
+    letter-spacing: -0.04em;
+}
+
+html.fh-jf .fh-mode-note {
+    margin-top: 2px;
+    color: var(--fh-muted);
+    font-size: 11px;
+}
+
+html.fh-jf .fh-window-note-trigger,
+html.fh-jf .fh-window-note-chip,
+html.fh-jf .fh-window-note-popover,
+html.fh-jf .fh-window-note-editor input,
+html.fh-jf .fh-window-note-editor button {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html.fh-jf .fh-window-note-trigger,
+html.fh-jf .fh-window-note-chip {
+    border-radius: 999px;
+}
+
+html.fh-jf .fh-window-note-trigger:hover,
+html.fh-jf .fh-window-note-trigger:focus-visible,
+html.fh-jf .fh-window-note-control.has-note .fh-window-note-trigger {
+    border-color: var(--fh-accent) !important;
+    background: var(--fh-accent-soft) !important;
+    color: var(--fh-accent) !important;
+}
+
+html.fh-jf .fh-window-note-popover {
+    box-shadow: var(--fh-shadow) !important;
+}
+
+html.fh-jf .fh-header-right,
+html.fh-jf .fh-toolbar-tail-omni {
+    gap: 8px;
+}
+
+html.fh-jf .fh-header-actions {
+    gap: 6px;
+}
+
+html.fh-jf .fh-link-action {
+    height: 30px;
+    padding: 0 12px;
+    border-color: var(--fh-line) !important;
+    border-radius: 999px;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-muted) !important;
+    font-size: 11px;
+    font-weight: 780;
+}
+
+html.fh-jf .fh-link-action:hover,
+html.fh-jf .fh-link-action:focus-visible {
+    border-color: var(--fh-accent) !important;
+    background: var(--fh-accent-soft) !important;
+    color: var(--fh-text) !important;
+    transform: translateY(-1px);
+}
+
+html.fh-jf .fh-mode-switch {
+    padding: 3px;
+    border-color: var(--fh-line) !important;
+    border-radius: 999px;
+    background: var(--fh-surface-soft) !important;
+}
+
+html.fh-jf .fh-mode-switch button {
+    min-width: 54px;
+    height: 28px;
+    border-radius: 999px;
+    color: var(--fh-muted);
+    font-size: 11px;
+    font-weight: 820;
+}
+
+html.fh-jf .fh-mode-switch button.active {
+    background: var(--fh-accent) !important;
+    color: var(--fh-accent-ink) !important;
+    box-shadow: none;
+}
+
+html.fh-jf .x-toolbar.fh-command-bar {
+    position: sticky;
+    top: 86px;
+    z-index: 25;
+    min-height: 52px;
+    padding: 8px;
+    gap: 8px;
+    border-radius: var(--fh-radius);
+    background: color-mix(in srgb, var(--fh-surface-raised) 94%, transparent) !important;
+    backdrop-filter: blur(18px);
+}
+
+html.fh-jf .fh-command-group {
+    min-height: 34px;
+    padding: 3px;
+    gap: 3px;
+    border-color: var(--fh-line) !important;
+    border-radius: 12px;
+    background: var(--fh-surface-soft) !important;
+}
+
+html.fh-jf .fh-command-primary {
+    border-color: var(--fh-accent) !important;
+    background: var(--fh-accent-soft) !important;
+}
+
+html.fh-jf .xjf-btn,
+html.fh-jf #btnLeftRight,
+html.fh-jf #btnUpDown,
+html.fh-jf .fh-segmented > button {
+    min-height: 28px;
+    height: 28px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--fh-muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+html.fh-jf .xjf-btn:hover,
+html.fh-jf #btnLeftRight:hover,
+html.fh-jf #btnUpDown:hover,
+html.fh-jf .fh-segmented > button:hover {
+    border-color: var(--fh-line-strong) !important;
+    background: var(--fh-surface-raised) !important;
+    color: var(--fh-text) !important;
+    transform: translateY(-1px);
+}
+
+html.fh-jf .xjf-btn:focus-visible,
+html.fh-jf #btnLeftRight:focus-visible,
+html.fh-jf #btnUpDown:focus-visible,
+html.fh-jf .fh-segmented > button:focus-visible,
+html.fh-jf .fh-switch:focus-within,
+html.fh-jf .fh-radio-pill:focus-within {
+    outline: 2px solid var(--fh-accent) !important;
+    outline-offset: 2px;
+}
+
+html.fh-jf .fh-btn-primary,
+html.fh-jf .fh-jsonpath-trigger,
+html.fh-jf .jsonpath-header-btn:not(.xjf-btn-examples) {
+    border-color: var(--fh-accent) !important;
+    background: var(--fh-accent) !important;
+    color: var(--fh-accent-ink) !important;
+}
+
+html.fh-jf .fh-btn-primary:hover,
+html.fh-jf .fh-jsonpath-trigger:hover,
+html.fh-jf .jsonpath-header-btn:not(.xjf-btn-examples):hover {
+    border-color: var(--fh-accent-strong) !important;
+    background: var(--fh-accent-strong) !important;
+    color: var(--fh-accent-ink) !important;
+}
+
+html.fh-jf .fh-btn-secondary {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html.fh-jf #btnLeftRight.selected,
+html.fh-jf #btnUpDown.selected,
+html.fh-jf .fh-segmented > button.selected,
+html.fh-jf .fh-radio-pill input:checked + span {
+    border-color: var(--fh-accent) !important;
+    background: var(--fh-accent) !important;
+    color: var(--fh-accent-ink) !important;
+}
+
+html.fh-jf .fh-switch {
+    height: 30px;
+    padding: 0 9px 0 5px;
+    border-radius: 9px;
+    color: var(--fh-muted);
+    font-weight: 750;
+}
+
+html.fh-jf .fh-switch:hover {
+    background: var(--fh-surface-raised);
+    color: var(--fh-text);
+}
+
+html.fh-jf .fh-switch-ui {
+    width: 27px;
+    height: 16px;
+    border-color: var(--fh-line-strong);
+    background: var(--fh-surface);
+}
+
+html.fh-jf .fh-switch-ui::after {
+    width: 10px;
+    height: 10px;
+    background: var(--fh-muted);
+    box-shadow: none;
+}
+
+html.fh-jf .fh-switch input:checked + .fh-switch-ui {
+    border-color: var(--fh-accent) !important;
+    background: var(--fh-accent) !important;
+}
+
+html.fh-jf .fh-switch input:checked + .fh-switch-ui::after {
+    background: var(--fh-accent-ink);
+    transform: translateX(10px);
+}
+
+html.fh-jf .fh-lite-sort-trigger,
+html.fh-jf .fh-lite-sort-options {
+    border-color: var(--fh-line) !important;
+    border-radius: 9px;
+    background: var(--fh-surface-raised) !important;
+    color: var(--fh-text) !important;
+}
+
+html.fh-jf .fh-lite-sort-trigger strong {
+    color: var(--fh-accent) !important;
+}
+
+html.fh-jf .fh-workspace {
+    flex: 1 1 auto;
+    min-height: min(760px, calc(100dvh - 170px));
+    gap: 12px;
+    overflow: visible;
+}
+
+html.fh-jf .wp-json.layout-left-right .fh-workspace {
+    grid-template-columns: minmax(340px, 0.92fr) minmax(0, 1.28fr);
+}
+
+html.fh-jf .wp-json.layout-up-down .fh-workspace {
+    grid-template-rows: minmax(340px, 0.9fr) minmax(440px, 1.2fr);
+}
+
+html.fh-jf .fh-pane {
+    min-height: 0;
+    overflow: hidden;
+    border-radius: var(--fh-radius);
+    background: var(--fh-surface) !important;
+}
+
+html.fh-jf .fh-pane-header {
+    min-height: 52px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--fh-line);
+    background: var(--fh-surface-raised) !important;
+}
+
+html.fh-jf .fh-pane-header h2 {
+    margin: 0;
+    color: var(--fh-text);
+    font-size: 13px;
+    font-weight: 860;
+    letter-spacing: -0.01em;
+}
+
+html.fh-jf .fh-pane-header h2::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    margin-right: 8px;
+    display: inline-block;
+    border-radius: 2px;
+    background: var(--fh-accent);
+    vertical-align: 1px;
+}
+
+html.fh-jf .fh-pane-actions {
+    gap: 6px;
+}
+
+html.fh-jf .fh-pane-actions > .fh-pane-tool-action,
+html.fh-jf .fh-pane-actions .fh-option-bar .xjf-btn {
+    height: 30px;
+    padding: 0 12px;
+    border-color: var(--fh-line) !important;
+    border-radius: 9px;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-muted) !important;
+    font-size: 11px;
+    font-weight: 820;
+}
+
+html.fh-jf .fh-pane-actions > .fh-pane-tool-action:hover,
+html.fh-jf .fh-pane-actions > .fh-pane-tool-action:focus-visible,
+html.fh-jf .fh-pane-actions .fh-option-bar .xjf-btn:hover,
+html.fh-jf .fh-pane-actions .fh-option-bar .xjf-btn:focus-visible {
+    border-color: var(--fh-accent) !important;
+    background: var(--fh-accent-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html.fh-jf .fh-node-edit-banner {
+    margin: 10px 12px 0;
+    padding: 8px 10px;
+    border: 1px solid var(--fh-warning);
+    border-radius: var(--fh-radius-sm);
+    background: var(--fh-warning-soft);
+    color: var(--fh-warning);
+}
+
+html.fh-jf .fh-node-edit-banner .fh-node-restore-action,
+html.fh-jf .fh-json-error-actions .fh-error-tool-action {
+    border-color: var(--fh-line) !important;
+    border-radius: 8px;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html.fh-jf .panel-txt,
+html.fh-jf .rst-item {
+    min-height: 0;
+    margin: 0;
+    padding: 12px;
+    background: var(--fh-surface) !important;
+}
+
+html.fh-jf .fh-input-pane .CodeMirror,
+html.fh-jf .fh-input-pane #jsonSource,
+html.fh-jf .fh-result-pane #modJsonResult,
+html.fh-jf .fh-result-pane #jfContent,
+html.fh-jf .fh-result-pane #jfContent_pre {
+    border: 1px solid var(--fh-line) !important;
+    border-radius: 12px;
+    background: var(--fh-surface-raised) !important;
+    color: var(--fh-text) !important;
+}
+
+html.fh-jf .fh-input-pane .CodeMirror {
+    height: 100% !important;
+    min-height: 360px;
+    font-family: var(--fh-mono);
+    font-size: 13px;
+    line-height: 1.62;
+}
+
+html.fh-jf .fh-input-pane .CodeMirror-scroll {
+    min-height: 360px;
+    padding: 10px 0;
+}
+
+html.fh-jf .fh-input-pane .CodeMirror-gutters {
+    border-right: 1px solid var(--fh-line);
+    background: var(--fh-surface) !important;
+}
+
+html.fh-jf .fh-input-pane .CodeMirror-linenumber {
+    padding: 0 10px 0 8px;
+    color: var(--fh-faint);
+}
+
+html.fh-jf .fh-input-pane .CodeMirror-cursor {
+    border-left-color: var(--fh-accent);
+}
+
+html.fh-jf .fh-input-pane .CodeMirror-selected,
+html.fh-jf .fh-input-pane .CodeMirror-focused .CodeMirror-selected {
+    background: var(--fh-accent-soft) !important;
+}
+
+html.fh-jf .fh-input-pane .CodeMirror-activeline-background {
+    background: var(--fh-accent-soft) !important;
+}
+
+html.fh-jf .fh-result-pane .rst-item {
+    height: calc(100% - 52px);
+    min-height: 0;
+    overflow: auto;
+}
+
+html.fh-jf #jfContent,
+html.fh-jf #jfContent_pre {
+    min-height: 100%;
+    margin: 0;
+    padding: 14px 16px;
+    overflow: auto;
+    font-family: var(--fh-mono);
+    font-size: 13px;
+    line-height: 1.64;
+}
+
+html.fh-jf #jfContent_pre:empty {
+    display: none;
+}
+
+html.fh-jf #formattingMsg {
+    padding: 26px;
+    color: var(--fh-muted);
+    text-align: center;
+}
+
+html.fh-jf .fh-empty-state {
+    max-width: 360px;
+    margin: 12vh auto 0;
+    padding: 28px 20px;
+    border: 1px dashed var(--fh-line-strong);
+    border-radius: var(--fh-radius);
+    background: var(--fh-surface-soft);
+    text-align: left;
+}
+
+html.fh-jf .fh-empty-mark {
+    width: fit-content;
+    margin-bottom: 18px;
+    padding: 5px 8px;
+    border: 1px solid var(--fh-accent);
+    border-radius: 7px;
+    background: var(--fh-accent-soft);
+    color: var(--fh-accent);
+    font-family: var(--fh-mono);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+html.fh-jf .fh-empty-state strong {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--fh-text);
+    font-size: 15px;
+}
+
+html.fh-jf .fh-empty-state p {
+    margin: 0;
+    color: var(--fh-muted);
+    line-height: 1.6;
+}
+
+html.fh-jf .fh-error-state,
+html.fh-jf .fh-raw-source-fallback {
+    margin: 8px;
+    border-color: var(--fh-danger) !important;
+    border-radius: var(--fh-radius-sm);
+    background: var(--fh-danger-soft) !important;
+    box-shadow: none !important;
+}
+
+html.fh-jf .fh-error-badge {
+    background: var(--fh-danger-soft);
+    color: var(--fh-danger);
+}
+
+html.fh-jf .fh-error-state strong,
+html.fh-jf .fh-error-message,
+html.fh-jf .fh-raw-source-fallback-head strong {
+    color: var(--fh-danger);
+}
+
+html.fh-jf .jsonpath-modal {
+    z-index: 100;
+    padding: clamp(14px, 4vw, 44px);
+    background: rgba(8, 12, 9, 0.72) !important;
+    backdrop-filter: blur(16px);
+}
+
+html.fh-jf body.theme-default .jsonpath-modal {
+    background: rgba(26, 39, 28, 0.42) !important;
+}
+
+html.fh-jf .jsonpath-modal-content {
+    width: min(1120px, 100%);
+    max-height: min(850px, calc(100dvh - 48px));
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+html.fh-jf .jsonpath-modal-header {
+    min-height: 74px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--fh-line);
+    background: var(--fh-surface-raised) !important;
+}
+
+html.fh-jf .jsonpath-modal-header h3 {
+    margin: 0;
+    color: var(--fh-text);
+    font-size: 18px;
+    letter-spacing: -0.04em;
+}
+
+html.fh-jf .jsonpath-modal-header p {
+    margin-top: 5px;
+    color: var(--fh-muted);
+}
+
+html.fh-jf .jsonpath-modal-close {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--fh-line) !important;
+    border-radius: 999px;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-muted) !important;
+}
+
+html.fh-jf .jsonpath-modal-close:hover,
+html.fh-jf .jsonpath-modal-close:focus-visible {
+    border-color: var(--fh-accent) !important;
+    background: var(--fh-accent-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html.fh-jf .jsonpath-modal-body {
+    padding: 18px 20px 22px;
+    overflow: auto;
+    background: var(--fh-surface) !important;
+}
+
+html.fh-jf .jsonpath-query-panel,
+html.fh-jf .jsonpath-query-info,
+html.fh-jf .jsonpath-output-panel,
+html.fh-jf .jsonpath-results,
+html.fh-jf .jsonpath-example-item,
+html.fh-jf .fh-tableview-scroll {
+    border-color: var(--fh-line) !important;
+    border-radius: 12px;
+    background: var(--fh-surface-raised) !important;
+}
+
+html.fh-jf .jsonpath-query-panel {
+    padding: 12px;
+}
+
+html.fh-jf .jsonpath-query-panel label {
+    color: var(--fh-muted);
+    font-size: 11px;
+    font-weight: 820;
+}
+
+html.fh-jf .jsonpath-header-input,
+html.fh-jf .xjf-input {
+    min-height: 36px;
+    border-color: var(--fh-line) !important;
+    border-radius: 9px;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+    font-family: var(--fh-mono);
+}
+
+html.fh-jf .jsonpath-header-input:focus,
+html.fh-jf .xjf-input:focus {
+    border-color: var(--fh-accent) !important;
+    box-shadow: 0 0 0 3px var(--fh-accent-soft) !important;
+}
+
+html.fh-jf .jsonpath-output-header,
+html.fh-jf .jsonpath-result-row-head {
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-muted);
+}
+
+html.fh-jf .jsonpath-output-value,
+html.fh-jf .jsonpath-result-value {
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text);
+    font-family: var(--fh-mono);
+}
+
+html.fh-jf .jsonpath-result-row {
+    border-bottom-color: var(--fh-line-soft);
+}
+
+html.fh-jf .jsonpath-result-row-head span,
+html.fh-jf .jsonpath-result-index,
+html.fh-jf .jsonpath-result-path,
+html.fh-jf .jsonpath-result-type,
+html.fh-jf .jsonpath-result-value,
+html.fh-jf .jsonpath-result-row-actions {
+    border-right-color: var(--fh-line-soft);
+}
+
+html.fh-jf .jsonpath-result-path code,
+html.fh-jf .jsonpath-example-path code,
+html.fh-jf .jsonpath-query-info code,
+html.fh-jf .fh-tableview-meta code {
+    border-color: var(--fh-line);
+    border-radius: 6px;
+    background: var(--fh-accent-soft);
+    color: var(--fh-accent);
+}
+
+html.fh-jf .jsonpath-example-item:hover {
+    border-color: var(--fh-accent) !important;
+    background: var(--fh-accent-soft) !important;
+    transform: translateY(-1px);
+}
+
+html.fh-jf .jsonpath-no-results,
+html.fh-jf .jsonpath-error {
+    border-color: var(--fh-line-strong);
+    border-radius: var(--fh-radius-sm);
+    background: var(--fh-surface-soft);
+}
+
+html.fh-jf .jsonpath-error .error-msg {
+    color: var(--fh-danger);
+}
+
+html.fh-jf .fh-tableview-table {
+    background: var(--fh-surface-raised);
+    color: var(--fh-text);
+}
+
+html.fh-jf .fh-tableview-table th,
+html.fh-jf .fh-tableview-table td {
+    border-color: var(--fh-line-soft);
+}
+
+html.fh-jf .fh-tableview-table th {
+    background: var(--fh-surface-soft);
+    color: var(--fh-text);
+}
+
+html.fh-jf .fh-tableview-kv td:first-child {
+    background: var(--fh-surface-soft);
+}
+
+@media (max-width: 1040px) {
+    html.fh-jf .fh-tool-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    html.fh-jf .fh-header-right,
+    html.fh-jf .fh-header-right-omni,
+    html.fh-jf .fh-toolbar-tail-omni {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    html.fh-jf .fh-header-actions-omni {
+        justify-content: flex-start;
+    }
+
+    html.fh-jf .fh-workspace {
+        min-height: 760px;
+    }
+
+    html.fh-jf .wp-json.layout-left-right .fh-workspace {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(360px, 0.9fr) minmax(500px, 1.2fr);
+    }
+}
+
+@media (max-width: 680px) {
+    html.fh-jf .fh-json-tool {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    html.fh-jf .fh-tool-header {
+        position: static;
+        min-height: 0;
+        padding: 12px;
+    }
+
+    html.fh-jf .fh-header-right,
+    html.fh-jf .fh-toolbar-tail-omni,
+    html.fh-jf .fh-header-actions,
+    html.fh-jf .fh-inline-command-bar {
+        width: 100%;
+        max-width: none;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    html.fh-jf .x-toolbar.fh-command-bar {
+        position: static;
+        overflow-x: auto;
+    }
+
+    html.fh-jf .fh-workspace,
+    html.fh-jf .wp-json.layout-left-right .fh-workspace,
+    html.fh-jf .wp-json.layout-up-down .fh-workspace {
+        min-height: 0;
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(360px, 46dvh) minmax(480px, 60dvh);
+    }
+
+    html.fh-jf .fh-pane-header {
+        min-height: 48px;
+        padding: 10px 12px;
+    }
+
+    html.fh-jf .panel-txt,
+    html.fh-jf .rst-item {
+        padding: 8px;
+    }
+
+    html.fh-jf .fh-input-pane .CodeMirror,
+    html.fh-jf .fh-input-pane .CodeMirror-scroll {
+        min-height: 300px;
+    }
+
+    html.fh-jf .jsonpath-modal {
+        padding: 10px;
+    }
+
+    html.fh-jf .jsonpath-modal-content {
+        max-height: calc(100dvh - 20px);
+    }
+
+    html.fh-jf .jsonpath-modal-header,
+    html.fh-jf .jsonpath-modal-body {
+        padding: 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.fh-jf *,
+    html.fh-jf *::before,
+    html.fh-jf *::after {
+        animation-duration: 1ms !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+    }
+}

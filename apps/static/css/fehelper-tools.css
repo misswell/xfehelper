@@ -1559,3 +1559,869 @@ body.fh-modern img[alt="loading"] {
         margin-left: 0;
     }
 }
+
+/*
+ * XFeHelper visual system v2
+ * Shared by every fh-modern tool page. The UUID workbench established the
+ * language; this layer brings the same ink-and-volt system to legacy tools
+ * without changing their DOM contracts or behaviour.
+ */
+body.fh-modern {
+    --fh-page-pad: clamp(14px, 2.4vw, 30px);
+    --fh-page-gap: 16px;
+    --fh-header-height: 64px;
+    --fh-bg: #edf2ec;
+    --fh-panel: #f7faf5;
+    --fh-panel-solid: #f7faf5;
+    --fh-surface-soft: #e3ebe1;
+    --fh-line: #c9d5c5;
+    --fh-line-strong: #9dad98;
+    --fh-text: #162218;
+    --fh-muted: #5d6d61;
+    --fh-faint: #7f8e80;
+    --fh-subtle: #e8eee5;
+    --fh-primary: #b9ea63;
+    --fh-primary-deep: #9cc94f;
+    --fh-primary-soft: rgba(185, 234, 99, 0.22);
+    --fh-success: #79b848;
+    --fh-success-soft: rgba(121, 184, 72, 0.16);
+    --fh-warning: #bd7d36;
+    --fh-warning-soft: rgba(189, 125, 54, 0.15);
+    --fh-danger: #c65d61;
+    --fh-danger-soft: rgba(198, 93, 97, 0.14);
+    --fh-primary-ink: #172315;
+    --primary: #b9ea63;
+    --primary-deep: #9cc94f;
+    --tag-bg: rgba(185, 234, 99, 0.22);
+    --tag-color: #36541d;
+    --bg-grad-1: rgba(185, 234, 99, 0.24);
+    --bg-grad-2: rgba(132, 183, 128, 0.08);
+    --fh-radius: 18px;
+    --fh-shadow: 0 18px 42px rgba(39, 58, 39, 0.07);
+    --fh-mono: "SFMono-Regular", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+    color-scheme: light;
+    background:
+        radial-gradient(circle at 88% -6%, rgba(185, 234, 99, 0.28), transparent 31%),
+        var(--fh-bg);
+    color: var(--fh-text);
+    font-family: "Avenir Next", "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+}
+
+body.fh-modern.theme-dark {
+    --fh-bg: #101611;
+    --fh-panel: #182019;
+    --fh-panel-solid: #182019;
+    --fh-surface-soft: #202b20;
+    --fh-line: #334234;
+    --fh-line-strong: #536552;
+    --fh-text: #eff4e9;
+    --fh-muted: #a2afa0;
+    --fh-faint: #758374;
+    --fh-subtle: #1d281e;
+    --fh-primary: #c6f36c;
+    --fh-primary-deep: #a9d856;
+    --fh-primary-soft: rgba(198, 243, 108, 0.15);
+    --fh-success: #a4d965;
+    --fh-success-soft: rgba(164, 217, 101, 0.15);
+    --fh-warning: #e0a662;
+    --fh-warning-soft: rgba(224, 166, 98, 0.14);
+    --fh-danger: #ef8586;
+    --fh-danger-soft: rgba(239, 133, 134, 0.14);
+    --fh-primary-ink: #172315;
+    --primary: #c6f36c;
+    --primary-deep: #a9d856;
+    --tag-bg: rgba(198, 243, 108, 0.15);
+    --tag-color: #c6f36c;
+    --bg-grad-1: rgba(198, 243, 108, 0.12);
+    --bg-grad-2: rgba(100, 150, 100, 0.08);
+    --fh-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+    color-scheme: dark;
+    background:
+        radial-gradient(circle at 88% -6%, rgba(198, 243, 108, 0.13), transparent 30%),
+        var(--fh-bg) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern .wrapper,
+body.fh-modern > .container,
+body.fh-modern main.container,
+body.fh-modern > .main-container {
+    width: min(100% - (var(--fh-page-pad) * 2), 1440px);
+    max-width: 1440px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+body.fh-modern .wrapper {
+    padding-top: var(--fh-page-pad);
+    padding-bottom: 36px;
+}
+
+body.fh-modern .panel-heading,
+body.fh-modern .page-header,
+body.fh-modern .main-navbar,
+body.fh-modern .fh-unified-header {
+    position: sticky;
+    top: 12px;
+    z-index: 20;
+    min-height: var(--fh-header-height) !important;
+    margin: 0 0 var(--fh-page-gap) !important;
+    padding: 12px 16px !important;
+    border: 1px solid var(--fh-line) !important;
+    border-radius: var(--fh-radius) !important;
+    background: color-mix(in srgb, var(--fh-panel) 94%, transparent) !important;
+    box-shadow: var(--fh-shadow) !important;
+    backdrop-filter: blur(14px);
+}
+
+body.fh-modern .panel-title,
+body.fh-modern .page-header,
+body.fh-modern .navbar-brand,
+body.fh-modern .mod-head-actions,
+body.fh-modern .fh-tool-layout-ready {
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern .fh-tool-brand-link,
+body.fh-modern .x-a-high,
+body.fh-modern .header-link,
+body.fh-modern .brand-link {
+    min-height: 34px;
+    color: var(--fh-text) !important;
+    font-weight: 850;
+}
+
+body.fh-modern .fh-tool-brand-link img,
+body.fh-modern .x-a-high img,
+body.fh-modern .header-link img,
+body.fh-modern .brand-link img,
+body.fh-modern .navbar-brand img {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid var(--fh-line-strong);
+    border-radius: 10px;
+    background: var(--fh-panel-solid);
+}
+
+body.fh-modern .fh-tool-title,
+body.fh-modern .page-title-suffix,
+body.fh-modern .brand-subtitle,
+body.fh-modern .title-text-wrapper-text {
+    color: var(--fh-text) !important;
+    font-size: 17px;
+    font-weight: 850;
+    letter-spacing: -0.035em;
+}
+
+body.fh-modern .panel-body,
+body.fh-modern .tool-panel,
+body.fh-modern .app-container,
+body.fh-modern .main-container,
+body.fh-modern .tab-container,
+body.fh-modern .preview-panel,
+body.fh-modern .regex-visual-debugger,
+body.fh-modern .search-container,
+body.fh-modern .x-wrapper,
+body.fh-modern .main-content,
+body.fh-modern .chart-container,
+body.fh-modern .tips-panel,
+body.fh-modern .input-panel,
+body.fh-modern .output-panel,
+body.fh-modern .control-panel,
+body.fh-modern .result-panel,
+body.fh-modern .settings-panel,
+body.fh-modern .result-section,
+body.fh-modern .input-section,
+body.fh-modern .option-group,
+body.fh-modern .template-selection,
+body.fh-modern .editor-panel,
+body.fh-modern .advanced-options,
+body.fh-modern .x-panel,
+body.fh-modern .x-section,
+body.fh-modern .encode-card,
+body.fh-modern .encode-actions,
+body.fh-modern .tab-content,
+body.fh-modern .category-section,
+body.fh-modern .visual-result,
+body.fh-modern .color-module,
+body.fh-modern .mod-inputs,
+body.fh-modern .box-result,
+body.fh-modern .quick-actions-module,
+body.fh-modern .input-time-module,
+body.fh-modern .current-time-module,
+body.fh-modern .parse-results-module,
+body.fh-modern .input-zone,
+body.fh-modern .output-zone,
+body.fh-modern .result-content,
+body.fh-modern .info-card,
+body.fh-modern .performance-section,
+body.fh-modern .performance-card,
+body.fh-modern .main-inner,
+body.fh-modern .tab-header,
+body.fh-modern .mod-toolbar,
+body.fh-modern .tbl-editor,
+body.fh-modern .special-layout,
+body.fh-modern .preview-container {
+    border-color: var(--fh-line) !important;
+    border-radius: var(--fh-radius) !important;
+    background: var(--fh-panel) !important;
+    color: var(--fh-text) !important;
+    box-shadow: var(--fh-shadow) !important;
+}
+
+body.fh-modern .panel-body,
+body.fh-modern .tool-panel,
+body.fh-modern .preview-panel,
+body.fh-modern .input-panel,
+body.fh-modern .output-panel,
+body.fh-modern .control-panel,
+body.fh-modern .result-panel,
+body.fh-modern .settings-panel,
+body.fh-modern .option-group,
+body.fh-modern .x-section,
+body.fh-modern .info-card {
+    padding: 22px !important;
+}
+
+body.fh-modern h1,
+body.fh-modern h2,
+body.fh-modern h3,
+body.fh-modern h4,
+body.fh-modern h5,
+body.fh-modern label,
+body.fh-modern .panel-subtitle,
+body.fh-modern .x-panel-title,
+body.fh-modern .category-title,
+body.fh-modern .module-label,
+body.fh-modern .x-title {
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern h1,
+body.fh-modern h2,
+body.fh-modern h3,
+body.fh-modern h4 {
+    letter-spacing: -0.035em;
+}
+
+body.fh-modern .panel-subtitle,
+body.fh-modern .x-panel-title,
+body.fh-modern h4.x-wd,
+body.fh-modern .input-panel h2,
+body.fh-modern .output-panel h2,
+body.fh-modern .control-panel h2,
+body.fh-modern .result-panel h2,
+body.fh-modern .tool-panel h2,
+body.fh-modern .preview-panel h2,
+body.fh-modern .option-group h3,
+body.fh-modern .settings-section h4 {
+    min-height: 0;
+    margin: 0 0 16px;
+    padding: 0 0 11px;
+    border-bottom: 1px solid var(--fh-line);
+    font-size: 15px;
+    font-weight: 850;
+}
+
+body.fh-modern h4.x-wd::after,
+body.fh-modern .panel-subtitle::after,
+body.fh-modern .x-panel-title::after,
+body.fh-modern .input-panel h2::after,
+body.fh-modern .output-panel h2::after,
+body.fh-modern .control-panel h2::after,
+body.fh-modern .result-panel h2::after,
+body.fh-modern .tool-panel h2::after,
+body.fh-modern .preview-panel h2::after,
+body.fh-modern .option-group h3::after {
+    display: none;
+}
+
+body.fh-modern textarea,
+body.fh-modern input[type="text"],
+body.fh-modern input[type="number"],
+body.fh-modern input[type="password"],
+body.fh-modern input[type="search"],
+body.fh-modern input[type="url"],
+body.fh-modern input[type="email"],
+body.fh-modern select,
+body.fh-modern .form-control,
+body.fh-modern .x-input,
+body.fh-modern .fh-input,
+body.fh-modern .fh-textarea,
+body.fh-modern .fh-select {
+    min-height: 42px;
+    border: 1px solid var(--fh-line-strong) !important;
+    border-radius: 11px !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+    box-shadow: none !important;
+    outline: 0;
+}
+
+body.fh-modern textarea {
+    padding: 12px 14px;
+}
+
+body.fh-modern textarea::placeholder,
+body.fh-modern input::placeholder,
+body.fh-modern .form-control::placeholder {
+    color: var(--fh-faint) !important;
+}
+
+body.fh-modern textarea:focus,
+body.fh-modern input:focus,
+body.fh-modern select:focus,
+body.fh-modern .form-control:focus,
+body.fh-modern .x-input:focus,
+body.fh-modern .fh-input:focus,
+body.fh-modern .fh-textarea:focus,
+body.fh-modern .fh-select:focus {
+    border-color: var(--fh-primary) !important;
+    box-shadow: 0 0 0 3px var(--fh-primary-soft) !important;
+}
+
+body.fh-modern input[readonly],
+body.fh-modern textarea[readonly],
+body.fh-modern input[disabled],
+body.fh-modern textarea[disabled],
+body.fh-modern select[disabled] {
+    background: var(--fh-subtle) !important;
+    color: var(--fh-muted) !important;
+}
+
+body.fh-modern .btn,
+body.fh-modern .fh-btn,
+body.fh-modern button {
+    min-height: 40px;
+    border-radius: 11px;
+    font-weight: 800;
+    transition: transform 160ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+body.fh-modern .btn-primary,
+body.fh-modern .btn-success,
+body.fh-modern .btn-info,
+body.fh-modern .fh-btn.fh-btn-primary,
+body.fh-modern #upload,
+body.fh-modern #generate-btn {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary) !important;
+    color: var(--fh-primary-ink) !important;
+    box-shadow: none !important;
+}
+
+body.fh-modern .btn-default,
+body.fh-modern .btn-secondary,
+body.fh-modern .btn-outline,
+body.fh-modern .btn-action,
+body.fh-modern .btn-copy,
+body.fh-modern .quick-btn,
+body.fh-modern .fh-btn:not(.fh-btn-primary) {
+    border-color: var(--fh-line-strong) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+    box-shadow: none !important;
+}
+
+body.fh-modern .btn-warning {
+    border-color: var(--fh-warning) !important;
+    background: var(--fh-warning-soft) !important;
+    color: var(--fh-warning) !important;
+}
+
+body.fh-modern .btn-danger,
+body.fh-modern .alert-danger {
+    border-color: var(--fh-danger) !important;
+    background: var(--fh-danger-soft) !important;
+    color: var(--fh-danger) !important;
+}
+
+body.fh-modern .btn:hover,
+body.fh-modern .fh-btn:hover,
+body.fh-modern button:hover {
+    transform: translateY(-1px);
+}
+
+body.fh-modern .btn-primary:hover,
+body.fh-modern .btn-success:hover,
+body.fh-modern .btn-info:hover,
+body.fh-modern .fh-btn.fh-btn-primary:hover,
+body.fh-modern #upload:hover,
+body.fh-modern #generate-btn:hover {
+    border-color: var(--fh-primary-deep) !important;
+    background: var(--fh-primary-deep) !important;
+}
+
+body.fh-modern .x-other-tools,
+body.fh-modern .panel-title > .x-switch,
+body.fh-modern .page-header > .x-switch,
+body.fh-modern .fh-tool-actions > .x-switch,
+body.fh-modern .fh-nav-btn,
+body.fh-modern .fh-tool-header-actions .example-links a,
+body.fh-modern .fh-tool-header-actions .x-toolbox a,
+body.fh-modern .x-xdemo {
+    border-color: var(--fh-line-strong) !important;
+    border-radius: 999px !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern .x-other-tools:hover,
+body.fh-modern .panel-title > .x-switch:hover,
+body.fh-modern .page-header > .x-switch:hover,
+body.fh-modern .fh-tool-actions > .x-switch:hover,
+body.fh-modern .fh-nav-btn:hover,
+body.fh-modern .x-xdemo:hover {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern .fh-page-tip,
+body.fh-modern .alert,
+body.fh-modern .well,
+body.fh-modern .fh-page-tip {
+    border-color: var(--fh-line) !important;
+    border-radius: 13px !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern .table,
+body.fh-modern table,
+body.fh-modern table.table {
+    overflow: hidden;
+    border: 1px solid var(--fh-line) !important;
+    border-radius: 14px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--fh-panel) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern .table th,
+body.fh-modern .table td,
+body.fh-modern table th,
+body.fh-modern table td {
+    border-color: var(--fh-line) !important;
+}
+
+body.fh-modern .table thead th,
+body.fh-modern table thead th,
+body.fh-modern thead th {
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern pre,
+body.fh-modern code,
+body.fh-modern kbd,
+body.fh-modern .x-code,
+body.fh-modern .rst-code,
+body.fh-modern .result-code,
+body.fh-modern .output-code,
+body.fh-modern .CodeMirror,
+body.fh-modern .CodeMirror-scroll,
+body.fh-modern .CodeMirror-gutters {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern .CodeMirror {
+    border-radius: 13px !important;
+}
+
+body.fh-modern .CodeMirror-cursor {
+    border-left-color: var(--fh-primary) !important;
+}
+
+body.fh-modern .CodeMirror-selected,
+body.fh-modern .CodeMirror-activeline-background {
+    background: var(--fh-primary-soft) !important;
+}
+
+body.fh-modern .cm-keyword,
+body.fh-modern .cm-property { color: #8bd35e !important; }
+body.fh-modern .cm-string { color: #d6e86d !important; }
+body.fh-modern .cm-number { color: #e2b66d !important; }
+body.fh-modern .cm-comment { color: var(--fh-faint) !important; }
+
+body.fh-modern a,
+body.fh-modern .reg_link {
+    color: var(--fh-text);
+}
+
+body.fh-modern a:hover,
+body.fh-modern .reg_link:hover {
+    color: var(--fh-primary-deep);
+}
+
+body.fh-modern ::selection {
+    background: var(--fh-primary);
+    color: var(--fh-primary-ink);
+}
+
+body.fh-modern :focus-visible {
+    outline: 3px solid var(--fh-primary-soft) !important;
+    outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+    body.fh-modern .wrapper,
+    body.fh-modern > .container,
+    body.fh-modern main.container,
+    body.fh-modern .main-navbar {
+        width: calc(100% - 24px);
+        margin-right: 12px;
+        margin-left: 12px;
+    }
+
+    body.fh-modern .wrapper {
+        padding-top: 12px;
+        padding-bottom: 24px;
+    }
+
+    body.fh-modern .panel-heading,
+    body.fh-modern .page-header,
+    body.fh-modern .main-navbar,
+    body.fh-modern .fh-unified-header {
+        top: 8px;
+        min-height: 56px !important;
+        padding: 10px 12px !important;
+    }
+
+    body.fh-modern .panel-body,
+    body.fh-modern .tool-panel,
+    body.fh-modern .preview-panel,
+    body.fh-modern .input-panel,
+    body.fh-modern .output-panel,
+    body.fh-modern .control-panel,
+    body.fh-modern .result-panel,
+    body.fh-modern .settings-panel,
+    body.fh-modern .option-group,
+    body.fh-modern .x-section,
+    body.fh-modern .info-card {
+        padding: 16px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.fh-modern *,
+    body.fh-modern *::before,
+    body.fh-modern *::after {
+        animation-duration: 1ms !important;
+        transition-duration: 1ms !important;
+    }
+}
+
+/* QR workbench surfaces sit outside the generic panel vocabulary. Keep them
+ * in the same Ink + Volt system when their page-specific stylesheet loads. */
+body.fh-modern .qr-topbar,
+body.fh-modern .qr-card,
+body.fh-modern .qr-left,
+body.fh-modern .qr-center,
+body.fh-modern .qr-right,
+body.fh-modern .decoder-left,
+body.fh-modern .decoder-right {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-panel) !important;
+    color: var(--fh-text) !important;
+    box-shadow: var(--fh-shadow) !important;
+}
+
+body.fh-modern .qr-topbar .panel-heading,
+body.fh-modern .qr-card .section-title {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern .qr-card .control-panel,
+body.fh-modern .qr-card .upload-panel,
+body.fh-modern #codeSource,
+body.fh-modern #decodeResult,
+body.fh-modern #opt_width,
+body.fh-modern #opt_fc,
+body.fh-modern .x-select {
+    border-color: var(--fh-line-strong) !important;
+    background-color: var(--fh-surface-soft) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern.theme-dark .qr-card .x-select,
+body.fh-modern.theme-dark .qr-header-actions .x-switch,
+body.fh-modern.theme-dark .x-other-tools {
+    border-color: var(--fh-primary) !important;
+    background-color: var(--fh-surface-soft) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern.theme-dark .qr-header-actions .x-switch:hover,
+body.fh-modern.theme-dark .x-other-tools:hover {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern #codeSource:focus,
+body.fh-modern #decodeResult:focus,
+body.fh-modern #opt_width:focus,
+body.fh-modern #opt_fc:focus,
+body.fh-modern .x-select:focus,
+body.fh-modern .upload-panel:hover {
+    border-color: var(--fh-primary) !important;
+    box-shadow: 0 0 0 3px var(--fh-primary-soft) !important;
+}
+
+body.fh-modern .qr-card .control-item label,
+body.fh-modern .qr-card .drag-drop-text,
+body.fh-modern .qr-card .decoder-tips {
+    color: var(--fh-muted) !important;
+}
+
+body.fh-modern .qr-card .btn-action,
+body.fh-modern .qr-card .qr-recipe-row button,
+body.fh-modern .qr-card .x-icons label {
+    border-color: var(--fh-line-strong) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+body.fh-modern .qr-card .btn-action:hover,
+body.fh-modern .qr-card .qr-recipe-row button:hover,
+body.fh-modern .qr-card .x-icons label:hover {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary-soft) !important;
+}
+
+body.fh-modern #confirm_button,
+body.fh-modern #upload {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary) !important;
+    color: var(--fh-primary-ink) !important;
+    box-shadow: none !important;
+}
+
+body.fh-modern #confirm_button:hover,
+body.fh-modern #upload:hover {
+    border-color: var(--fh-primary-deep) !important;
+    background: var(--fh-primary-deep) !important;
+}
+
+body.fh-modern #preview {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+}
+
+/* Final contrast pass. A few legacy tool rules carry a more specific
+ * theme-dark selector, so the shared system closes those escape hatches here
+ * with the same tokens and a single Volt accent. */
+html body.fh-modern.theme-dark .panel-heading,
+html body.fh-modern.theme-dark .page-header,
+html body.fh-modern.theme-dark .main-navbar,
+html body.fh-modern.theme-dark .encode-card-head,
+html body.fh-modern.theme-dark .section-title,
+html body.fh-modern.theme-dark .tab-btn.active,
+html body.fh-modern.theme-dark thead th,
+html body.fh-modern.theme-dark .table thead th,
+html body.fh-modern.theme-dark table thead th {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-modern.theme-dark textarea,
+html body.fh-modern.theme-dark input[type="text"],
+html body.fh-modern.theme-dark input[type="number"],
+html body.fh-modern.theme-dark input[type="password"],
+html body.fh-modern.theme-dark input[type="search"],
+html body.fh-modern.theme-dark input[type="url"],
+html body.fh-modern.theme-dark input[type="email"],
+html body.fh-modern.theme-dark select,
+html body.fh-modern.theme-dark .form-control,
+html body.fh-modern.theme-dark .x-input,
+html body.fh-modern.theme-dark .fh-input,
+html body.fh-modern.theme-dark .fh-textarea,
+html body.fh-modern.theme-dark .fh-select,
+html body.fh-modern.theme-dark .input-textarea,
+html body.fh-modern.theme-dark .output-textarea,
+html body.fh-modern.theme-dark .mod-textarea,
+html body.fh-modern.theme-dark .time-item .time-display,
+html body.fh-modern.theme-dark .CodeMirror {
+    border-color: var(--fh-line-strong) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+    box-shadow: none !important;
+}
+
+html body.fh-modern.theme-dark textarea:focus,
+html body.fh-modern.theme-dark input:focus,
+html body.fh-modern.theme-dark select:focus,
+html body.fh-modern.theme-dark .form-control:focus,
+html body.fh-modern.theme-dark .x-input:focus,
+html body.fh-modern.theme-dark .fh-input:focus,
+html body.fh-modern.theme-dark .fh-textarea:focus,
+html body.fh-modern.theme-dark .fh-select:focus,
+html body.fh-modern.theme-dark .input-textarea:focus,
+html body.fh-modern.theme-dark .output-textarea:focus {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-surface-raised) !important;
+    box-shadow: 0 0 0 3px var(--fh-primary-soft) !important;
+}
+
+html body.fh-modern.theme-dark textarea::placeholder,
+html body.fh-modern.theme-dark input::placeholder,
+html body.fh-modern.theme-dark .form-control::placeholder {
+    color: var(--fh-faint) !important;
+}
+
+html body.fh-modern.theme-dark input[readonly],
+html body.fh-modern.theme-dark textarea[readonly],
+html body.fh-modern.theme-dark input[disabled],
+html body.fh-modern.theme-dark textarea[disabled],
+html body.fh-modern.theme-dark select[disabled] {
+    background: var(--fh-subtle) !important;
+    color: var(--fh-muted) !important;
+}
+
+html body.fh-modern.theme-dark .btn-default,
+html body.fh-modern.theme-dark .btn-secondary,
+html body.fh-modern.theme-dark .btn-outline,
+html body.fh-modern.theme-dark .btn-action,
+html body.fh-modern.theme-dark .radix-tips,
+html body.fh-modern.theme-dark .encode-pill span,
+html body.fh-modern.theme-dark .x-xdemo,
+html body.fh-modern.theme-dark .tab-btn,
+html body.fh-modern.theme-dark .regex-item,
+html body.fh-modern.theme-dark .btn-copy,
+html body.fh-modern.theme-dark .quick-btn,
+html body.fh-modern.theme-dark ul.box-tools li.x-addtool,
+html body.fh-modern.theme-dark .x-sidebar ul li,
+html body.fh-modern.theme-dark .nav-tabs > li > a,
+html body.fh-modern.theme-dark .example-links a,
+html body.fh-modern.theme-dark .x-toolbox a {
+    border-color: var(--fh-line-strong) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+    box-shadow: none !important;
+}
+
+html body.fh-modern.theme-dark .btn-primary,
+html body.fh-modern.theme-dark .btn-success,
+html body.fh-modern.theme-dark .btn-info,
+html body.fh-modern.theme-dark #upload,
+html body.fh-modern.theme-dark #generate-btn,
+html body.fh-modern.theme-dark .regex-item:hover,
+html body.fh-modern.theme-dark .regex-item:focus,
+html body.fh-modern.theme-dark .btn-copy:hover,
+html body.fh-modern.theme-dark .radix-tips:hover,
+html body.fh-modern.theme-dark .quick-btn:hover,
+html body.fh-modern.theme-dark ul.box-tools li.x-addtool:hover,
+html body.fh-modern.theme-dark .x-sidebar ul li:hover,
+html body.fh-modern.theme-dark .x-sidebar ul li.x-selected,
+html body.fh-modern.theme-dark .nav-tabs > li.active > a,
+html body.fh-modern.theme-dark .nav-tabs > li.active > a:hover,
+html body.fh-modern.theme-dark .nav-tabs > li.active > a:focus,
+html body.fh-modern.theme-dark .nav-tabs > li > a:hover,
+html body.fh-modern.theme-dark .mod-radios input[type="radio"]:checked + label {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary) !important;
+    color: var(--fh-primary-ink) !important;
+    box-shadow: none !important;
+}
+
+html body.fh-modern.theme-dark .x-other-tools,
+html body.fh-modern.theme-dark .panel-title > .x-switch,
+html body.fh-modern.theme-dark .page-header > .x-switch,
+html body.fh-modern.theme-dark .fh-tool-actions > .x-switch,
+html body.fh-modern.theme-dark .fh-nav-btn {
+    border-color: var(--fh-line-strong) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-modern.theme-dark .x-other-tools:hover,
+html body.fh-modern.theme-dark .panel-title > .x-switch:hover,
+html body.fh-modern.theme-dark .page-header > .x-switch:hover,
+html body.fh-modern.theme-dark .fh-tool-actions > .x-switch:hover,
+html body.fh-modern.theme-dark .fh-nav-btn:hover {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-modern.theme-dark .fh-page-tip,
+html body.fh-modern.theme-dark .alert-info,
+html body.fh-modern.theme-dark .well,
+html body.fh-modern.theme-dark .x-tips,
+html body.fh-modern.theme-dark .tips-panel {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-modern.theme-dark .fh-byte-control,
+html body.fh-modern.theme-dark .fh-byte-summary,
+html body.fh-modern.theme-dark .fh-byte-table-panel,
+html body.fh-modern.theme-dark .fh-byte-result-main,
+html body.fh-modern.theme-dark .fh-byte-empty,
+html body.fh-modern.theme-dark .fh-byte-preset,
+html body.fh-modern.theme-dark .fh-byte-table {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-panel) !important;
+    color: var(--fh-text) !important;
+    box-shadow: var(--fh-shadow) !important;
+}
+
+html body.fh-modern.theme-dark .fh-byte-result-main {
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-primary) !important;
+}
+
+html body.fh-modern.theme-dark .fh-byte-empty {
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-modern.theme-dark .fh-byte-empty-mark,
+html body.fh-modern.theme-dark .fh-byte-table tbody > tr > td:last-child {
+    color: var(--fh-primary) !important;
+}
+
+html body.fh-modern:not(.theme-dark) .panel-heading,
+html body.fh-modern:not(.theme-dark) .page-header,
+html body.fh-modern:not(.theme-dark) .main-navbar,
+html body.fh-modern:not(.theme-dark) .section-title,
+html body.fh-modern:not(.theme-dark) textarea,
+html body.fh-modern:not(.theme-dark) input,
+html body.fh-modern:not(.theme-dark) select,
+html body.fh-modern:not(.theme-dark) .form-control,
+html body.fh-modern:not(.theme-dark) .CodeMirror {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-panel) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-modern:not(.theme-dark) textarea,
+html body.fh-modern:not(.theme-dark) input,
+html body.fh-modern:not(.theme-dark) select,
+html body.fh-modern:not(.theme-dark) .form-control,
+html body.fh-modern:not(.theme-dark) .CodeMirror {
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-modern:not(.theme-dark) .btn-primary,
+html body.fh-modern:not(.theme-dark) .btn-success,
+html body.fh-modern:not(.theme-dark) .btn-info,
+html body.fh-modern:not(.theme-dark) #upload,
+html body.fh-modern:not(.theme-dark) #generate-btn {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary) !important;
+    color: var(--fh-primary-ink) !important;
+}

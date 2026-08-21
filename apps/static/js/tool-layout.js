@@ -44,7 +44,8 @@
     function shouldUsePageDefaultTheme(settings) {
         return !!(
             document.body &&
-            document.body.getAttribute('data-default-theme') === 'dark' &&
+            document.body.classList.contains('fh-modern') &&
+            document.body.getAttribute('data-default-theme') !== 'light' &&
             !hasStoredThemeSetting(settings)
         );
     }

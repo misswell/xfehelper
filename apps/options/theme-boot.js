@@ -33,6 +33,11 @@
     }
 
     function shouldEnableDarkMode(settings) {
+        var hasPreference = settings[alwaysKey] !== undefined && settings[alwaysKey] !== null ||
+            settings[autoKey] !== undefined && settings[autoKey] !== null;
+        if (!hasPreference) {
+            return true;
+        }
         if (isEnabledSetting(settings[alwaysKey])) {
             return true;
         }
