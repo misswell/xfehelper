@@ -1,10 +1,148 @@
 @import url("../static/css/bootstrap.min.css");
 
-.x-section { margin-bottom: 30px; }
-.x-section h4 { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
-.x-row { margin-bottom: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-.x-row label { margin: 0; white-space: nowrap; }
-.x-result { width: 100%; min-height: 120px; font-family: 'Menlo', 'Monaco', 'Courier New', monospace; font-size: 13px; line-height: 1.6; resize: vertical; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 10px; }
-.x-parse-result { margin-top: 10px; }
-.x-parse-result .table { max-width: 500px; }
-.x-parse-result .table td { padding: 6px 12px; }
+/* Keep the generator controls readable at both extension-panel and tab widths. */
+body.fh-modern .uuid-page-body {
+    padding: 22px 24px 28px !important;
+}
+
+body.fh-modern .uuid-page-body .x-section {
+    margin: 0;
+    padding: 0 0 24px;
+}
+
+body.fh-modern .uuid-page-body .x-section + .x-section {
+    padding-top: 24px;
+    border-top: 1px solid var(--fh-line);
+}
+
+body.fh-modern .uuid-page-body .x-section:last-child {
+    padding-bottom: 0;
+}
+
+body.fh-modern .uuid-page-body .x-section h4 {
+    margin: 0 0 16px;
+    padding: 0 0 10px;
+    color: var(--fh-text);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.35;
+    border-bottom: 1px solid var(--fh-line);
+}
+
+body.fh-modern .uuid-page-body .uuid-controls {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    margin: 0 0 14px;
+}
+
+body.fh-modern .uuid-page-body .uuid-control {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 8px;
+    margin: 0;
+    color: var(--fh-text);
+    white-space: nowrap;
+}
+
+body.fh-modern .uuid-page-body .uuid-control--format {
+    flex-basis: 300px;
+}
+
+body.fh-modern .uuid-page-body .uuid-control--parse {
+    flex: 1 1 320px;
+    min-width: 240px;
+}
+
+body.fh-modern .uuid-page-body .uuid-input {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+body.fh-modern .uuid-page-body .uuid-input--short {
+    width: 84px;
+}
+
+body.fh-modern .uuid-page-body .uuid-input--format {
+    width: 190px;
+}
+
+body.fh-modern .uuid-page-body .uuid-input--parse {
+    width: 100%;
+}
+
+body.fh-modern .uuid-page-body .uuid-action {
+    flex: 0 0 auto;
+    min-width: 68px;
+    margin: 0;
+}
+
+body.fh-modern .uuid-page-body .x-result {
+    display: block;
+    width: 100%;
+    height: 200px;
+    min-height: 200px;
+    margin: 0;
+    padding: 12px 14px;
+    color: var(--fh-text);
+    background: var(--fh-subtle);
+    border-color: var(--fh-line-strong);
+    border-radius: var(--fh-radius);
+    font-family: var(--fh-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+body.fh-modern .uuid-page-body .x-parse-result {
+    margin-top: 4px;
+}
+
+body.fh-modern .uuid-page-body .x-parse-result .table {
+    width: 100%;
+    max-width: 560px;
+    margin: 0;
+}
+
+body.fh-modern .uuid-page-body .x-parse-result .table td {
+    padding: 8px 12px;
+}
+
+body.fh-modern .uuid-page-body .x-parse-result .table td:first-child {
+    width: 160px;
+}
+
+@media (max-width: 640px) {
+    body.fh-modern .uuid-page-body {
+        padding: 18px 16px 24px !important;
+    }
+
+    body.fh-modern .uuid-page-body .uuid-control {
+        flex: 1 1 calc(50% - 9px);
+        min-width: 0;
+    }
+
+    body.fh-modern .uuid-page-body .uuid-control--format,
+    body.fh-modern .uuid-page-body .uuid-control--parse {
+        flex-basis: 100%;
+    }
+
+    body.fh-modern .uuid-page-body .uuid-input--short,
+    body.fh-modern .uuid-page-body .uuid-input--format {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 420px) {
+    body.fh-modern .uuid-page-body .uuid-control {
+        flex-basis: 100%;
+    }
+
+    body.fh-modern .uuid-page-body .uuid-action {
+        width: 100%;
+    }
+}

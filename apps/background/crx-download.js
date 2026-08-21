@@ -125,7 +125,10 @@ export default (function () {
      * @private
      */
     let _downloadCrx = function (tab) {
-        let isWebStoreDetailPage = tab.url.indexOf('https://chrome.google.com/webstore/detail/') === 0;
+        let isWebStoreDetailPage = [
+            'https://chrome.google.com/webstore/detail/',
+            'https://chromewebstore.google.com/detail/'
+        ].some(prefix => tab.url.indexOf(prefix) === 0);
         if (isWebStoreDetailPage) {
             // 如果是某个chrome extension的详情页面了，直接下载当前crx文件
             downloadCrxFileFromWebStoreDetailPage(() => {
@@ -138,7 +141,7 @@ export default (function () {
 
             downloadCrxFileByCrxId(crxId, crxName, () => {
                 chrome.tabs.create({
-                    url: MSG_TYPE.DOWNLOAD_FROM_GITHUB
+                    url: MSG_TYPE.CHROME_STORE_URL
                 });
             });
         }

@@ -8,6 +8,8 @@ export let MSG_TYPE = {
 
     // 正式版chrome extension id
     STABLE_EXTENSION_ID: 'pkgccpejnmalmdinmhkkfafefagiiiad',
+    // Chrome 商店中的正式扩展页面，作为右键菜单下载失败时的默认入口
+    CHROME_STORE_URL: 'https://chromewebstore.google.com/detail/pkgccpejnmalmdinmhkkfafefagiiiad',
     // github 上的下载地址
     DOWNLOAD_FROM_GITHUB: 'https://github.com/zxlie/FeHelper/tree/master/apps/static/screenshot/crx',
 

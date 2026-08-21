@@ -520,23 +520,23 @@ new Vue({
                 });
             } else {
                 // 其他情况，如更新检查失败等
-                // 备选方案：跳转到官方网站
+                // 备选方案：跳转到 Chrome 商店
                 chrome.tabs.create({ 
-                    url: 'https://fehelper.com/'
+                    url: MSG_TYPE.CHROME_STORE_URL
                 });
                 
                 this.showNotification({
                     title: 'XFeHelper 更新',
-                    message: '自动更新失败，请访问XFeHelper官网手动获取最新版本。'
+                    message: '自动更新失败，请访问 Chrome 商店手动获取最新版本。'
                 });
             }
         },
 
         // 处理更新错误
         handleUpdateError(error) {
-            // 出错时跳转到官方网站
+            // 出错时跳转到 Chrome 商店
             chrome.tabs.create({ 
-                url: 'https://fehelper.com/'
+                url: MSG_TYPE.CHROME_STORE_URL
             });
             
             this.showNotification({
