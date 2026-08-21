@@ -25,6 +25,30 @@
         return readLocalSetting(key);
     }
 
+    function hasStoredThemeSetting(settings) {
+        if (settings && (
+            Object.prototype.hasOwnProperty.call(settings, 'AUTO_DARK_MODE') ||
+            Object.prototype.hasOwnProperty.call(settings, 'ALWAYS_DARK_MODE')
+        )) {
+            return true;
+        }
+
+        try {
+            return localStorage.getItem('AUTO_DARK_MODE') !== null ||
+                localStorage.getItem('ALWAYS_DARK_MODE') !== null;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function shouldUsePageDefaultTheme(settings) {
+        return !!(
+            document.body &&
+            document.body.getAttribute('data-default-theme') === 'dark' &&
+            !hasStoredThemeSetting(settings)
+        );
+    }
+
     function prefersColorSchemeDark() {
         try {
             return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -41,7 +65,7 @@
             return true;
         }
         if (!auto) {
-            return false;
+            return shouldUsePageDefaultTheme(settings);
         }
         return prefersColorSchemeDark();
     }
