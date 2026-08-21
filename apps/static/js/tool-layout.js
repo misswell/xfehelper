@@ -2,6 +2,68 @@
     let mediaQueryList = null;
     let mediaQueryHandler = null;
 
+    /* Give every surface a stable identity so the shared visual system can
+     * compose layouts by tool job, without touching the DOM contracts that
+     * the individual tools rely on. */
+    function applyToolIdentity() {
+        if (!document.body) {
+            return;
+        }
+
+        let parts = (window.location.pathname || '').split('/').filter(Boolean);
+        let appsIndex = parts.indexOf('apps');
+        let slug = appsIndex >= 0 ? parts[appsIndex + 1] : parts[parts.length - 2];
+        if (!slug || slug === 'index.html') {
+            slug = 'home';
+        }
+        slug = slug.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'home';
+
+        document.body.dataset.tool = slug;
+        document.body.classList.add('fh-tool-surface', 'fh-tool--' + slug);
+    }
+
+    function composeTimestampLayout() {
+        if (!document.body || document.body.dataset.tool !== 'timestamp') {
+            return;
+        }
+
+        const root = document.querySelector('.mod-stamp');
+        if (!root || root.dataset.composed === 'true') {
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        const children = Array.from(root.children);
+
+        for (let i = 0; i < children.length; i += 1) {
+            const node = children[i];
+            if (node.tagName === 'H4') {
+                const block = document.createElement('section');
+                block.className = 'fh-time-card';
+                block.appendChild(node);
+                const content = children[i + 1];
+                if (content && content.tagName !== 'H4') {
+                    if (content.tagName === 'TABLE') {
+                        block.classList.add('fh-time-world-clock');
+                    }
+                    block.appendChild(content);
+                    i += 1;
+                }
+                fragment.appendChild(block);
+            } else if (node.tagName === 'TABLE') {
+                const block = document.createElement('section');
+                block.className = 'fh-time-card fh-time-world-clock';
+                block.appendChild(node);
+                fragment.appendChild(block);
+            } else if (node.parentNode === root) {
+                fragment.appendChild(node);
+            }
+        }
+
+        root.replaceChildren(fragment);
+        root.dataset.composed = 'true';
+    }
+
     function isElement(node) {
         return node && node.nodeType === 1;
     }
@@ -27,8 +89,10 @@
 
     function hasStoredThemeSetting(settings) {
         if (settings && (
-            Object.prototype.hasOwnProperty.call(settings, 'AUTO_DARK_MODE') ||
-            Object.prototype.hasOwnProperty.call(settings, 'ALWAYS_DARK_MODE')
+            (Object.prototype.hasOwnProperty.call(settings, 'AUTO_DARK_MODE') &&
+                settings.AUTO_DARK_MODE !== null && settings.AUTO_DARK_MODE !== undefined) ||
+            (Object.prototype.hasOwnProperty.call(settings, 'ALWAYS_DARK_MODE') &&
+                settings.ALWAYS_DARK_MODE !== null && settings.ALWAYS_DARK_MODE !== undefined)
         )) {
             return true;
         }
@@ -453,6 +517,8 @@
         window.setTimeout(syncToolDarkModeFromStorage, 500);
     }
 
+    applyToolIdentity();
+    composeTimestampLayout();
     normalizeToolDarkMode();
     normalizeToolHeader();
 })();

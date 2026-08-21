@@ -236,7 +236,14 @@ new Vue({
             let saved = localStorage.getItem(THEME_KEY);
             if (saved === 'dark') this.isDark = true;
             else if (saved === 'light') this.isDark = false;
-            else this.isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            else {
+                // Keep the first-run experience aligned with the shared
+                // Ink + Volt shell.  tool-layout.js has already resolved the
+                // extension-wide preference on the body before Vue mounts;
+                // when no preference exists, the product default is dark.
+                this.isDark = document.body.classList.contains('theme-dark') ||
+                    !document.body.classList.contains('theme-default');
+            }
             this.applyTheme();
         },
         applyTheme() {

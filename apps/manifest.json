@@ -1,7 +1,7 @@
 {
   "name": "XFeHelper - JSON格式化、编解码、二维码、开发者工具箱",
   "short_name": "XFeHelper",
-  "version": "2026.7.33",
+  "version": "2026.7.34",
   "manifest_version": 3,
   "description": "30+款前端开发工具：JSON格式化、编解码、二维码、代码美化、正则、时间戳、UUID、图表、Excel转换等，全部功能默认启用，开箱即用。",
   "icons": {

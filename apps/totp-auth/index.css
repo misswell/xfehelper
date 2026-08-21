@@ -326,3 +326,224 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* -------------------------------------------------------------------------
+ * Ink + Volt pass
+ *
+ * TOTP is intentionally a little quieter than the generator tools: the
+ * security story should feel calm and trustworthy while the current code is
+ * still easy to scan.  Keep the existing DOM/API contracts and only reshape
+ * the visual layer here.
+ * ------------------------------------------------------------------------- */
+:root {
+    --totp-bg: #101611;
+    --totp-surface: #182019;
+    --totp-surface-soft: #202b20;
+    --totp-line: #334234;
+    --totp-line-strong: #536552;
+    --totp-text: #eff4e9;
+    --totp-muted: #a2afa0;
+    --totp-accent: #c6f36c;
+    --totp-accent-ink: #172315;
+    --totp-danger: #ef8586;
+    --totp-shadow: 0 24px 64px rgba(0, 0, 0, 0.24);
+}
+
+body.fh-modern,
+body.fh-modern .totp-page {
+    background:
+        radial-gradient(circle at 92% -10%, rgba(198, 243, 108, 0.14), transparent 28rem),
+        radial-gradient(circle at 0% 32%, rgba(88, 127, 91, 0.12), transparent 26rem),
+        var(--totp-bg) !important;
+    color: var(--totp-text) !important;
+}
+
+body.fh-modern .totp-page {
+    min-height: 100dvh;
+    padding: 18px 24px 28px;
+    gap: 16px;
+}
+
+body.fh-modern .totp-header,
+body.fh-modern .totp-vault-panel,
+body.fh-modern .totp-pane {
+    border: 1px solid var(--totp-line) !important;
+    border-radius: 20px !important;
+    background: color-mix(in srgb, var(--totp-surface) 94%, transparent) !important;
+    box-shadow: var(--totp-shadow) !important;
+}
+
+body.fh-modern .totp-header {
+    min-height: 68px;
+    padding: 0 18px;
+    gap: 16px;
+}
+
+body.fh-modern .totp-brand,
+body.fh-modern .totp-header h1,
+body.fh-modern .totp-vault-copy h2,
+body.fh-modern .totp-pane-head h2,
+body.fh-modern .totp-field,
+body.fh-modern .totp-account-meta strong,
+body.fh-modern .totp-empty strong {
+    color: var(--totp-text) !important;
+}
+
+body.fh-modern .totp-brand {
+    font-weight: 850;
+}
+
+body.fh-modern .totp-brand img {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--totp-line-strong);
+    border-radius: 9px;
+}
+
+body.fh-modern .totp-header h1 {
+    margin-right: auto;
+    font-size: clamp(18px, 2vw, 25px);
+    font-weight: 900;
+    letter-spacing: -0.035em;
+}
+
+body.fh-modern .totp-header h1::before {
+    content: "SECURE WORKSPACE";
+    display: block;
+    margin-bottom: 4px;
+    color: var(--totp-accent);
+    font: 800 9px/1 var(--fh-mono, ui-monospace, monospace);
+    letter-spacing: 0.18em;
+}
+
+body.fh-modern .totp-vault-panel {
+    margin: 0;
+    padding: 20px 22px;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 440px);
+    gap: 22px;
+}
+
+body.fh-modern .totp-vault-copy p,
+body.fh-modern .totp-pane-head span,
+body.fh-modern .totp-security-note,
+body.fh-modern .totp-empty,
+body.fh-modern .totp-account-meta span,
+body.fh-modern .totp-account-meta code,
+body.fh-modern .totp-code-box small {
+    color: var(--totp-muted) !important;
+}
+
+body.fh-modern .totp-vault-copy h2 {
+    font-size: 20px;
+    letter-spacing: -0.025em;
+}
+
+body.fh-modern .totp-vault-actions input,
+body.fh-modern .totp-field input,
+body.fh-modern .totp-field select,
+body.fh-modern .totp-field textarea {
+    border-color: var(--totp-line-strong) !important;
+    border-radius: 12px !important;
+    background: #111a12 !important;
+    color: var(--totp-text) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+body.fh-modern .totp-vault-actions input:focus,
+body.fh-modern .totp-field input:focus,
+body.fh-modern .totp-field select:focus,
+body.fh-modern .totp-field textarea:focus {
+    outline: 0;
+    border-color: var(--totp-accent) !important;
+    box-shadow: 0 0 0 3px rgba(198, 243, 108, 0.14) !important;
+}
+
+body.fh-modern .totp-primary-button,
+body.fh-modern .totp-secondary-button,
+body.fh-modern .totp-ghost-button,
+body.fh-modern .totp-remove-button,
+body.fh-modern .totp-code {
+    border-color: var(--totp-line-strong) !important;
+    border-radius: 12px !important;
+    background: var(--totp-surface-soft) !important;
+    color: var(--totp-text) !important;
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+body.fh-modern .totp-primary-button {
+    border-color: var(--totp-accent) !important;
+    background: var(--totp-accent) !important;
+    color: var(--totp-accent-ink) !important;
+}
+
+body.fh-modern .totp-primary-button:hover,
+body.fh-modern .totp-secondary-button:hover,
+body.fh-modern .totp-ghost-button:hover,
+body.fh-modern .totp-remove-button:hover,
+body.fh-modern .totp-code:hover {
+    transform: translateY(-1px);
+    border-color: var(--totp-accent) !important;
+}
+
+body.fh-modern .totp-form-pane,
+body.fh-modern .totp-list-pane {
+    padding: 20px;
+}
+
+body.fh-modern .totp-pane-head {
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--totp-line);
+}
+
+body.fh-modern .totp-uri-box {
+    border-top-color: var(--totp-line) !important;
+}
+
+body.fh-modern .totp-account {
+    padding: 14px;
+    border-color: var(--totp-line) !important;
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(32, 43, 32, 0.86), rgba(24, 32, 25, 0.96));
+}
+
+body.fh-modern .totp-code {
+    min-height: 52px;
+    border-color: rgba(198, 243, 108, 0.32) !important;
+    background: #111a12 !important;
+    color: var(--totp-accent) !important;
+    font: 900 28px/1 var(--fh-mono, ui-monospace, monospace);
+    letter-spacing: 0.12em;
+}
+
+body.fh-modern .totp-progress {
+    height: 6px;
+    background: #101611 !important;
+}
+
+body.fh-modern .totp-progress span {
+    background: var(--totp-accent) !important;
+}
+
+body.fh-modern .totp-remove-button {
+    color: var(--totp-danger) !important;
+}
+
+body.fh-modern .totp-notice {
+    right: 24px;
+    bottom: 24px;
+    border: 1px solid var(--totp-line-strong);
+    border-radius: 12px;
+    background: var(--totp-surface-soft);
+    color: var(--totp-text);
+}
+
+@media (max-width: 860px) {
+    body.fh-modern .totp-page {
+        padding: 12px;
+    }
+
+    body.fh-modern .totp-vault-panel,
+    body.fh-modern .totp-layout {
+        grid-template-columns: 1fr;
+    }
+}

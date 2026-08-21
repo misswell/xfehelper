@@ -60,6 +60,14 @@ describe('totp-auth tool', () => {
         expect(js).not.toContain('XMLHttpRequest');
     });
 
+    it('Issue #627: mounts under the extension CSP without runtime template compilation', () => {
+        const js = readSource('apps/totp-auth/index.js');
+
+        expect(js).toContain('render(h) {');
+        expect(js).not.toContain('with(this)');
+        expect(js).not.toContain('Vue.compile(');
+    });
+
     it('Issue #627: generates RFC 6238 TOTP values for supported algorithms', async () => {
         const timestamp = 59000;
 

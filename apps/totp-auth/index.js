@@ -4,6 +4,235 @@ const TOTP_CORE = window.FHTotpCore;
 
 new Vue({
     el: '#pageContainer',
+    // The extension CSP disallows Vue's runtime `new Function` template compiler.
+    // Keep this render function precompiled so the page can mount under
+    // `script-src 'self'` without requiring `unsafe-eval`.
+    render(h) {
+        const vm = this;
+        const textInput = (key, placeholder) => h('input', {
+            class: 'totp-input',
+            attrs: {
+                type: 'text',
+                disabled: !vm.vaultReady,
+                autocomplete: 'off',
+                spellcheck: 'false',
+                placeholder
+            },
+            domProps: {value: vm[key]},
+            on: {
+                input: event => {
+                    vm[key] = event.target.value.trim();
+                }
+            }
+        });
+        const selectInput = (key, options) => h('select', {
+            attrs: {disabled: !vm.vaultReady},
+            domProps: {value: vm[key]},
+            on: {
+                change: event => {
+                    vm[key] = event.target.value;
+                }
+            }
+        }, options.map(option => h('option', {
+            attrs: {value: option.value},
+            domProps: {value: option.value}
+        }, option.label)));
+        const accountCards = vm.accounts.map(account => h('article', {
+            key: account.id,
+            class: 'totp-account'
+        }, [
+            h('div', {class: 'totp-account-meta'}, [
+                h('strong', account.issuer || '未命名服务'),
+                h('span', account.name || '未命名账号'),
+                h('span', (account.algorithm || 'SHA-1') + ' / ' + account.digits + ' 位 / ' + account.period + 's'),
+                vm.revealSecrets ? h('code', account.secret) : null
+            ]),
+            h('div', {class: 'totp-code-box'}, [
+                h('button', {
+                    class: 'totp-code',
+                    attrs: {type: 'button'},
+                    on: {click: () => vm.copyCode(account)}
+                }, vm.getCode(account.id)),
+                h('div', {
+                    class: 'totp-progress',
+                    attrs: {'aria-hidden': 'true'}
+                }, [
+                    h('span', {
+                        style: {width: vm.getProgress(account) + '%'}
+                    })
+                ]),
+                h('small', String(vm.getRemainingSeconds(account)) + 's')
+            ]),
+            h('button', {
+                class: 'totp-remove-button',
+                attrs: {type: 'button'},
+                on: {click: () => vm.removeAccount(account)}
+            }, '删除')
+        ]));
+        return h('div', {
+            class: 'totp-page',
+            attrs: {id: 'pageContainer'}
+        }, [
+            h('header', {class: 'totp-header'}, [
+                h('a', {
+                    class: 'totp-brand',
+                    attrs: {href: 'https://fehelper.com', target: '_blank'}
+                }, [
+                    h('img', {
+                        attrs: {src: '../static/img/fe-16.png', alt: 'XFeHelper'}
+                    }),
+                    h('span', 'XFeHelper')
+                ]),
+                h('h1', '2FA 动态口令'),
+                vm.vaultReady ? h('button', {
+                    class: 'totp-ghost-button',
+                    attrs: {type: 'button'},
+                    on: {click: vm.toggleSecretReveal}
+                }, vm.revealSecrets ? '隐藏密钥' : '显示密钥') : null,
+                vm.vaultReady ? h('button', {
+                    class: 'totp-ghost-button',
+                    attrs: {type: 'button'},
+                    on: {click: vm.lockVault}
+                }, '锁定') : null
+            ]),
+            !vm.vaultReady ? h('section', {class: 'totp-vault-panel'}, [
+                h('div', {class: 'totp-vault-copy'}, [
+                    h('h2', vm.vaultTitle),
+                    h('p', vm.vaultHint)
+                ]),
+                h('div', {class: 'totp-vault-actions'}, [
+                    h('input', {
+                        attrs: {
+                            type: 'password',
+                            autocomplete: 'new-password',
+                            placeholder: '本地保险箱口令'
+                        },
+                        domProps: {value: vm.vaultPassphrase},
+                        on: {
+                            input: event => {
+                                vm.vaultPassphrase = event.target.value;
+                            }
+                        }
+                    }),
+                    !vm.vaultExists ? h('input', {
+                        attrs: {
+                            type: 'password',
+                            autocomplete: 'new-password',
+                            placeholder: '再次输入口令'
+                        },
+                        domProps: {value: vm.vaultPassphraseConfirm},
+                        on: {
+                            input: event => {
+                                vm.vaultPassphraseConfirm = event.target.value;
+                            }
+                        }
+                    }) : null,
+                    h('button', {
+                        class: 'totp-primary-button',
+                        attrs: {type: 'button'},
+                        on: {
+                            click: vm.vaultExists ? vm.unlockVault : vm.createVault
+                        }
+                    }, vm.vaultExists ? '解锁' : '创建保险箱')
+                ])
+            ]) : null,
+            h('main', {class: 'totp-layout'}, [
+                h('section', {class: 'totp-pane totp-form-pane'}, [
+                    h('div', {class: 'totp-pane-head'}, [
+                        h('h2', '添加账号'),
+                        h('span', vm.vaultReady ? '已加密' : '需先解锁')
+                    ]),
+                    h('label', {class: 'totp-field'}, [
+                        h('span', 'Issuer'),
+                        textInput('issuerInput', 'GitHub')
+                    ]),
+                    h('label', {class: 'totp-field'}, [
+                        h('span', 'Account'),
+                        textInput('accountInput', 'name@example.com')
+                    ]),
+                    h('label', {class: 'totp-field'}, [
+                        h('span', 'Secret'),
+                        textInput('secretInput', 'Base32 secret')
+                    ]),
+                    h('div', {class: 'totp-field-grid'}, [
+                        h('label', {class: 'totp-field'}, [
+                            h('span', 'Digits'),
+                            selectInput('digitsInput', [
+                                {value: 6, label: '6'},
+                                {value: 8, label: '8'}
+                            ])
+                        ]),
+                        h('label', {class: 'totp-field'}, [
+                            h('span', 'Period'),
+                            h('input', {
+                                attrs: {
+                                    type: 'number',
+                                    min: '15',
+                                    max: '120',
+                                    step: '5',
+                                    disabled: !vm.vaultReady
+                                },
+                                domProps: {value: vm.periodInput},
+                                on: {
+                                    input: event => {
+                                        vm.periodInput = Number(event.target.value);
+                                    }
+                                }
+                            })
+                        ]),
+                        h('label', {class: 'totp-field'}, [
+                            h('span', 'Algorithm'),
+                            selectInput('algorithmInput', [
+                                {value: 'SHA-1', label: 'SHA-1'},
+                                {value: 'SHA-256', label: 'SHA-256'},
+                                {value: 'SHA-512', label: 'SHA-512'}
+                            ])
+                        ])
+                    ]),
+                    h('button', {
+                        class: 'totp-primary-button',
+                        attrs: {type: 'button', disabled: !vm.vaultReady},
+                        on: {click: vm.addAccount}
+                    }, '加密保存账号'),
+                    h('div', {class: 'totp-uri-box'}, [
+                        h('label', {class: 'totp-field'}, [
+                            h('span', 'otpauth URI'),
+                            h('textarea', {
+                                attrs: {
+                                    disabled: !vm.vaultReady,
+                                    spellcheck: 'false',
+                                    placeholder: 'otpauth://totp/Issuer:account?secret=...'
+                                },
+                                domProps: {value: vm.uriInput},
+                                on: {
+                                    input: event => {
+                                        vm.uriInput = event.target.value.trim();
+                                    }
+                                }
+                            })
+                        ]),
+                        h('button', {
+                            class: 'totp-secondary-button',
+                            attrs: {type: 'button', disabled: !vm.vaultReady},
+                            on: {click: vm.importOtpAuthUri}
+                        }, '导入 URI')
+                    ]),
+                    h('p', {class: 'totp-security-note'}, '账号密钥使用本地口令加密保存。忘记口令后无法恢复。')
+                ]),
+                h('section', {class: 'totp-pane totp-list-pane'}, [
+                    h('div', {class: 'totp-pane-head'}, [
+                        h('h2', '动态码'),
+                        h('span', String(vm.accounts.length) + ' 个账号')
+                    ]),
+                    vm.accounts.length ? accountCards : h('div', {class: 'totp-empty'}, [
+                        h('strong', vm.vaultReady ? '暂无账号' : '保险箱未解锁'),
+                        h('span', vm.vaultReady ? '添加 Base32 secret 后开始生成动态口令。' : '解锁后显示本地动态口令。')
+                    ])
+                ])
+            ]),
+            vm.noticeText ? h('div', {class: 'totp-notice'}, vm.noticeText) : null
+        ]);
+    },
     data: {
         issuerInput: '',
         accountInput: '',

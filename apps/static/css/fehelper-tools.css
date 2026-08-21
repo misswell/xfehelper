@@ -2425,3 +2425,1514 @@ html body.fh-modern:not(.theme-dark) #generate-btn {
     background: var(--fh-primary) !important;
     color: var(--fh-primary-ink) !important;
 }
+
+/* -------------------------------------------------------------------------
+ * Tool surfaces v3
+ *
+ * The shared tokens establish the Ink + Volt language. This layer is about
+ * composition: each tool gets a layout that mirrors its actual job instead
+ * of inheriting one generic stack of panels.
+ * ------------------------------------------------------------------------- */
+html body.fh-tool-surface:not(.uuid-tool-surface) {
+    min-height: 100dvh;
+    background:
+        radial-gradient(circle at 92% -10%, rgba(198, 243, 108, 0.16), transparent 28%),
+        radial-gradient(circle at -8% 18%, rgba(88, 127, 91, 0.12), transparent 26%),
+        var(--fh-bg);
+}
+
+html body.fh-tool-surface:not(.uuid-tool-surface) .wrapper,
+html body.fh-tool-surface:not(.uuid-tool-surface) > .container,
+html body.fh-tool-surface:not(.uuid-tool-surface) main.container {
+    width: min(calc(100% - 32px), 1440px);
+    max-width: 1440px;
+    margin-inline: auto;
+}
+
+html body.fh-tool-surface:not(.uuid-tool-surface) .wrapper {
+    padding-top: 16px;
+    padding-bottom: 36px;
+}
+
+html body.fh-tool-surface:not(.uuid-tool-surface) .panel-heading,
+html body.fh-tool-surface:not(.uuid-tool-surface) .page-header,
+html body.fh-tool-surface:not(.uuid-tool-surface) .main-navbar,
+html body.fh-tool-surface:not(.uuid-tool-surface) .fh-unified-header {
+    position: relative;
+    top: auto;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 64px !important;
+    margin-bottom: 16px !important;
+    border-radius: 20px !important;
+    background:
+        linear-gradient(110deg, rgba(198, 243, 108, 0.05), transparent 42%),
+        color-mix(in srgb, var(--fh-panel) 96%, transparent) !important;
+}
+
+html body.fh-tool-surface:not(.uuid-tool-surface) .panel-heading::after,
+html body.fh-tool-surface:not(.uuid-tool-surface) .page-header::after,
+html body.fh-tool-surface:not(.uuid-tool-surface) .main-navbar::after {
+    content: "";
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    width: 22%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--fh-primary));
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+html body.fh-tool-surface:not(.uuid-tool-surface) .panel-body,
+html body.fh-tool-surface:not(.uuid-tool-surface) .main-container,
+html body.fh-tool-surface:not(.uuid-tool-surface) .tab-container {
+    border-radius: 22px !important;
+}
+
+html body.fh-tool-surface:not(.uuid-tool-surface) .section-title,
+html body.fh-tool-surface:not(.uuid-tool-surface) .encode-card-head,
+html body.fh-tool-surface:not(.uuid-tool-surface) .output-header,
+html body.fh-tool-surface:not(.uuid-tool-surface) .fh-byte-section-head {
+    position: relative;
+}
+
+html body.fh-tool-surface:not(.uuid-tool-surface) .section-title::after,
+html body.fh-tool-surface:not(.uuid-tool-surface) .encode-card-head::after,
+html body.fh-tool-surface:not(.uuid-tool-surface) .fh-byte-section-head::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 34px;
+    height: 2px;
+    background: var(--fh-primary);
+}
+
+html body.fh-tool-surface:not(.uuid-tool-surface) .fh-tool-header-actions,
+html body.fh-tool-surface:not(.uuid-tool-surface) .fh-tool-actions,
+html body.fh-tool-surface:not(.uuid-tool-surface) .navbar-actions {
+    gap: 8px;
+}
+
+html body.fh-tool-surface:not(.uuid-tool-surface) .fh-tool-header-actions > *,
+html body.fh-tool-surface:not(.uuid-tool-surface) .fh-tool-actions > *,
+html body.fh-tool-surface:not(.uuid-tool-surface) .navbar-actions > * {
+    white-space: nowrap;
+}
+
+/* JSON Diff: two deliberate source lanes with a compact command strip. */
+html body.fh-tool--json-diff .panel-body.mod-json {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(520px, calc(100dvh - 178px));
+    gap: 14px;
+    min-height: 0;
+    padding: 16px !important;
+}
+
+html body.fh-tool--json-diff .panel-body.mod-json::before,
+html body.fh-tool--json-diff .panel-body.mod-json::after,
+html body.fh-tool--en-decode .mod-endecode::before,
+html body.fh-tool--en-decode .mod-endecode::after,
+html body.fh-tool--excel2json .excel2json-flex-panel::before,
+html body.fh-tool--excel2json .excel2json-flex-panel::after,
+html body.fh-tool--image-base64 .image-base64-layout::before,
+html body.fh-tool--image-base64 .image-base64-layout::after,
+html body.fh-tool--image-base64 .base64-image-layout::before,
+html body.fh-tool--image-base64 .base64-image-layout::after {
+    display: none !important;
+    content: none !important;
+}
+
+html body.fh-tool--json-diff .panel-body.mod-json .json-examples {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    min-height: 46px;
+    margin: 0;
+    padding: 0 4px 10px;
+    border-bottom: 1px solid var(--fh-line);
+}
+
+html body.fh-tool--json-diff .box-wrapper-left,
+html body.fh-tool--json-diff .box-wrapper-right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    float: none;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    padding: 0 !important;
+    border: 1px solid var(--fh-line);
+    border-radius: 18px;
+    background: var(--fh-panel);
+    overflow: hidden;
+    height: 100%;
+    min-height: 520px;
+}
+
+html body.fh-tool--json-diff .box-wrapper-left::before,
+html body.fh-tool--json-diff .box-wrapper-right::before {
+    display: block;
+    flex: 0 0 42px;
+    padding: 13px 16px 0;
+    color: var(--fh-muted);
+    font: 800 10px/1 var(--fh-mono);
+    letter-spacing: 0.16em;
+}
+
+html body.fh-tool--json-diff .box-wrapper-left::before { content: "INPUT A"; }
+html body.fh-tool--json-diff .box-wrapper-right::before { content: "INPUT B"; }
+
+html body.fh-tool--json-diff .box-wrapper-left .CodeMirror,
+html body.fh-tool--json-diff .box-wrapper-right .CodeMirror,
+html body.fh-tool--json-diff .box-wrapper-left .CodeMirror-scroll,
+html body.fh-tool--json-diff .box-wrapper-right .CodeMirror-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+}
+
+html body.fh-tool--json-diff .box-wrapper-left .CodeMirror,
+html body.fh-tool--json-diff .box-wrapper-right .CodeMirror {
+    background: var(--fh-surface-soft) !important;
+}
+
+/* Encoding is a command deck: source and output occupy the main lane,
+ * conversion methods stay in a scrollable rail on the side. */
+html body.fh-tool--en-decode .mod-endecode {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    grid-template-areas:
+        "source methods"
+        "result methods";
+    gap: 14px;
+    min-height: calc(100dvh - 128px);
+    grid-template-rows: minmax(300px, 1fr) minmax(180px, auto);
+    padding: 16px !important;
+    align-items: stretch;
+}
+
+html body.fh-tool--en-decode .encode-input-card {
+    grid-area: source;
+    min-height: 310px;
+}
+
+html body.fh-tool--en-decode .encode-options-card {
+    grid-area: methods;
+    position: static !important;
+    width: auto !important;
+    max-height: calc(100dvh - 160px);
+    height: 100%;
+    overflow: auto;
+    scrollbar-color: var(--fh-line-strong) transparent;
+}
+
+html body.fh-tool--en-decode .encode-empty-card {
+    grid-area: result;
+    min-height: 220px;
+    align-self: stretch;
+}
+
+html body.fh-tool--en-decode .encode-pill-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+html body.fh-tool--en-decode .encode-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    margin: 0 -22px -22px;
+    padding: 14px 22px;
+    border-top: 1px solid var(--fh-line);
+    background: color-mix(in srgb, var(--fh-panel) 96%, transparent);
+    backdrop-filter: blur(12px);
+}
+
+/* The legacy encoder stylesheet deliberately uses a left rail and therefore
+ * has a stronger selector. Repeat the structural overrides with the modern
+ * identity in the selector so the new grid remains the source of truth. */
+html body.fh-modern.fh-tool--en-decode .mod-endecode {
+    position: static !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 360px !important;
+    grid-template-rows: minmax(300px, 1fr) minmax(180px, auto) !important;
+    grid-template-areas: "source methods" "result methods" !important;
+    min-height: calc(100dvh - 128px) !important;
+    padding: 16px !important;
+}
+
+html body.fh-modern.fh-tool--en-decode .encode-input-card {
+    grid-area: source !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+html body.fh-modern.fh-tool--en-decode .encode-options-card {
+    position: static !important;
+    grid-area: methods !important;
+    width: auto !important;
+    height: 100% !important;
+    max-height: calc(100dvh - 160px) !important;
+    margin: 0 !important;
+}
+
+html body.fh-modern.fh-tool--en-decode .encode-empty-card {
+    grid-area: result !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+/* Markdown is an editor, not a generic panel. Keep toolbar, canvas and
+ * statusbar in one bounded workbench so the writing area gets the height. */
+html body.fh-tool--html2markdown .mod-markdown {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    min-height: calc(100dvh - 112px);
+    padding: 10px !important;
+    gap: 0;
+    overflow: hidden;
+}
+
+html body.fh-tool--html2markdown .mod-toolbar {
+    grid-row: 1;
+    border: 1px solid var(--fh-line);
+    border-bottom: 0;
+    border-radius: 16px 16px 0 0;
+    background: var(--fh-surface-soft);
+}
+
+html body.fh-tool--html2markdown .mod-editor,
+html body.fh-tool--html2markdown .markdown-body {
+    min-height: 0;
+    height: auto !important;
+    border-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-tool--html2markdown .mod-editor {
+    border-left: 1px solid var(--fh-line);
+}
+
+html body.fh-tool--html2markdown .mod-statusbar {
+    grid-row: 3;
+    border: 1px solid var(--fh-line);
+    border-top: 0;
+    border-radius: 0 0 16px 16px;
+    background: var(--fh-panel);
+}
+
+/* Base64: the uploaded asset is the visual anchor, the string output is a
+ * readable result lane. */
+html body.fh-tool--image-base64 .mod-imagebase64,
+html body.fh-tool--image-base64 .mod-base64image {
+    min-height: calc(100dvh - 128px);
+    padding: 16px !important;
+}
+
+html body.fh-tool--image-base64 .image-base64-layout,
+html body.fh-tool--image-base64 .base64-image-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 16px;
+    min-height: calc(100dvh - 178px);
+}
+
+html body.fh-tool--image-base64 .upload-section,
+html body.fh-tool--image-base64 .result-section,
+html body.fh-tool--image-base64 .input-section,
+html body.fh-tool--image-base64 .preview-section {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 18px;
+    border: 1px solid var(--fh-line);
+    border-radius: 18px;
+    background: var(--fh-panel);
+}
+
+html body.fh-tool--image-base64 .upload-section .x-panel,
+html body.fh-tool--image-base64 .preview-section .x-panel,
+html body.fh-tool--image-base64 #base64Result,
+html body.fh-tool--image-base64 #base64Input {
+    flex: 1 1 auto;
+    min-height: 340px;
+}
+
+html body.fh-tool--image-base64 .x-result-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 12px;
+}
+
+/* Excel and CSV use two equal document lanes, with actions fixed to each
+ * lane header so the output never feels detached from its source. */
+html body.fh-tool--excel2json .excel2json-flex-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+    min-height: calc(100dvh - 170px);
+    padding: 16px !important;
+}
+
+html body.fh-tool--excel2json .input-zone,
+html body.fh-tool--excel2json .output-zone {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 16px;
+    border: 1px solid var(--fh-line);
+    border-radius: 18px;
+    background: var(--fh-panel);
+}
+
+html body.fh-tool--excel2json .input-textarea,
+html body.fh-tool--excel2json .output-textarea {
+    flex: 1 1 auto;
+    height: auto !important;
+    min-height: 480px;
+}
+
+html body.fh-tool--excel2json .input-ops-row,
+html body.fh-tool--excel2json .output-header-block {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-bottom: 12px;
+}
+
+/* QR gets a clear three-lane studio rather than a tall empty rectangle. */
+html body.fh-tool--qr-code .panel-body.mod-json {
+    padding: 16px !important;
+}
+
+html body.fh-tool--qr-code .qr-layout {
+    grid-template-columns: minmax(0, 1.2fr) minmax(250px, 0.68fr) minmax(0, 1fr);
+    gap: 14px;
+    min-height: calc(100dvh - 170px);
+}
+
+html body.fh-tool--qr-code .qr-card {
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+html body.fh-tool--qr-code .qr-left .mod-textarea,
+html body.fh-tool--qr-code .qr-right #preview {
+    min-height: 560px;
+}
+
+html body.fh-tool--qr-code .qr-center .control-panel {
+    height: auto;
+    min-height: 360px;
+    padding: 18px;
+}
+
+/* Color conversion benefits from one larger source module and two compact
+ * output modules. It is intentionally not a row of four identical cards. */
+html body.fh-tool--trans-color .modules-grid {
+    display: grid;
+    grid-template-columns: 1.12fr 0.94fr 0.94fr;
+    grid-template-areas:
+        "hex rgb hsl"
+        "hex hsv hsv";
+    gap: 16px;
+    align-items: stretch;
+}
+
+html body.fh-tool--trans-color .module-hex { grid-area: hex; }
+html body.fh-tool--trans-color .module-rgb { grid-area: rgb; }
+html body.fh-tool--trans-color .module-hsl { grid-area: hsl; }
+html body.fh-tool--trans-color .module-hsv { grid-area: hsv; }
+
+html body.fh-tool--trans-color .color-module {
+    min-width: 0;
+    border-radius: 18px;
+    background: linear-gradient(145deg, var(--fh-panel), var(--fh-surface-soft)) !important;
+}
+
+html body.fh-tool--trans-color .global-alpha-slider {
+    display: grid;
+    grid-template-columns: auto minmax(180px, 560px) auto;
+    align-items: center;
+    gap: 14px;
+    max-width: 760px;
+    padding: 14px 16px;
+    border: 1px solid var(--fh-line);
+    border-radius: 14px;
+    background: var(--fh-panel);
+}
+
+/* Timestamp: each conversion is a quiet module, while the world clock gets
+ * a dedicated full-width table treatment. */
+html body.fh-tool--timestamp .mod-stamp {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 16px !important;
+}
+
+html body.fh-tool--timestamp .mod-stamp > .x-wd {
+    margin: 0;
+    padding: 16px 18px 10px;
+    border: 1px solid var(--fh-line);
+    border-bottom: 0;
+    border-radius: 16px 16px 0 0;
+    background: var(--fh-surface-soft);
+}
+
+html body.fh-tool--timestamp .mod-stamp > .x-cnt,
+html body.fh-tool--timestamp .mod-stamp > .row.x-cnt {
+    min-height: 120px;
+    margin: 0;
+    padding: 18px;
+    border: 1px solid var(--fh-line);
+    border-radius: 0 0 16px 16px;
+    background: var(--fh-panel);
+}
+
+html body.fh-tool--timestamp .mod-stamp > .x-wd:nth-last-of-type(1),
+html body.fh-tool--timestamp .mod-stamp > table {
+    grid-column: 1 / -1;
+}
+
+html body.fh-tool--timestamp .mod-stamp > table {
+    margin: 0;
+    width: 100%;
+}
+
+html body.fh-tool--timestamp .mod-stamp > table tbody tr:nth-child(even) {
+    background: color-mix(in srgb, var(--fh-surface-soft) 68%, transparent);
+}
+
+html body.fh-modern.fh-tool--timestamp .mod-stamp {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+    padding: 16px !important;
+}
+
+html body.fh-modern.fh-tool--timestamp .mod-stamp::before,
+html body.fh-modern.fh-tool--timestamp .mod-stamp::after {
+    display: none !important;
+    content: none !important;
+}
+
+html body.fh-modern.fh-tool--timestamp .fh-time-card {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--fh-line);
+    border-radius: 16px;
+    background: var(--fh-panel);
+}
+
+html body.fh-modern.fh-tool--timestamp .fh-time-card .x-wd {
+    margin: 0 !important;
+    padding: 15px 18px 11px !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-modern.fh-tool--timestamp .fh-time-card > .x-cnt,
+html body.fh-modern.fh-tool--timestamp .fh-time-card > .row.x-cnt {
+    flex: 1 1 auto;
+    min-height: 126px;
+    margin: 0 !important;
+    padding: 18px !important;
+    border: 0 !important;
+    background: transparent !important;
+}
+
+html body.fh-modern.fh-tool--timestamp .fh-time-world-clock {
+    grid-column: 1 / -1;
+}
+
+html body.fh-modern.fh-tool--timestamp .fh-time-world-clock table {
+    width: 100%;
+    margin: 0;
+}
+
+/* Regex reference is a catalogue. Put the category label in a rail and let
+ * the patterns flow in a responsive grid. */
+html body.fh-tool--regexp .tab-container {
+    padding: 16px !important;
+}
+
+html body.fh-tool--regexp .regex-visual-debugger {
+    padding: 22px !important;
+    border-radius: 20px;
+    background: linear-gradient(140deg, var(--fh-panel), var(--fh-surface-soft)) !important;
+}
+
+html body.fh-tool--regexp .category-section {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--fh-line);
+    background: transparent !important;
+}
+
+html body.fh-tool--regexp .category-title {
+    position: sticky;
+    top: 84px;
+    margin: 0;
+    padding: 10px 0 0 14px;
+    border-left: 2px solid var(--fh-primary);
+    color: var(--fh-text);
+    font-size: 16px;
+}
+
+html body.fh-tool--regexp .category-btn-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+    margin: 0;
+}
+
+html body.fh-tool--regexp .regex-item {
+    width: 100%;
+    min-height: 48px;
+    text-align: left;
+}
+
+/* Datetime calculator already has a good information model. Give its tab
+ * bar and result stack the same sense of depth as the UUID workbench. */
+html body.fh-tool--datetime-calc .tab-content,
+html body.fh-tool--datetime-calc .tab-container {
+    padding: 16px !important;
+}
+
+html body.fh-tool--datetime-calc .tab-content.active {
+    border-radius: 20px;
+    background: linear-gradient(140deg, var(--fh-panel), var(--fh-surface-soft)) !important;
+}
+
+html body.fh-tool--datetime-calc .quick-actions-module,
+html body.fh-tool--datetime-calc .input-time-module,
+html body.fh-tool--datetime-calc .current-time-module,
+html body.fh-tool--datetime-calc .parse-results-module {
+    min-height: 0;
+    border-radius: 18px !important;
+}
+
+/* Small conversion tools should still feel intentional when their content is
+ * short. Use an asymmetric control/result split instead of empty whitespace. */
+html body.fh-tool--byte-unit .fh-byte-layout,
+html body.fh-tool--trans-radix .special-layout,
+html body.fh-tool--websocket .x-wrapper,
+html body.fh-tool--postman .special-layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr) !important;
+    gap: 16px;
+}
+
+html body.fh-tool--byte-unit .fh-byte-panel,
+html body.fh-tool--trans-radix .panel-body,
+html body.fh-tool--websocket .panel-body,
+html body.fh-tool--postman .panel-body {
+    padding: 16px !important;
+}
+
+html body.fh-tool--byte-unit .fh-byte-result-main {
+    min-height: 150px;
+    display: grid;
+    place-items: center start;
+    padding: 22px;
+    border-radius: 16px;
+    font-size: clamp(24px, 3vw, 42px);
+    letter-spacing: -0.04em;
+}
+
+html body.fh-tool--websocket .x-wrapper,
+html body.fh-tool--postman .special-layout {
+    align-items: stretch;
+}
+
+html body.fh-tool--websocket textarea,
+html body.fh-tool--postman textarea {
+    min-height: 170px;
+}
+
+/* Compact tools (password, crontab, code formatters) get a centered command
+ * card with a visible result zone, not a page-sized empty canvas. */
+html body.fh-tool--password .panel-body,
+html body.fh-tool--crontab .panel-body,
+html body.fh-tool--code-beautify .panel-body,
+html body.fh-tool--code-compress .panel-body {
+    max-width: none;
+    min-height: 0;
+    padding: 18px !important;
+}
+
+html body.fh-tool--password .panel-body > *,
+html body.fh-tool--crontab .panel-body > * {
+    max-width: 980px;
+    margin-inline: auto;
+}
+
+html body.fh-tool--code-beautify .form-control,
+html body.fh-tool--code-compress .CodeMirror,
+html body.fh-tool--code-compress textarea {
+    min-height: 460px;
+}
+
+html body.fh-tool--code-beautify .mod-json,
+html body.fh-tool--code-compress .mod-json {
+    display: grid;
+    grid-template-rows: minmax(420px, 1fr) auto;
+    gap: 16px;
+}
+
+@media (max-width: 980px) {
+    html body.fh-tool--json-diff .panel-body.mod-json,
+    html body.fh-tool--excel2json .excel2json-flex-panel,
+    html body.fh-tool--image-base64 .image-base64-layout,
+    html body.fh-tool--image-base64 .base64-image-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    html body.fh-tool--en-decode .mod-endecode {
+        grid-template-columns: 1fr;
+        grid-template-areas: "source" "methods" "result";
+    }
+
+    html body.fh-tool--en-decode .encode-options-card {
+        max-height: none;
+    }
+
+    html body.fh-tool--qr-code .qr-layout {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    html body.fh-tool--qr-code .qr-right {
+        grid-column: 1 / -1;
+    }
+
+    html body.fh-tool--trans-color .modules-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "hex hex" "rgb hsl" "hsv hsv";
+    }
+
+    html body.fh-tool--timestamp .mod-stamp {
+        grid-template-columns: 1fr;
+    }
+
+    html body.fh-modern.fh-tool--timestamp .fh-time-world-clock {
+        grid-column: 1;
+    }
+
+    html body.fh-tool--timestamp .mod-stamp > table,
+    html body.fh-tool--timestamp .mod-stamp > .x-wd {
+        grid-column: 1;
+    }
+
+    html body.fh-tool--regexp .category-section {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    html body.fh-tool--regexp .category-title {
+        position: static;
+    }
+
+    html body.fh-tool--byte-unit .fh-byte-layout,
+    html body.fh-tool--trans-radix .special-layout,
+    html body.fh-tool--websocket .x-wrapper,
+    html body.fh-tool--postman .special-layout {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 640px) {
+    html body.fh-tool-surface:not(.uuid-tool-surface) .wrapper,
+    html body.fh-tool-surface:not(.uuid-tool-surface) > .container,
+    html body.fh-tool-surface:not(.uuid-tool-surface) main.container {
+        width: calc(100% - 20px);
+    }
+
+    html body.fh-tool-surface:not(.uuid-tool-surface) .panel-heading,
+    html body.fh-tool-surface:not(.uuid-tool-surface) .page-header,
+    html body.fh-tool-surface:not(.uuid-tool-surface) .main-navbar {
+        min-height: 56px !important;
+        padding: 10px 12px !important;
+        border-radius: 16px !important;
+    }
+
+    html body.fh-tool--json-diff .panel-body.mod-json {
+        grid-template-columns: 1fr;
+    }
+
+    html body.fh-tool--qr-code .qr-layout,
+    html body.fh-tool--trans-color .modules-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas: none;
+    }
+
+    html body.fh-tool--trans-color .module-hex,
+    html body.fh-tool--trans-color .module-rgb,
+    html body.fh-tool--trans-color .module-hsl,
+    html body.fh-tool--trans-color .module-hsv {
+        grid-area: auto;
+    }
+
+    html body.fh-tool--regexp .category-btn-group {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* -------------------------------------------------------------------------
+ * Tool surfaces v4 — the remaining legacy workspaces
+ *
+ * The generator page set already speaks Ink + Volt.  These compositions bring
+ * the same editorial rhythm to the less frequently used tools without
+ * rewriting their Vue/jQuery contracts.  The rules are deliberately scoped
+ * by the runtime tool identity added in tool-layout.js.
+ * ------------------------------------------------------------------------- */
+
+html body.fh-modern.fh-tool-surface .panel,
+html body.fh-modern.fh-tool-surface .x-panel,
+html body.fh-modern.fh-tool-surface .result-panel,
+html body.fh-modern.fh-tool-surface .tool-panel,
+html body.fh-modern.fh-tool-surface .preview-panel,
+html body.fh-modern.fh-tool-surface .chart-container {
+    border-color: var(--fh-line) !important;
+    border-radius: 20px !important;
+    background: color-mix(in srgb, var(--fh-panel) 96%, transparent) !important;
+    box-shadow: var(--fh-shadow) !important;
+}
+
+html body.fh-modern.fh-tool-surface button,
+html body.fh-modern.fh-tool-surface .btn,
+html body.fh-modern.fh-tool-surface input,
+html body.fh-modern.fh-tool-surface select,
+html body.fh-modern.fh-tool-surface textarea {
+    transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+html body.fh-modern.fh-tool-surface button:focus-visible,
+html body.fh-modern.fh-tool-surface input:focus-visible,
+html body.fh-modern.fh-tool-surface select:focus-visible,
+html body.fh-modern.fh-tool-surface textarea:focus-visible {
+    outline: 0;
+    border-color: var(--fh-primary) !important;
+    box-shadow: 0 0 0 3px var(--fh-primary-soft) !important;
+}
+
+/* Mock data: a narrow command rail beside an intentionally generous output
+ * canvas.  The result stays legible when the generated payload is long. */
+html body.fh-tool--mock-data .panel-body {
+    padding: 18px !important;
+}
+
+html body.fh-tool--mock-data .main-content-layout {
+    display: grid !important;
+    grid-template-columns: minmax(330px, 410px) minmax(0, 1fr);
+    gap: 18px;
+    align-items: stretch;
+    min-height: calc(100dvh - 178px);
+}
+
+html body.fh-tool--mock-data .config-section,
+html body.fh-tool--mock-data .result-section {
+    min-width: 0;
+    border: 1px solid var(--fh-line) !important;
+    border-radius: 18px;
+    background: var(--fh-panel) !important;
+}
+
+html body.fh-tool--mock-data .config-section {
+    padding: 18px !important;
+    overflow: auto;
+    scrollbar-color: var(--fh-line-strong) transparent;
+}
+
+html body.fh-tool--mock-data .result-section {
+    padding: 12px !important;
+}
+
+html body.fh-tool--mock-data .result-panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 !important;
+    overflow: hidden;
+}
+
+html body.fh-tool--mock-data .template-section.template-top,
+html body.fh-tool--mock-data .data-type-section,
+html body.fh-tool--mock-data .data-content,
+html body.fh-tool--mock-data .generate-config {
+    padding: 14px !important;
+    border: 1px solid var(--fh-line) !important;
+    border-radius: 14px;
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-tool--mock-data .template-section.template-top,
+html body.fh-tool--mock-data .data-type-section,
+html body.fh-tool--mock-data .data-content {
+    margin-bottom: 12px !important;
+}
+
+html body.fh-tool--mock-data .template-section.template-top h4,
+html body.fh-tool--mock-data .data-type-section h4,
+html body.fh-tool--mock-data .field-group h5 {
+    margin: 0 0 10px !important;
+    color: var(--fh-text) !important;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+}
+
+html body.fh-tool--mock-data .template-buttons,
+html body.fh-tool--mock-data .action-buttons-top,
+html body.fh-tool--mock-data .data-type-tabs {
+    gap: 8px !important;
+}
+
+html body.fh-tool--mock-data .action-buttons-top {
+    margin: 0 0 12px !important;
+    padding: 0 0 12px !important;
+    border-bottom: 1px solid var(--fh-line);
+}
+
+html body.fh-tool--mock-data .data-type-tabs {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+html body.fh-tool--mock-data .data-tab {
+    min-height: 38px;
+    border: 1px solid var(--fh-line) !important;
+    border-radius: 10px !important;
+    background: var(--fh-panel) !important;
+    color: var(--fh-muted) !important;
+}
+
+html body.fh-tool--mock-data .data-tab.active {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary) !important;
+    color: var(--fh-primary-ink) !important;
+}
+
+html body.fh-tool--mock-data .field-row {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+}
+
+html body.fh-tool--mock-data .field-row label {
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 9px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--fh-panel) 76%, transparent);
+    color: var(--fh-text) !important;
+}
+
+html body.fh-tool--mock-data .field-row label:hover {
+    border-color: var(--fh-line-strong);
+}
+
+html body.fh-tool--mock-data .field-row input {
+    accent-color: var(--fh-primary);
+}
+
+html body.fh-tool--mock-data .result-header {
+    padding: 14px 16px !important;
+    border-bottom: 1px solid var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-tool--mock-data .result-header h4 {
+    color: var(--fh-text) !important;
+}
+
+html body.fh-tool--mock-data .result-content {
+    flex: 1 1 auto;
+    min-height: 520px;
+    background: #111a12 !important;
+}
+
+html body.fh-tool--mock-data .result-content pre {
+    min-height: 100%;
+    margin: 0 !important;
+    padding: 20px !important;
+    color: #d8f2af !important;
+    font: 13px/1.75 var(--fh-mono);
+}
+
+/* Page Monkey: make the script catalogue read like a small product surface,
+ * not a form with a toolbar attached. */
+html body.fh-tool--page-monkey .fh-subbar {
+    width: min(calc(100% - 48px), 1380px);
+    margin: 0 auto 16px;
+    padding: 10px 14px;
+    border: 1px solid var(--fh-line) !important;
+    border-radius: 16px;
+    background: var(--fh-panel) !important;
+    box-shadow: var(--fh-shadow);
+}
+
+html body.fh-tool--page-monkey .fh-main {
+    width: min(calc(100% - 48px), 1380px);
+    max-width: none;
+    padding: 0 0 34px;
+}
+
+html body.fh-tool--page-monkey .fh-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+html body.fh-tool--page-monkey .fh-stat,
+html body.fh-tool--page-monkey .fh-filter-bar,
+html body.fh-tool--page-monkey .fh-card,
+html body.fh-tool--page-monkey .fh-empty,
+html body.fh-tool--page-monkey .fh-editor {
+    border-color: var(--fh-line) !important;
+    border-radius: 18px !important;
+    background: var(--fh-panel) !important;
+    box-shadow: var(--fh-shadow) !important;
+}
+
+html body.fh-tool--page-monkey .fh-stat {
+    min-height: 82px;
+    padding: 14px 16px;
+}
+
+html body.fh-tool--page-monkey .fh-stat-icon {
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--fh-line);
+    border-radius: 12px;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-primary) !important;
+    font: 800 11px/1 var(--fh-mono);
+}
+
+html body.fh-tool--page-monkey .fh-filter-bar {
+    padding: 12px !important;
+    gap: 10px;
+}
+
+html body.fh-tool--page-monkey .fh-search,
+html body.fh-tool--page-monkey .fh-filter-tabs {
+    border-color: var(--fh-line) !important;
+    border-radius: 11px;
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-tool--page-monkey .fh-search input {
+    color: var(--fh-text) !important;
+}
+
+html body.fh-tool--page-monkey .fh-filter-tab.active {
+    border: 1px solid var(--fh-primary);
+    background: var(--fh-primary) !important;
+    color: var(--fh-primary-ink) !important;
+    box-shadow: none;
+}
+
+html body.fh-tool--page-monkey .fh-card {
+    padding: 18px;
+}
+
+html body.fh-tool--page-monkey .fh-card:hover {
+    border-color: var(--fh-primary) !important;
+    transform: translateY(-2px);
+}
+
+html body.fh-tool--page-monkey .fh-card-pattern,
+html body.fh-tool--page-monkey .fh-editor-body {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+}
+
+/* SVG conversion is a three-stage pipeline.  Turn the legacy table into a
+ * proper source → transform → result workbench while preserving its cells. */
+html body.fh-tool--svg-converter .mod-main {
+    padding: 0 0 36px !important;
+}
+
+html body.fh-tool--svg-converter .main-inner {
+    padding: 18px !important;
+    border-color: var(--fh-line) !important;
+    border-radius: 22px !important;
+    background: var(--fh-panel) !important;
+}
+
+html body.fh-tool--svg-converter .mod-table,
+html body.fh-tool--svg-converter .mod-table tbody,
+html body.fh-tool--svg-converter .mod-table tr {
+    display: grid;
+    width: 100%;
+}
+
+html body.fh-tool--svg-converter .mod-table {
+    border-spacing: 0 !important;
+}
+
+html body.fh-tool--svg-converter .mod-table tr {
+    grid-template-columns: minmax(0, 1fr) 220px minmax(0, 1fr);
+    gap: 14px;
+}
+
+html body.fh-tool--svg-converter .mod-table td,
+html body.fh-tool--svg-converter .mod-table td.converter-col {
+    display: block;
+    width: auto !important;
+    padding: 0 !important;
+}
+
+html body.fh-tool--svg-converter .x-panel {
+    min-height: 420px;
+    overflow: hidden;
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-tool--svg-converter .x-panel-title {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--fh-line);
+    background: var(--fh-panel) !important;
+    color: var(--fh-text) !important;
+    font: 850 12px/1 var(--fh-mono);
+    letter-spacing: 0.08em;
+}
+
+html body.fh-tool--svg-converter .panel-content {
+    min-height: 360px;
+    padding: 18px;
+    background: transparent !important;
+}
+
+html body.fh-tool--svg-converter .upload-zone,
+html body.fh-tool--svg-converter .result-zone {
+    min-height: 300px;
+    border: 1px dashed var(--fh-line-strong);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--fh-panel) 72%, transparent);
+}
+
+html body.fh-tool--svg-converter .upload-zone p,
+html body.fh-tool--svg-converter .result-zone p {
+    color: var(--fh-muted) !important;
+}
+
+html body.fh-tool--svg-converter .converter-box {
+    min-height: 420px;
+    justify-content: center;
+    padding: 18px 12px;
+    border: 1px solid var(--fh-line);
+    border-radius: 18px;
+    background: var(--fh-surface-soft);
+}
+
+html body.fh-tool--svg-converter .converter-inputs .input-group {
+    display: grid;
+    gap: 7px;
+    margin-bottom: 14px;
+}
+
+html body.fh-tool--svg-converter .converter-inputs label {
+    color: var(--fh-text) !important;
+    font-weight: 800;
+}
+
+html body.fh-tool--svg-converter .converter-inputs input,
+html body.fh-tool--svg-converter .converter-inputs select {
+    width: 100% !important;
+    border-color: var(--fh-line-strong) !important;
+    border-radius: 11px !important;
+    background: var(--fh-panel) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-tool--svg-converter .action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+html body.fh-tool--svg-converter .btn-convert,
+html body.fh-tool--svg-converter .download-btn .btn {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary) !important;
+    color: var(--fh-primary-ink) !important;
+}
+
+html body.fh-tool--svg-converter .file-info-panel {
+    margin-top: 12px;
+    border-color: var(--fh-line) !important;
+    border-radius: 14px;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+/* Screenshot: treat the canvas as a dark inspection stage and make the save
+ * affordance part of the stage header instead of a floating legacy button. */
+html body.fh-tool--screenshot .panel-body {
+    padding: 16px !important;
+}
+
+html body.fh-tool--screenshot .fh-page-tip {
+    margin: 0 0 14px !important;
+}
+
+html body.fh-tool--screenshot .x-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    margin: 0 !important;
+    padding: 0 14px 0 16px !important;
+    border: 1px solid var(--fh-line) !important;
+    border-radius: 14px 14px 0 0;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-tool--screenshot #btnSave {
+    margin: 0 0 0 auto !important;
+}
+
+html body.fh-tool--screenshot .img-container {
+    position: relative;
+    inset: auto;
+    max-height: calc(100dvh - 230px);
+    min-height: 520px;
+    margin: 0 !important;
+    padding: 14px;
+    border: 1px solid var(--fh-line) !important;
+    border-top: 0 !important;
+    border-radius: 0 0 18px 18px;
+    background: #0a0e0b !important;
+}
+
+html body.fh-tool--screenshot .img-result {
+    width: auto;
+    max-width: 100%;
+}
+
+/* Loan calculator: turn the formula controls into a compact header card and
+ * reserve the full width for the amortisation table. */
+html body.fh-tool--loan-rate .panel-body {
+    padding: 18px !important;
+}
+
+html body.fh-tool--loan-rate .mod-inputs,
+html body.fh-tool--loan-rate .mod-value,
+html body.fh-tool--loan-rate .row.x-tips {
+    padding: 14px 16px;
+    border: 1px solid var(--fh-line) !important;
+    border-radius: 14px;
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-tool--loan-rate .mod-inputs,
+html body.fh-tool--loan-rate .mod-value {
+    margin: 0 0 10px !important;
+}
+
+html body.fh-tool--loan-rate .mod-inputs .form-control,
+html body.fh-tool--loan-rate .mod-value .x-input,
+html body.fh-tool--loan-rate select.x-select {
+    border-color: var(--fh-line-strong) !important;
+    border-radius: 11px !important;
+    background: var(--fh-panel) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-tool--loan-rate .x-calc-title {
+    margin: 18px 0 12px !important;
+    padding: 0 0 10px !important;
+    border-bottom-color: var(--fh-line) !important;
+    color: var(--fh-text) !important;
+    font-size: 15px;
+}
+
+html body.fh-tool--loan-rate #containerPayback {
+    overflow: auto;
+    border: 1px solid var(--fh-line);
+    border-radius: 16px;
+}
+
+html body.fh-tool--loan-rate #containerPayback table {
+    margin: 0;
+    background: var(--fh-panel) !important;
+}
+
+html body.fh-tool--loan-rate #containerPayback thead th {
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+/* Mind-map archive and notes are document managers; give their empty states
+ * a clear reading column and make the navigation rail feel intentional. */
+html body.fh-tool--naotu .naotu-shell,
+html body.fh-tool--sticky-notes .x-wrapper {
+    border-color: var(--fh-line) !important;
+    border-radius: 20px !important;
+    background: var(--fh-panel) !important;
+    box-shadow: var(--fh-shadow) !important;
+}
+
+html body.fh-tool--naotu .naotu-shell {
+    padding: 18px !important;
+}
+
+html body.fh-tool--naotu .naotu-hero {
+    padding: 18px !important;
+    border-radius: 16px !important;
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-tool--naotu .my-naotu-list .mm-tips {
+    border-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-tool--naotu .my-naotu-list table {
+    overflow: hidden;
+    border-color: var(--fh-line) !important;
+    border-radius: 14px;
+}
+
+html body.fh-tool--sticky-notes .x-wrapper {
+    min-height: calc(100dvh - 124px);
+    overflow: hidden;
+}
+
+html body.fh-tool--sticky-notes .x-wrapper .x-sidebar {
+    width: 280px;
+    border-right-color: var(--fh-line) !important;
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-tool--sticky-notes .x-sidebar .x-tools {
+    padding: 12px 14px;
+    border-bottom-color: var(--fh-line) !important;
+    background: var(--fh-panel) !important;
+}
+
+html body.fh-tool--sticky-notes .x-sidebar ul li {
+    padding: 10px 14px;
+    border-bottom-color: var(--fh-line) !important;
+    background: transparent !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-tool--sticky-notes .x-sidebar ul li:hover,
+html body.fh-tool--sticky-notes .x-sidebar ul li.x-selected {
+    background: var(--fh-primary) !important;
+    color: var(--fh-primary-ink) !important;
+}
+
+html body.fh-tool--sticky-notes .x-wrapper #main {
+    min-height: calc(100dvh - 180px);
+    margin-left: 280px;
+    padding: 24px;
+    background: var(--fh-panel) !important;
+}
+
+/* Chart maker and poster maker already own rich controls; this pass removes
+ * the generic white-card defaults so their canvas and settings read as one
+ * coherent studio. */
+html body.fh-tool--chart-maker .app-container {
+    max-width: none;
+    grid-template-columns: minmax(320px, 390px) minmax(0, 1fr);
+    gap: 18px;
+    min-height: calc(100dvh - 170px);
+}
+
+html body.fh-tool--chart-maker .sidebar,
+html body.fh-tool--chart-maker .panel,
+html body.fh-tool--chart-maker .main-content,
+html body.fh-tool--chart-maker .chart-container {
+    min-width: 0;
+}
+
+html body.fh-tool--chart-maker .panel,
+html body.fh-tool--chart-maker .chart-container {
+    border-color: var(--fh-line) !important;
+    border-radius: 20px !important;
+    background: var(--fh-panel) !important;
+    box-shadow: var(--fh-shadow) !important;
+}
+
+html body.fh-tool--chart-maker .panel h2,
+html body.fh-tool--chart-maker .chart-type-gallery h3 {
+    color: var(--fh-text) !important;
+    border-bottom-color: var(--fh-line) !important;
+}
+
+html body.fh-tool--chart-maker .panel h2::after,
+html body.fh-tool--chart-maker .chart-type-gallery h3::after {
+    background: var(--fh-primary) !important;
+}
+
+html body.fh-tool--chart-maker .input-group input[type="text"],
+html body.fh-tool--chart-maker .input-group select,
+html body.fh-tool--chart-maker .input-group textarea {
+    border-color: var(--fh-line-strong) !important;
+    border-radius: 11px !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-tool--chart-maker #chart-wrapper {
+    min-height: 460px;
+    border-color: var(--fh-line) !important;
+    border-radius: 16px;
+    background: #111a12 !important;
+}
+
+html body.fh-tool--chart-maker .chart-type-item {
+    border-color: var(--fh-line) !important;
+    border-radius: 12px;
+    background: var(--fh-surface-soft) !important;
+}
+
+html body.fh-tool--chart-maker .chart-type-item.active,
+html body.fh-tool--chart-maker .chart-type-item:hover {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary-soft) !important;
+}
+
+html body.fh-tool--poster-maker .app-container {
+    max-width: none;
+    padding: 0 !important;
+}
+
+html body.fh-tool--poster-maker .app-main {
+    height: calc(100dvh - 132px);
+    min-height: 620px;
+    gap: 18px;
+}
+
+html body.fh-tool--poster-maker .tool-panel,
+html body.fh-tool--poster-maker .preview-panel {
+    border-color: var(--fh-line) !important;
+    border-radius: 20px !important;
+    background: var(--fh-panel) !important;
+    box-shadow: var(--fh-shadow) !important;
+}
+
+html body.fh-tool--poster-maker .panel-tabs,
+html body.fh-tool--poster-maker .preview-header {
+    border-bottom-color: var(--fh-line) !important;
+}
+
+html body.fh-tool--poster-maker .panel-tab.active {
+    border-bottom-color: var(--fh-primary) !important;
+    color: var(--fh-primary) !important;
+}
+
+html body.fh-tool--poster-maker .category-btn,
+html body.fh-tool--poster-maker .zoom-btn,
+html body.fh-tool--poster-maker .form-control {
+    border-color: var(--fh-line-strong) !important;
+    border-radius: 11px !important;
+    background: var(--fh-surface-soft) !important;
+    color: var(--fh-text) !important;
+}
+
+html body.fh-tool--poster-maker .category-btn.active,
+html body.fh-tool--poster-maker .zoom-btn:hover {
+    border-color: var(--fh-primary) !important;
+    background: var(--fh-primary) !important;
+    color: var(--fh-primary-ink) !important;
+}
+
+html body.fh-tool--poster-maker .preview-container {
+    background: #111a12 !important;
+}
+
+@media (max-width: 900px) {
+    html body.fh-tool--mock-data .main-content-layout,
+    html body.fh-tool--chart-maker .app-container {
+        grid-template-columns: 1fr;
+    }
+
+    html body.fh-tool--page-monkey .fh-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    html body.fh-tool--svg-converter .mod-table tr {
+        grid-template-columns: 1fr;
+    }
+
+    html body.fh-tool--svg-converter .converter-box {
+        min-height: 0;
+    }
+
+    html body.fh-tool--sticky-notes .x-wrapper .x-sidebar {
+        position: relative;
+        width: 100%;
+        min-height: 120px;
+        border-right: 0 !important;
+        border-bottom: 1px solid var(--fh-line) !important;
+    }
+
+    html body.fh-tool--sticky-notes .x-wrapper #main {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    html body.fh-tool--page-monkey .fh-subbar,
+    html body.fh-tool--page-monkey .fh-main {
+        width: calc(100% - 20px);
+    }
+
+    html body.fh-tool--page-monkey .fh-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    html body.fh-tool--mock-data .field-row,
+    html body.fh-tool--mock-data .data-type-tabs {
+        grid-template-columns: 1fr;
+    }
+
+    html body.fh-tool--screenshot .img-container {
+        min-height: 360px;
+    }
+}
+
+/* The encoder stylesheet has a legacy fixed rail with higher specificity;
+ * repeat the narrow layout after every v4 rule so phones never inherit that
+ * two-column geometry. */
+@media (max-width: 980px) {
+    html body.fh-modern.fh-tool--en-decode .mod-endecode {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto auto auto !important;
+        grid-template-areas: "source" "methods" "result" !important;
+        min-height: 0 !important;
+    }
+
+    html body.fh-modern.fh-tool--en-decode .encode-input-card,
+    html body.fh-modern.fh-tool--en-decode .encode-options-card,
+    html body.fh-modern.fh-tool--en-decode .encode-empty-card {
+        width: auto !important;
+        max-height: none !important;
+        height: auto !important;
+    }
+}
