@@ -1,105 +1,173 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>UUID/ID生成器</title>
+        <title>UUID/ID 生成器 | XFeHelper</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="../static/img/favicon.ico">
-        <link rel="stylesheet" href="index.css" />
-    <link rel="stylesheet" href="../static/css/fehelper-tools.css">
+        <link rel="stylesheet" href="index.css">
     </head>
-    <body class="fh-modern">
-    <div class="wrapper" id="pageContainer">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    <a href="https://fehelper.com" target="_blank" class="x-a-high">
-                        <img src="../static/img/fe-16.png" alt="XFeHelper"/> XFeHelper</a>：UUID/ID 生成器
-                    <a class="x-other-tools" id="btnOptions"><i class="icon-plus-circle"></i> 工具市场</a>
-                </h3>
-            </div>
+    <body class="fh-modern uuid-tool-surface">
+        <div class="uuid-shell" id="pageContainer">
+            <header class="uuid-header">
+                <a href="https://fehelper.com" target="_blank" rel="noopener noreferrer" class="uuid-brand" aria-label="打开 XFeHelper 官网">
+                    <span class="uuid-brand-mark"><img src="../static/img/fe-16.png" alt=""></span>
+                    <span class="uuid-brand-name">XFeHelper</span>
+                </a>
+                <div class="uuid-heading">
+                    <span class="uuid-heading-kicker">IDENTITY WORKBENCH</span>
+                    <h1>UUID / ID 生成器</h1>
+                </div>
+                <div class="uuid-header-actions">
+                    <span class="uuid-local-state"><span aria-hidden="true"></span>本地运行</span>
+                    <button type="button" id="btnOptions" class="uuid-market-link">工具市场</button>
+                </div>
+            </header>
+
+            <main class="uuid-main">
+                <section class="uuid-intro" aria-labelledby="uuidIntroTitle">
+                    <div class="uuid-intro-copy">
+                        <span class="uuid-overline">本地生成器</span>
+                        <h2 id="uuidIntroTitle">快速生成可直接复制的唯一标识符。</h2>
+                        <p>UUID、Snowflake 和 NanoID 都在当前浏览器中完成，不上传任何数据。</p>
+                    </div>
+                    <div class="uuid-runtime-note" aria-label="运行环境">
+                        <span>运行环境</span>
+                        <code>Browser Crypto API</code>
+                    </div>
+                </section>
+
+                <div class="uuid-grid">
+                    <article class="uuid-card uuid-card--uuid">
+                        <div class="uuid-card-heading">
+                            <div>
+                                <span class="uuid-card-label">通用标识符</span>
+                                <h2>UUID v4</h2>
+                            </div>
+                            <span class="uuid-card-token">RANDOM</span>
+                        </div>
+                        <p class="uuid-card-description">适合数据库主键、请求追踪和跨系统对象标识。</p>
+                        <div class="uuid-control-row uuid-control-row--uuid">
+                            <label class="uuid-field" for="uuidCount">
+                                <span>生成数量</span>
+                                <input type="number" id="uuidCount" value="5" min="1" max="100" class="uuid-input uuid-input--short" inputmode="numeric">
+                            </label>
+                            <label class="uuid-field uuid-field--format" for="uuidFormat">
+                                <span>输出格式</span>
+                                <select id="uuidFormat" class="uuid-input uuid-input--format">
+                                    <option value="standard">标准（带连字符）</option>
+                                    <option value="nohyphen">无连字符</option>
+                                    <option value="upper">大写</option>
+                                    <option value="braces">带花括号</option>
+                                </select>
+                            </label>
+                            <button type="button" class="uuid-button" id="btnGenUUID">生成 UUID</button>
+                        </div>
+                        <div class="uuid-result-heading">
+                            <label for="uuidResult">输出结果</label>
+                            <span>点击文本即可全选</span>
+                        </div>
+                        <textarea class="uuid-result x-result" id="uuidResult" rows="11" readonly aria-label="UUID 生成结果"></textarea>
+                    </article>
+
+                    <article class="uuid-card uuid-card--snowflake">
+                        <div class="uuid-card-heading">
+                            <div>
+                                <span class="uuid-card-label">有序分布式标识符</span>
+                                <h2>Snowflake</h2>
+                            </div>
+                            <span class="uuid-card-token">64 BIT</span>
+                        </div>
+                        <p class="uuid-card-description">生成带时间、数据中心、机器和序列信息的数字 ID。</p>
+                        <div class="uuid-control-grid uuid-control-grid--snowflake">
+                            <label class="uuid-field" for="machineId">
+                                <span>机器 ID</span>
+                                <input type="number" id="machineId" value="1" min="0" max="31" class="uuid-input" inputmode="numeric">
+                            </label>
+                            <label class="uuid-field" for="datacenterId">
+                                <span>数据中心 ID</span>
+                                <input type="number" id="datacenterId" value="1" min="0" max="31" class="uuid-input" inputmode="numeric">
+                            </label>
+                            <label class="uuid-field" for="snowflakeCount">
+                                <span>生成数量</span>
+                                <input type="number" id="snowflakeCount" value="5" min="1" max="100" class="uuid-input" inputmode="numeric">
+                            </label>
+                        </div>
+                        <button type="button" class="uuid-button uuid-button--wide" id="btnGenSnowflake">生成 Snowflake ID</button>
+                        <div class="uuid-result-heading">
+                            <label for="snowflakeResult">输出结果</label>
+                            <span>点击文本即可全选</span>
+                        </div>
+                        <textarea class="uuid-result x-result" id="snowflakeResult" rows="9" readonly aria-label="雪花 ID 生成结果"></textarea>
+                    </article>
+
+                    <article class="uuid-card uuid-card--parse">
+                        <div class="uuid-card-heading">
+                            <div>
+                                <span class="uuid-card-label">结构查看器</span>
+                                <h2>解析 Snowflake</h2>
+                            </div>
+                            <span class="uuid-card-token">DECODE</span>
+                        </div>
+                        <p class="uuid-card-description">拆开一个 Snowflake ID，查看它携带的时间和节点信息。</p>
+                        <div class="uuid-parse-controls">
+                            <label class="uuid-field uuid-field--full" for="snowflakeInput">
+                                <span>Snowflake ID</span>
+                                <input type="text" id="snowflakeInput" class="uuid-input" placeholder="粘贴要解析的数字 ID" autocomplete="off" inputmode="numeric">
+                            </label>
+                            <button type="button" class="uuid-button uuid-button--outline" id="btnParseSnowflake">解析 ID</button>
+                        </div>
+                        <div class="uuid-parse-result" id="snowflakeParsed" style="display:none">
+                            <table class="uuid-decode-table">
+                                <tbody>
+                                    <tr><th scope="row">时间戳</th><td id="parsedTimestamp"></td></tr>
+                                    <tr><th scope="row">日期时间</th><td id="parsedDatetime"></td></tr>
+                                    <tr><th scope="row">数据中心 ID</th><td id="parsedDatacenterId"></td></tr>
+                                    <tr><th scope="row">机器 ID</th><td id="parsedMachineId"></td></tr>
+                                    <tr><th scope="row">序列号</th><td id="parsedSequence"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+
+                    <article class="uuid-card uuid-card--nano">
+                        <div class="uuid-card-heading">
+                            <div>
+                                <span class="uuid-card-label">短字符串标识符</span>
+                                <h2>NanoID</h2>
+                            </div>
+                            <span class="uuid-card-token">URL SAFE</span>
+                        </div>
+                        <p class="uuid-card-description">用更短的 URL 安全字符串，适合链接、临时令牌和前端对象。</p>
+                        <div class="uuid-control-row uuid-control-row--nano">
+                            <label class="uuid-field" for="nanoIdLength">
+                                <span>长度</span>
+                                <input type="number" id="nanoIdLength" value="21" min="1" max="256" class="uuid-input uuid-input--short" inputmode="numeric">
+                            </label>
+                            <label class="uuid-field" for="nanoIdCount">
+                                <span>生成数量</span>
+                                <input type="number" id="nanoIdCount" value="5" min="1" max="100" class="uuid-input uuid-input--short" inputmode="numeric">
+                            </label>
+                            <button type="button" class="uuid-button" id="btnGenNanoId">生成 NanoID</button>
+                        </div>
+                        <div class="uuid-result-heading">
+                            <label for="nanoIdResult">输出结果</label>
+                            <span>点击文本即可全选</span>
+                        </div>
+                        <textarea class="uuid-result x-result" id="nanoIdResult" rows="9" readonly aria-label="NanoID 生成结果"></textarea>
+                    </article>
+                </div>
+            </main>
+
+            <footer class="uuid-footer">
+                <span>所有结果仅在本地生成</span>
+                <span>© XFeHelper</span>
+            </footer>
         </div>
-        <div class="panel-body uuid-page-body">
-            <div class="x-section">
-                <h4>UUID v4 生成器</h4>
-                <div class="x-row uuid-controls">
-                    <label class="uuid-control" for="uuidCount">
-                        <span>生成数量</span>
-                        <input type="number" id="uuidCount" value="5" min="1" max="100" class="form-control uuid-input uuid-input--short">
-                    </label>
-                    <label class="uuid-control uuid-control--format" for="uuidFormat">
-                        <span>格式</span>
-                        <select id="uuidFormat" class="form-control uuid-input uuid-input--format">
-                        <option value="standard">标准 (带连字符)</option>
-                        <option value="nohyphen">无连字符</option>
-                        <option value="upper">大写</option>
-                        <option value="braces">带花括号</option>
-                        </select>
-                    </label>
-                    <button class="btn btn-primary uuid-action" id="btnGenUUID">生成</button>
-                </div>
-                <textarea class="form-control x-result" id="uuidResult" rows="8" readonly aria-label="UUID 生成结果"></textarea>
-            </div>
 
-            <div class="x-section">
-                <h4>雪花 ID (Snowflake) 生成器</h4>
-                <div class="x-row uuid-controls">
-                    <label class="uuid-control" for="machineId">
-                        <span>机器 ID</span>
-                        <input type="number" id="machineId" value="1" min="0" max="31" class="form-control uuid-input uuid-input--short">
-                    </label>
-                    <label class="uuid-control" for="datacenterId">
-                        <span>数据中心 ID</span>
-                        <input type="number" id="datacenterId" value="1" min="0" max="31" class="form-control uuid-input uuid-input--short">
-                    </label>
-                    <label class="uuid-control" for="snowflakeCount">
-                        <span>数量</span>
-                        <input type="number" id="snowflakeCount" value="5" min="1" max="100" class="form-control uuid-input uuid-input--short">
-                    </label>
-                    <button class="btn btn-primary uuid-action" id="btnGenSnowflake">生成</button>
-                </div>
-                <textarea class="form-control x-result" id="snowflakeResult" rows="8" readonly aria-label="雪花 ID 生成结果"></textarea>
-            </div>
-
-            <div class="x-section">
-                <h4>雪花 ID 解析</h4>
-                <div class="x-row uuid-controls">
-                    <label class="uuid-control uuid-control--parse" for="snowflakeInput">
-                        <span class="sr-only">雪花 ID</span>
-                        <input type="text" id="snowflakeInput" class="form-control uuid-input uuid-input--parse" placeholder="输入雪花 ID 进行解析">
-                    </label>
-                    <button class="btn btn-success uuid-action" id="btnParseSnowflake">解析</button>
-                </div>
-                <div class="x-parse-result" id="snowflakeParsed" style="display:none">
-                    <table class="table table-bordered">
-                        <tr><td><b>时间戳</b></td><td id="parsedTimestamp"></td></tr>
-                        <tr><td><b>日期时间</b></td><td id="parsedDatetime"></td></tr>
-                        <tr><td><b>数据中心ID</b></td><td id="parsedDatacenterId"></td></tr>
-                        <tr><td><b>机器ID</b></td><td id="parsedMachineId"></td></tr>
-                        <tr><td><b>序列号</b></td><td id="parsedSequence"></td></tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="x-section">
-                <h4>NanoID 生成器</h4>
-                <div class="x-row uuid-controls">
-                    <label class="uuid-control" for="nanoIdLength">
-                        <span>长度</span>
-                        <input type="number" id="nanoIdLength" value="21" min="1" max="256" class="form-control uuid-input uuid-input--short">
-                    </label>
-                    <label class="uuid-control" for="nanoIdCount">
-                        <span>数量</span>
-                        <input type="number" id="nanoIdCount" value="5" min="1" max="100" class="form-control uuid-input uuid-input--short">
-                    </label>
-                    <button class="btn btn-primary uuid-action" id="btnGenNanoId">生成</button>
-                </div>
-                <textarea class="form-control x-result" id="nanoIdResult" rows="8" readonly aria-label="NanoID 生成结果"></textarea>
-            </div>
-        </div>
-    </div>
-    <script src="../static/vendor/jquery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="../static/js/utils.js"></script>
-    <script src="../static/js/tool-layout.js"></script>
-    <script type="text/javascript" src="index.js"></script>
+        <script src="../static/vendor/jquery/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../static/js/utils.js"></script>
+        <script src="../static/js/tool-layout.js"></script>
+        <script type="text/javascript" src="index.js"></script>
     </body>
 </html>
